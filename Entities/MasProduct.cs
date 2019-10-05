@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Entities
+{
+    public class MasProduct
+    {
+        public int ProductID { get; set; }
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public double PurchasePrice { get; set; }
+        public double SellPrice { get; set; }
+        public string Active { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        
+    }
+}

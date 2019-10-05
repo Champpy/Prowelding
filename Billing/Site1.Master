@@ -39,7 +39,7 @@
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Setup/MasterProduct.aspx">Product</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/Setup/MasterPackage.aspx">Package</a></li>
+                                    <li><a href="/Setup/MasterPackageList.aspx">Package</a></li>
                                     <li role="separator" class="divider"></li>
                                     <%--<li><a href="/Setup/MasterDistributor.aspx">ผู้จัดจำหน่าย</a></li>
                                     <li role="separator" class="divider"></li>--%>

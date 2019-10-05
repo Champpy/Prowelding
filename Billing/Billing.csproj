@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -463,11 +464,14 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Setup\MasterDistributor.aspx" />
+    <Content Include="Setup\MasterPackageList.aspx" />
+    <Content Include="Setup\MasterProduct.aspx" />
     <Content Include="Setup\MasterUnit.aspx" />
     <Content Include="Setup\MasterItemType.aspx" />
     <Content Include="Setup\MasterSender.aspx" />
     <Content Include="Setup\MasterAccount.aspx" />
     <Content Include="Setup\MasterItem.aspx" />
+    <Content Include="Setup\MasterPackage.aspx" />
     <Content Include="Setup\UserLogin.aspx" />
     <Content Include="Site1.Master" />
     <Content Include="packages.config" />
@@ -686,6 +690,20 @@
     <Compile Include="Setup\MasterDistributor.aspx.designer.cs">
       <DependentUpon>MasterDistributor.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Setup\MasterPackageList.aspx.cs">
+      <DependentUpon>MasterPackageList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\MasterPackageList.aspx.designer.cs">
+      <DependentUpon>MasterPackageList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\MasterProduct.aspx.cs">
+      <DependentUpon>MasterProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\MasterProduct.aspx.designer.cs">
+      <DependentUpon>MasterProduct.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Setup\MasterUnit.aspx.cs">
       <DependentUpon>MasterUnit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -720,6 +738,13 @@
     </Compile>
     <Compile Include="Setup\MasterItem.aspx.designer.cs">
       <DependentUpon>MasterItem.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Setup\MasterPackage.aspx.cs">
+      <DependentUpon>MasterPackage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Setup\MasterPackage.aspx.designer.cs">
+      <DependentUpon>MasterPackage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Setup\UserLogin.aspx.cs">
       <DependentUpon>UserLogin.aspx</DependentUpon>

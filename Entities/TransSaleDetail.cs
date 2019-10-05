@@ -16,5 +16,6 @@ namespace Entities
         public double? DiscountPer { get; set; }
         public double? ItemPrice { get; set; }
         public string ItemDetail { get; set; }
+        public int PackageID { get; set; }
     }
 }

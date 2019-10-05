@@ -42,9 +42,13 @@
     <Compile Include="DTO\CustomerDTO.cs" />
     <Compile Include="DTO\InventoryDTO.cs" />
     <Compile Include="DTO\MasItemDTO.cs" />
+    <Compile Include="MasPackageDetail.cs" />
+    <Compile Include="MasPackageHeader.cs" />
+    <Compile Include="MasProduct.cs" />
     <Compile Include="MasItemDetail.cs" />
     <Compile Include="MasItemType.cs" />
     <Compile Include="MasUnit.cs" />
+    <Compile Include="TransSaleDetailProduct.cs" />
     <Compile Include="TransStock.cs" />
     <Compile Include="TransSaleHeader.cs" />
     <Compile Include="TransSaleDetail.cs" />
