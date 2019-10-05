@@ -146,7 +146,7 @@
             </div>
             <div class="row" style="height:120px;">
                 <div class="col-md-1"></div>
-                <div class="col-md-2 headerData" style="height:120px;"><b>รายละเอียด :</b></div>
+                <div class="col-md-2 headerData" style="height:120px;"><b>รายละเอียด :</b></div> 
                 <div class="col-md-8 rowData" style="height:120px;">
                     <asp:TextBox ID="txtMDesc" runat="server" Width="95%" TextMode="MultiLine" Rows="5"></asp:TextBox>
                 </div>
