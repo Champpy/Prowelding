@@ -143,25 +143,25 @@ namespace DAL
 
         public List<MasProduct> GetSearchProduct()
         {
-            List<MasItemDTO> lst = new List<MasItemDTO>();
+            List<MasProduct> lst = new List<MasProduct>();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
                 DataSet ds = conn.GetDataSet("GetSearchItem", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
-                    MasItemDTO o = new MasItemDTO();
+                    MasProduct o = new MasProduct();
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        o = new MasItemDTO();
-                        o.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
-                        o.ItemCode = dr["ItemCode"].ToString();
-                        o.ItemName = dr["ItemName"].ToString();
-                        o.ItemDesc = dr["ItemDesc"].ToString();
-                        o.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
-                        o.UnitName = dr["UnitName"].ToString();
-                        o.Active = dr["Active"].ToString();
-                        lst.Add(o);
+                        //o = new MasItemDTO();
+                        //o.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
+                        //o.ItemCode = dr["ItemCode"].ToString();
+                        //o.ItemName = dr["ItemName"].ToString();
+                        //o.ItemDesc = dr["ItemDesc"].ToString();
+                        //o.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
+                        //o.UnitName = dr["UnitName"].ToString();
+                        //o.Active = dr["Active"].ToString();
+                        //lst.Add(o);
                     }
                 }
             }
