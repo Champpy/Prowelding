@@ -591,24 +591,7 @@ namespace Billing.Transaction
                     return;
                 }
 
-                //if (txtMDiscountPer.Text != "" && ToDoudle(txtMDiscountPer.Text) > 100)
-                //{
-                //    ShowMessageBox("ระบุส่วนลด % ไม่ถูกต้อง");
-                //    ModalPopupExtender1.Show();
-                //    return;
-                //}
-
                 ItemID = ToInt32(hddItemID.Value);
-                //using (BillingEntities cre = new BillingEntities())
-                //{
-                //    Count = cre.TransStocks.Where(w => w.ItemID.Equals(ItemID) && w.Active.ToLower().Equals("y")).Count();
-                //}
-                //if(Count == 0)
-                //{
-                //    ShowMessageBox("สินค้า " + txtMItem.Text + " ไม่มีในสต๊อก กรุณาเพิ่มสินค้าก่อนทำรายการขาย !!");
-                //    ModalPopupExtender1.Show();
-                //    return;
-                //}
                 #endregion
 
                 #region Save to Session
@@ -626,7 +609,7 @@ namespace Billing.Transaction
                     if(o != null)
                     {
                         o.ItemID = ItemID;
-                        o.StockID = ToInt32(hddStockID.Value);
+                        //o.StockID = ToInt32(hddStockID.Value);
                         o.ItemName = txtMItem.Text;
                         o.ItemPrice = ToDoudle(txtMPrice.Text);
                         o.Discount = ToDoudle(txtMDiscount.Text);
@@ -641,7 +624,7 @@ namespace Billing.Transaction
                     o = new SaleDetailDTO();
                     o.SaleDetailID = lst.Count == 0 ? 1 : ToInt32(lst.Max(m => m.SaleDetailID).ToString()) + 1;
                     o.ItemID = ItemID; // ToInt32(hddItemID.Value);
-                    o.StockID = ToInt32(hddStockID.Value);
+                    //o.StockID = ToInt32(hddStockID.Value);
                     o.ItemName = txtMItem.Text;
                     o.ItemPrice = ToDoudle(txtMPrice.Text);
                     o.Discount = ToDoudle(txtMDiscount.Text);
@@ -672,7 +655,7 @@ namespace Billing.Transaction
             string result = "";
             try
             {
-                result = txtMDescription.Text;
+                //result = txtMDescription.Text;
                 //TextBox txt = new TextBox();
                 //for (int i = 1; i <= 10; i++)
                 //{
@@ -735,7 +718,7 @@ namespace Billing.Transaction
             txtMDiscount.Text = "0";
             //txtMDiscountPer.Text = "0";
             txtMSN.Text = "";
-            txtMDescription.Text = "";
+            //txtMDescription.Text = "";
         }
 
         protected void imgbtnEdit_Click(object sender, ImageClickEventArgs e)
@@ -766,7 +749,7 @@ namespace Billing.Transaction
                                 //txtMDiscountPer.Text = obj.DiscountPerStr;
                                 txtMSN.Text = obj.SerialNumber;
                                 //BindItemDesc(obj.ItemDescription);
-                                txtMDescription.Text = obj.ItemDescription;
+                                //txtMDescription.Text = obj.ItemDescription;
                             }
                         }
                     }
@@ -1096,34 +1079,35 @@ namespace Billing.Transaction
                 {
                     Int32 index = ToInt32(imb.CommandArgument);
                     hdd = (HiddenField)gvItemSearch.Rows[index].FindControl("hddItemID");
-                    hddStock = (HiddenField)gvItemSearch.Rows[index].FindControl("hddStockID");
+                    //hddStock = (HiddenField)gvItemSearch.Rows[index].FindControl("hddStockID");
                     if (hdd != null && hddStock != null)
                     {
                         hddItemID.Value = hdd.Value;
-                        hddStockID.Value = hddStock.Value;
+                        //hddStockID.Value = hddStock.Value;
                         txtMItem.Text = gvItemSearch.Rows[index].Cells[1].Text;
                         txtMPrice.Text = gvItemSearch.Rows[index].Cells[2].Text;
                         //txtMSN.Text = gvItemSearch.Rows[index].Cells[2].Text;
                         //txtMDescription.Text = gvItemSearch.Rows[index].Cells[3].Text;
-                        txtMDescription.Text = ((Label)gvItemSearch.Rows[index].FindControl("lbItemDesc")).Text;
+                        //txtMDescription.Text = ((Label)gvItemSearch.Rows[index].FindControl("lbItemDesc")).Text;
+                        
                         #region ItemDetail
-                        //var dal = ItemDal.Instance;
-                        //List<MasItemDTO> lst = dal.GetSearchItemDetailByID(ToInt32(hddItemID.Value));
-                        //if (lst != null)
-                        //{
-                        //    foreach (MasItemDTO item in lst)
-                        //    {
-                        //        txt = (TextBox)Panel1.FindControl("txtMDesc" + i.ToString());
-                        //        if(txt != null)
-                        //        {
-                        //            txt.Text = item.ItemDetail;
-                        //            txt.ReadOnly = item.CanChange == "N" ? true : false;
-                        //            txt.Visible = !string.IsNullOrEmpty(item.ItemDetail);
-                        //        }
+                        var dal = ItemDal.Instance;
+                        List<Entities.MasPackageDetail> lst = dal.GetSearchItemDetailByID(ToInt32(hddItemID.Value));
+                        if (lst != null)
+                        {
+                            foreach (Entities.MasPackageDetail item in lst)
+                            {
+                                //txt = (TextBox)Panel1.FindControl("txtMDesc" + i.ToString());
+                                //if (txt != null)
+                                //{
+                                //    txt.Text = item.ItemDetail;
+                                //    txt.ReadOnly = item.CanChange == "N" ? true : false;
+                                //    txt.Visible = !string.IsNullOrEmpty(item.ItemDetail);
+                                //}
 
-                        //        i++;
-                        //    }
-                        //}
+                                i++;
+                            }
+                        }
                         #endregion
                     }                    
                 }
@@ -1134,7 +1118,7 @@ namespace Billing.Transaction
             }
         }
 
-        protected void imgbtnSearchItem_Click_Click(object sender, ImageClickEventArgs e)
+        protected void imgbtnSearchItem_Click(object sender, ImageClickEventArgs e)
         {
             try
             {
@@ -1154,20 +1138,22 @@ namespace Billing.Transaction
             {
                 string ItemCode = txtSearchItemCode.Text.ToLower();
                 string ItemName = txtSearchItemName.Text.ToLower();
-                List<Entities.DTO.InventoryDTO> lst = new List<Entities.DTO.InventoryDTO>();
                 var dal = StockDal.Instance;
+                //List<Entities.DTO.InventoryDTO> lst = new List<Entities.DTO.InventoryDTO>();
+                //lst = dal.GetItemInStock();
+                List<Entities.MasPackageHeader> lst = new List<Entities.MasPackageHeader>();
                 lst = dal.GetItemInStock();
                 if (lst != null)
                 {
                     if (!string.IsNullOrEmpty(ItemCode))
-                        lst = lst.Where(w => w.ItemCode.ToLower().Contains(ItemCode)).ToList();
+                        lst = lst.Where(w => w.PackageCode.ToLower().Contains(ItemCode)).ToList();
 
                     if (!string.IsNullOrEmpty(ItemName))
                     {
-                        lst = lst.Where(w => w.ItemName.ToLower().Contains(ItemName)).ToList();
+                        lst = lst.Where(w => w.PackageName.ToLower().Contains(ItemName)).ToList();
                     }
 
-                    lst = lst.OrderBy(od => od.ItemID).OrderBy(od => od.StockID).ToList();
+                    lst = lst.OrderBy(od => od.PackageHeaderID).ToList();
                     gvItemSearch.DataSource = lst;
                     gvItemSearch.DataBind();
                 }

@@ -262,24 +262,25 @@ namespace DAL
             return lst;
         }
 
-        public List<MasItemDTO> GetSearchItemDetailByID(Int32 ItemID)
+        public List<MasPackageDetail> GetSearchItemDetailByID(Int32 ItemID)
         {
-            List<MasItemDTO> lst = new List<MasItemDTO>();
-            MasItemDTO item = new MasItemDTO();
+            List<MasPackageDetail> lst = new List<MasPackageDetail>();
+            MasPackageDetail item = new MasPackageDetail();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
-                param.Add(new SqlParameter() { ParameterName = "ItemID", Value = ItemID, DbType = DbType.Int32 });
+                param.Add(new SqlParameter() { ParameterName = "PackageHeaderID", Value = ItemID, DbType = DbType.Int32 });
                 DataSet ds = conn.GetDataSet("GetSearchItemDetailByID", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        item = new MasItemDTO();
-                        item.TID = Convert.ToInt32(dr["TID"].ToString());
-                        item.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
-                        item.ItemDetail = dr["ItemDetail"].ToString();
-                        item.DetailOrder = Convert.ToInt32(dr["DetailOrder"].ToString());
+                        item = new MasPackageDetail();
+                        item.PackageDetailID = Convert.ToInt32(dr["PackageDetailID"].ToString());
+                        item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        item.ProductCode = dr["ProductCode"].ToString();
+                        item.ProductName = dr["ProductName"].ToString();
+                        item.OrderNo = Convert.ToInt32(dr["OrderNo"].ToString());
                         item.CanChange = dr["CanChange"].ToString();
                         lst.Add(item);
                     }

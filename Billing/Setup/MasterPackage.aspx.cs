@@ -465,7 +465,7 @@ namespace Billing.Setup
                 string ItemName = txtSearchItemName.Text.ToLower();
                 List<Entities.DTO.InventoryDTO> lst = new List<Entities.DTO.InventoryDTO>();
                 var dal = StockDal.Instance;
-                lst = dal.GetItemInStock();
+                //lst = dal.GetItemInStock();
                 if (lst != null)
                 {
                     if (!string.IsNullOrEmpty(ItemCode))

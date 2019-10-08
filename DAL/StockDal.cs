@@ -161,9 +161,42 @@ namespace DAL
             return lst;
         }
 
-        public List<InventoryDTO> GetItemInStock()
+        //public List<InventoryDTO> GetItemInStock()
+        //{
+        //    List<InventoryDTO> lst = new List<InventoryDTO>();
+        //    try
+        //    {
+        //        List<SqlParameter> param = new List<SqlParameter>();
+        //        //DataSet ds = conn.GetDataSet("GetSearchItemInStock", param);
+        //        DataSet ds = conn.GetDataSet("GetSearchItem", param);
+        //        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+        //        {
+        //            InventoryDTO o = new InventoryDTO();
+        //            foreach (DataRow dr in ds.Tables[0].Rows)
+        //            {
+        //                o = new InventoryDTO();
+        //                //o.StockID = Convert.ToInt32(dr["StockID"].ToString());
+        //                o.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
+        //                o.ItemCode = dr["ItemCode"].ToString();
+        //                o.ItemName = dr["ItemName"].ToString();
+        //                o.ItemDesc = dr["ItemDesc"].ToString();
+        //                //o.Serial = dr["Serial"].ToString();
+        //                o.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
+        //                o.UnitName = dr["UnitName"].ToString();
+        //                lst.Add(o);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    return lst;
+        //}
+
+        public List<MasPackageHeader> GetItemInStock()
         {
-            List<InventoryDTO> lst = new List<InventoryDTO>();
+            List<MasPackageHeader> lst = new List<MasPackageHeader>();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
@@ -171,18 +204,16 @@ namespace DAL
                 DataSet ds = conn.GetDataSet("GetSearchItem", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
-                    InventoryDTO o = new InventoryDTO();
+                    MasPackageHeader o = new MasPackageHeader();
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        o = new InventoryDTO();
+                        o = new MasPackageHeader();
                         //o.StockID = Convert.ToInt32(dr["StockID"].ToString());
-                        o.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
-                        o.ItemCode = dr["ItemCode"].ToString();
-                        o.ItemName = dr["ItemName"].ToString();
-                        o.ItemDesc = dr["ItemDesc"].ToString();
-                        //o.Serial = dr["Serial"].ToString();
-                        o.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
-                        o.UnitName = dr["UnitName"].ToString();
+                        o.PackageHeaderID = Convert.ToInt32(dr["PackageHeaderID"].ToString());
+                        o.PackageCode = dr["PackageCode"].ToString();
+                        o.PackageName = dr["PackageName"].ToString();
+                        o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        //o.UnitName = dr["UnitName"].ToString();
                         lst.Add(o);
                     }
                 }
@@ -193,6 +224,6 @@ namespace DAL
             }
             return lst;
         }
-       
+
     }
 }

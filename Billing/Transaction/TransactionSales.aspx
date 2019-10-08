@@ -71,15 +71,6 @@
                                     <asp:HiddenField ID="hddID" runat="server" />
                                 </div>
                             </div>
-                            <%--<div class="row width99" style="padding-left:35px;">
-                                <div class="col-xs-2 headerData"><b></b></div>
-                                <div class="col-xs-4 rowData">
-                                    
-                                </div>
-                                <div class="col-xs-2 headerData"><b></b></div>
-                                <div class="col-xs-4 rowData">                                    
-                                </div> 
-                            </div>--%>
                             <div class="row width99" style="padding-left:35px;">                                
                                 <div class="col-xs-2 headerData"><b>เลขที่ :</b></div>
                                 <div class="col-xs-4 rowData">
@@ -222,38 +213,7 @@
                                 <div class="col-xs-4 rowData">
                                     <asp:TextBox ID="txtDeliverPostalCode" runat="server" Width="90%"></asp:TextBox>
                                 </div>                                                           
-                            </div>
-                            <%-- Comment
-                            <div class="row width99" style="padding-left:35px;">
-                                <div class="col-xs-2 headerData"><b>ที่อยู่1 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtCustAddress" runat="server" Width="90%"></asp:TextBox>
-                                </div>
-                                <div class="col-xs-2 headerData"><b>ที่อยู่1 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtDeliverAddress" runat="server" Width="90%"></asp:TextBox>
-                                </div>                                                            
-                            </div>    
-                            <div class="row width99" style="padding-left:35px;">
-                                <div class="col-xs-2 headerData"><b>ที่อยู่2 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtCustAddress2" runat="server" Width="90%"></asp:TextBox>
-                                </div>
-                                <div class="col-xs-2 headerData"><b>ที่อยู่2 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtDeliverAddress2" runat="server" Width="90%"></asp:TextBox>
-                                </div>                                                          
-                            </div>   
-                            <div class="row width99" style="padding-left:35px;">
-                                <div class="col-xs-2 headerData"><b>ที่อยู่3 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtCustAddress3" runat="server" Width="90%"></asp:TextBox>
-                                </div>
-                                  <div class="col-xs-2 headerData"><b>ที่อยู่3 :</b></div>
-                                <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtDeliverAddress3" runat="server" Width="90%"></asp:TextBox>
-                                </div>                                                           
-                            </div>--%>                                                   
+                            </div>                                               
                             <div class="row width99" style="padding-left:35px; height:80px;">
                                 <div class="col-xs-2 headerData" style="height:80px;"><b>หมายเหตุ :</b></div>
                                 <div class="col-xs-10 rowData" style="height:80px;">
@@ -290,11 +250,7 @@
                                             <asp:BoundField HeaderText="ราคา/หน่วย" DataField="ItemPriceStr">
                                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                                 <ItemStyle CssClass="text-right rowData"/>
-                                            </asp:BoundField>  
-                                            <%--<asp:BoundField HeaderText="ส่วนลด %" DataField="DiscountPerStr">
-                                                <HeaderStyle CssClass="text-center width10 headerData" />
-                                                <ItemStyle CssClass="text-right rowData"/>
-                                            </asp:BoundField> --%>  
+                                            </asp:BoundField>
                                             <asp:BoundField HeaderText="ส่วนลด (บาท)" DataField="DiscountStr">
                                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                                 <ItemStyle CssClass="text-right rowData"/>
@@ -365,6 +321,7 @@
         <div class="col-xs-1"></div>  
     </div>
 
+    <%--Item Detail--%>
     <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel1" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
@@ -381,14 +338,11 @@
                 <div class="col-md-1 headerData"><b>สินค้า :</b></div>
                 <div class="col-md-4 rowData">
                     <asp:HiddenField ID="hddDetailID" runat="server" />
-                    <%--<asp:DropDownList ID="ddlMItem" runat="server" AutoPostBack="true" class="form-control" 
-                        OnSelectedIndexChanged="ddlMItem_SelectedIndexChanged">
-                    </asp:DropDownList>--%>
                     <asp:HiddenField ID="hddItemID" runat="server" />
-                    <asp:HiddenField ID="hddStockID" runat="server" />
+                    <%--<asp:HiddenField ID="hddStockID" runat="server" />--%>
                     <asp:TextBox ID="txtMItem" runat="server" Width="92%" ReadOnly="true"></asp:TextBox>
-                    <asp:ImageButton ID="imgbtnSearchItem_Click" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"                                        
-                        OnClick="imgbtnSearchItem_Click_Click" />
+                    <asp:ImageButton ID="imgbtnSearchItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"                                        
+                        OnClick="imgbtnSearchItem_Click" />
                 </div>
                 <div class="col-md-1 headerData"><b>ราคา/หน่วย :</b></div>
                 <div class="col-md-4 rowData">
@@ -436,7 +390,46 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-1 headerData" style="height:200px;"><b>รายละเอียด :</b></div>
                 <div class="col-md-9 rowData" style="height:200px;">
-                    <asp:TextBox ID="txtMDescription" runat="server" TextMode="MultiLine" Rows="7" Width="99%"></asp:TextBox>
+                    <%--<asp:TextBox ID="txtMDescription" runat="server" TextMode="MultiLine" Rows="7" Width="99%"></asp:TextBox>--%>
+                    <asp:GridView ID="gvDetail" runat="server" Width="100%" AutoGenerateColumns="False">
+                        <Columns>
+                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
+                                <HeaderStyle CssClass="text-center width20" Height="30px" />
+                                <ItemStyle CssClass="text-left paddingLeft5" Height="25px" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="ProductName">
+                                <HeaderStyle CssClass="text-center width60 " />
+                                <ItemStyle CssClass="text-left paddingLeft5" />
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="จำนวน" DataField="Amount" DataFormatString="{0:N0}">
+                                <HeaderStyle CssClass="text-center width10 " />
+                                <ItemStyle CssClass="text-right paddingRight5"/>
+                            </asp:BoundField>
+                            <asp:TemplateField HeaderText="Tools">
+                                <ItemTemplate>
+                                    <asp:ImageButton ID="imgbtnm1Delete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
+                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "TID").ToString()%>'
+                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "ItemIndex").ToString()%>'
+                                        Visible='<%# (DataBinder.Eval(Container.DataItem, "CANCHANGE").ToString() == "N" ? false : true) %>'
+                                        OnClick="imgbtnm1Delete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
+                                </ItemTemplate>
+                                <HeaderStyle CssClass="text-center width10" />
+                                <ItemStyle CssClass="text-center" />
+                            </asp:TemplateField>
+                        </Columns>
+                        <EmptyDataTemplate>
+                            <table>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        No data.
+                                    </td>
+                                </tr>
+                            </table>
+                        </EmptyDataTemplate>
+                    </asp:GridView>
                 </div>                
                 <div class="col-md-1"></div>
             </div>
@@ -450,6 +443,7 @@
         </div>
     </asp:Panel>
 
+    <%--Customer Info--%>
     <asp:ModalPopupExtender ID="ModalPopupExtender2" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel2" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
@@ -592,6 +586,7 @@
         </div>
     </asp:Panel>
 
+    <%--List Item (Package)--%>
     <asp:ModalPopupExtender ID="ModalPopupExtender3" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel3" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
@@ -620,11 +615,11 @@
                 <div class="col-md-10 rowData" style="overflow:auto; height:400px !important;">
                     <asp:GridView ID="gvItemSearch" runat="server" Width="100%" AutoGenerateColumns="False">
                         <Columns>
-                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ItemCode">
+                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="PackageCode">
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="itemName">
+                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="PackageName">
                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>
@@ -632,7 +627,7 @@
                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>--%>
-                            <asp:BoundField HeaderText="ราคา" DataField="ItemPrice">
+                            <asp:BoundField HeaderText="ราคา" DataField="SellPrice">
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-center rowData"/>
                             </asp:BoundField>      
@@ -642,9 +637,9 @@
                             </asp:BoundField>   --%>                           
                             <asp:TemplateField HeaderText="Tools">
                                 <ItemTemplate>
-                                    <asp:HiddenField ID="hddItemID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>' />
-                                    <asp:HiddenField ID="hddStockID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "StockID").ToString()%>' />
-                                    <asp:Label ID="lbItemDesc" runat="server" Visible="false" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDesc").ToString()%>'></asp:Label>
+                                    <asp:HiddenField ID="hddItemID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "PackageHeaderID").ToString()%>' />
+                                    <%--<asp:HiddenField ID="hddStockID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "StockID").ToString()%>' />--%>
+                                    <%--<asp:Label ID="lbItemDesc" runat="server" Visible="false" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDesc").ToString()%>'></asp:Label>--%>
                                     <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"                                        
                                         CommandArgument='<%# Container.DataItemIndex.ToString()%>'
                                         OnClick="imgbtnChooseItem_Click" />

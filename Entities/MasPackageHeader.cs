@@ -17,6 +17,7 @@ namespace Entities
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public Int32 Remaining { get; set; }
         
     }
 }

@@ -382,15 +382,6 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.HiddenField hddItemID;
         
         /// <summary>
-        /// hddStockID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hddStockID;
-        
-        /// <summary>
         /// txtMItem control.
         /// </summary>
         /// <remarks>
@@ -400,13 +391,13 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.TextBox txtMItem;
         
         /// <summary>
-        /// imgbtnSearchItem_Click control.
+        /// imgbtnSearchItem control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgbtnSearchItem_Click;
+        protected global::System.Web.UI.WebControls.ImageButton imgbtnSearchItem;
         
         /// <summary>
         /// txtMPrice control.
@@ -427,15 +418,6 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.TextBox txtMAmount;
         
         /// <summary>
-        /// txtMDiscountPer control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMDiscountPer;
-        
-        /// <summary>
         /// txtMSN control.
         /// </summary>
         /// <remarks>
@@ -454,13 +436,13 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.TextBox txtMDiscount;
         
         /// <summary>
-        /// txtMDescription control.
+        /// gvDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMDescription;
+        protected global::System.Web.UI.WebControls.GridView gvDetail;
         
         /// <summary>
         /// btnMSave control.

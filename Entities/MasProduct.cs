@@ -18,5 +18,13 @@ namespace Entities
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
         
+        #region Other
+        public Int32 UnitID { get; set; }
+        public string UnitName { get; set; }
+        public Int32 TypeID { get; set; }
+        public string TypeName { get; set; }
+        public Int32 Remaining { get; set; }
+        #endregion
+
     }
 }
