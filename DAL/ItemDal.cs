@@ -262,10 +262,10 @@ namespace DAL
             return lst;
         }
 
-        public List<MasPackageDetail> GetSearchItemDetailByID(Int32 ItemID)
+        public List<Entities.MasPackageDetail> GetSearchItemDetailByID(Int32 ItemID)
         {
-            List<MasPackageDetail> lst = new List<MasPackageDetail>();
-            MasPackageDetail item = new MasPackageDetail();
+            List<Entities.MasPackageDetail> lst = new List<Entities.MasPackageDetail>();
+            Entities.MasPackageDetail item = new Entities.MasPackageDetail();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
@@ -275,14 +275,44 @@ namespace DAL
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        item = new MasPackageDetail();
+                        item = new Entities.MasPackageDetail();
                         item.PackageDetailID = Convert.ToInt32(dr["PackageDetailID"].ToString());
                         item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
+                        item.Amount = 1;
                         item.OrderNo = Convert.ToInt32(dr["OrderNo"].ToString());
                         item.CanChange = dr["CanChange"].ToString();
                         lst.Add(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+
+        public List<Entities.MasProduct> GetSearchProductAll()
+        {
+            List<Entities.MasProduct> lst = new List<Entities.MasProduct>();
+            Entities.MasProduct o = new Entities.MasProduct();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                DataSet ds = conn.GetDataSet("GetSearchProductAll", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new Entities.MasProduct();
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        o.Remaining = string.IsNullOrEmpty(dr["Remaining"].ToString()) ? 0 : Convert.ToInt32(dr["Remaining"].ToString()); 
+                        o.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToInt32(dr["SellPrice"].ToString());
+                        lst.Add(o);
                     }
                 }
             }

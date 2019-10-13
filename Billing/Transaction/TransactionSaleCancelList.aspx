@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site1.Master" AutoEventWireup="true" CodeBehind="TransactionSaleList.aspx.cs" Inherits="Billing.Transaction.TransactionSaleList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site1.Master" AutoEventWireup="true" CodeBehind="TransactionSaleCancelList.aspx.cs" Inherits="Billing.Transaction.TransactionSaleCancelList" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
@@ -111,18 +111,10 @@
                                         </asp:BoundField>
                                         <asp:TemplateField HeaderText="Tools">
                                             <ItemTemplate>
-                                                <asp:ImageButton ID="imgbtnPrint" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/Print.jpg"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleHeaderID").ToString()%>'
-                                                    CommandName='<%# DataBinder.Eval(Container.DataItem, "BillType").ToString()%>'
-                                                    OnClick="imgbtnPrint_Click" />
-                                                &nbsp;
-                                                <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleHeaderID").ToString()%>'
-                                                    OnClick="imgbtnEdit_Click" />
-                                                <%--&nbsp;
                                                 <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleHeaderID").ToString()%>'                                                    
-                                                    OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>--%>
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleHeaderID").ToString()%>'   
+                                                    CommandName='<%# Container.DataItemIndex %>'                                                 
+                                                    OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการยกเลิกการขาย?');"/>
                                             </ItemTemplate>
                                             <HeaderStyle CssClass="text-center width10" />
                                             <ItemStyle CssClass="text-center" />
@@ -148,5 +140,35 @@
             </div>
         </div>
         <div class="col-xs-1"></div>  
-    </div>    
+    </div>   
+    
+    <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" BackgroundCssClass="modalBackground"
+        PopupControlID="Panel1" TargetControlID="lbl_modal_view">
+    </asp:ModalPopupExtender>
+    <asp:Panel ID="Panel1" Height="180px" Width="400px" runat="server" Style="display: none;">
+        <div class="panel panel-info-dark width100" style="min-height: 180px;">
+            <div class="panel-heading text-left">
+                <h3 class="panel-title">
+                    <asp:Label ID="lbl_modal_view" runat="server" CssClass="modalHeader" Text=""></asp:Label>
+                </h3>
+            </div>
+            <div class="row">    
+                <div class="col-md-1"></div>            
+                <div class="col-md-3 headerData"><b>ยอดเงิน :</b></div>
+                <div class="col-md-7 rowData">
+                    <asp:TextBox ID="txtmSellPrice" runat="server" Width="85%"></asp:TextBox>
+                    <asp:HiddenField id="hddHeaderID" runat="server" />
+                    <asp:HiddenField id="hddSellPrice" runat="server" />
+                </div>               
+                <div class="col-md-1"></div>
+            </div>     
+            <div class="row">&nbsp;</div> 
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12 text-center">
+                    <asp:Button ID="btnOK" runat="server" CssClass="btn btn-save" Text="OK" OnClick="btnOK_Click"/>
+                    <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-save" Text="Cancel" OnClick="btnCancel_Click"/>
+                </div>
+            </div>
+        </div>
+    </asp:Panel> 
 </asp:Content>

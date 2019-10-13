@@ -156,7 +156,7 @@ namespace DAL
         {
             try
             {
-                _cmd = this._conn.CreateCommand();
+                //_cmd = this._conn.CreateCommand();
                 if (this._conn.State == ConnectionState.Closed) { this._conn.Open(); }
                 //_oraTrans = this._connection.BeginTransaction(IsolationLevel.ReadCommitted);
                 //_cmd.Transaction = _oraTrans;
@@ -167,6 +167,9 @@ namespace DAL
 
                 if (parameters != null)
                 {
+                    if (_cmd.Parameters.Count > 0)
+                        _cmd.Parameters.Clear();
+
                     foreach (SqlParameter param in parameters)
                     {
                         _cmd.Parameters.Add(param);
@@ -183,12 +186,12 @@ namespace DAL
             }
             catch (SqlException ex)
             {
-                RollBack();
+                //RollBack();
                 err = ex.Message;
             }
             catch (Exception ex)
             {
-                RollBack();
+                //RollBack();
                 err = ex.Message;
             }
         }
@@ -196,13 +199,16 @@ namespace DAL
         {
             try
             {
-                _cmd = this._conn.CreateCommand();
+                //_cmd = this._conn.CreateCommand();
                 if (this._conn.State == ConnectionState.Closed) { this._conn.Open(); }
 
                 _cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 _cmd.CommandText = storename;
                 if (parameters != null)
                 {
+                    if(_cmd.Parameters.Count > 0)
+                        _cmd.Parameters.Clear();
+
                     //foreach (string key in parameters)
                     foreach (SqlParameter param in parameters)
                     {
@@ -223,13 +229,13 @@ namespace DAL
             catch (SqlException ex)
             {
                 ds = null;
-                RollBack();
+                //RollBack();
                 err = ex.Message;
             }
             catch (Exception ex)
             {
                 ds = null;
-                RollBack();
+                //RollBack();
                 err = ex.Message;
             }
         }

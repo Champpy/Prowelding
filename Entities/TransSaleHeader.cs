@@ -44,5 +44,6 @@ namespace Entities
         public string SaleName { get; set; }
         public string AccountTransfer { get; set; }
         public string TimeTransfer { get; set; }
+        public string Installment { get; set; }
     }
 }

@@ -26,6 +26,39 @@ namespace Billing.Transaction
             }
         }
 
+        protected void txtDate_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime dt = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                TransSaleHeader o = new TransSaleHeader();
+                using (BillingEntities cre = new BillingEntities())
+                {
+                    o = cre.TransSaleHeaders.Where(w => w.ReceivedDate.Value.Year == dt.Year && w.ReceivedDate.Value.Month == dt.Month)
+                        .OrderByDescending(od => od.SaleNumber).FirstOrDefault();
+
+                    if (o != null)
+                    {
+                        string[] spl = o.SaleNumber.Split('-');
+                        if (spl != null)
+                        {
+                            int no = ToInt32(spl[1]);
+                            no++;
+                            txtSaleNumber.Text = dt.ToString("yyMM") + "-" + no.ToString("000");
+                        }
+                    }
+                    else
+                    {
+                        txtSaleNumber.Text = dt.ToString("yyMM") + "-001";
+                    }
+                };
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         #region BindData
         protected void BindDDL()
         {
@@ -116,91 +149,154 @@ namespace Billing.Transaction
         {
             try
             {
-                if (!string.IsNullOrEmpty(hddID.Value))
+                Entities.TransSaleHeader obj = new Entities.TransSaleHeader();
+                List<Entities.DTO.SaleDetailDTO> lstDetail = new List<Entities.DTO.SaleDetailDTO>();
+                if (!string.IsNullOrEmpty(hddID.Value)) // Mode Edit
                 {
                     int tid = ToInt32(hddID.Value);
-                    TransSaleHeader obj = new TransSaleHeader();
-                    List<SaleDetailDTO> lst = new List<SaleDetailDTO>();
-                    using (BillingEntities cre = new BillingEntities())
+                    var bal = TransactionDal.Instance;
+                    bal.GetTransSaleByID(tid, ref obj, ref lstDetail);
+
+                    hddID.Value = obj.SaleHeaderID.ToString();
+                    txtDate.Text = obj.ReceivedDate.HasValue ? obj.ReceivedDate.Value.ToString("dd/MM/yyyy") : "";
+                    txtCustAddress.Text = obj.CustomerAddress;
+                    txtCustDistrict.Text = obj.CustomerDistrict;
+                    txtCustCountry.Text = obj.CustomerCountry;
+                    txtCustProvince.Text = obj.CustomerProvince;
+                    txtCustPostalCode.Text = obj.CustomerPostalCode;
+                    txtDeliverAddress.Text = obj.DeliverAdd;
+                    txtDeliverDistrict.Text = obj.DeliverDistrict;
+                    txtDeliverCountry.Text = obj.DeliverCountry;
+                    txtDeliverProvince.Text = obj.DeliverProvince;
+                    txtDeliverPostalCode.Text = obj.DeliverPostalCode;
+                    txtCustName.Text = obj.CustomerName;
+                    txtDeliveryName.Text = obj.DeliveryName;
+                    txtTel.Text = obj.Tel;
+                    txtSaleNumber.Text = obj.SaleNumber;
+                    txtRemark.Text = obj.Remark;
+                    //chkCOD.Checked = string.IsNullOrEmpty(obj.COD) ? false : obj.COD.Equals("0") ? false : true;
+                    txtWarranty.Text = obj.WarrantyDate.ToString("dd/MM/yyyy");
+                    txtConsignmentNo.Text = obj.ConsignmentNo;
+
+                    #region 201808
+                    if (!string.IsNullOrEmpty(obj.BillType))
                     {
-                        obj = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(tid));
-                        if (obj != null)
+                        if (obj.BillType.Equals("Vat"))
                         {
-                            hddID.Value = obj.SaleHeaderID.ToString();
-                            txtDate.Text = obj.ReceivedDate.HasValue ? obj.ReceivedDate.Value.ToString("dd/MM/yyyy") : "";
-                            txtCustAddress.Text = obj.CustomerAddress;
-                            txtCustDistrict.Text = obj.CustomerDistrict;
-                            txtCustCountry.Text = obj.CustomerCountry;
-                            txtCustProvince.Text = obj.CustomerProvince;
-                            txtCustPostalCode.Text = obj.CustomerPostalCode;
-                            //txtCustAddress2.Text = obj.CustomerAddress2;
-                            //txtCustAddress3.Text = obj.CustomerAddress3;
-                            txtDeliverAddress.Text = obj.DeliverAdd;
-                            txtDeliverDistrict.Text = obj.DeliverDistrict;
-                            txtDeliverCountry.Text = obj.DeliverCountry;
-                            txtDeliverProvince.Text = obj.DeliverProvince;
-                            txtDeliverPostalCode.Text = obj.DeliverPostalCode;
-                            //txtDeliverAddress2.Text = obj.DeliverAdd2;
-                            //txtDeliverAddress3.Text = obj.DeliverAdd3;
-                            txtCustName.Text = obj.CustomerName;
-                            txtDeliveryName.Text = obj.DeliveryName;
-                            txtTel.Text = obj.Tel;
-                            txtSaleNumber.Text = obj.SaleNumber;
-                            txtRemark.Text = obj.Remark;
-                            //chkCOD.Checked = string.IsNullOrEmpty(obj.COD) ? false : obj.COD.Equals("0") ? false : true;
-                            txtWarranty.Text = obj.WarrantyDate.HasValue ? obj.WarrantyDate.Value.ToString("dd/MM/yyyy") : "";
-                            txtConsignmentNo.Text = obj.ConsignmentNo;
-
-                            #region 201808
-                            if(!string.IsNullOrEmpty(obj.BillType))
-                            {
-                                if (obj.BillType.Equals("Vat"))
-                                {
-                                    rdbVat.Checked = true;
-                                }
-                                else //if (obj.BillType.Equals("Cash"))
-                                {
-                                    rdbCash.Checked = true;
-                                }
-                            }
-                            if (!string.IsNullOrEmpty(obj.PayType))
-                                ddlPay.SelectedIndex = ddlPay.Items.IndexOf(ddlPay.Items.FindByValue(obj.PayType)); //ToInt32(obj.PayType);
-                            #endregion
-
-                            #region 201901
-                            ddlAccount.SelectedIndex = ddlAccount.Items.IndexOf(ddlAccount.Items.FindByText(obj.AccountTransfer));
-                            ddlSaleName.SelectedIndex = ddlSaleName.Items.IndexOf(ddlSaleName.Items.FindByText(obj.SaleName));
-                            txtTimeTransfer.Text = obj.TimeTransfer;
-                            #endregion
-
-                            #region 201903
-                            ddlAccountInst.SelectedIndex = ddlAccountInst.Items.IndexOf(ddlAccountInst.Items.FindByText(obj.Installment));
-                            
-                            #endregion
-
-                            lst = (from d in cre.TransSaleDetails
-                                   join i in cre.MasItems on d.ItemID equals i.ItemID
-                                   where d.SaleHeaderID.Equals(tid)
-                                   select new SaleDetailDTO()
-                                   {
-                                       SaleDetailID = d.SaleDetailID,
-                                       SaleHeaderID = d.SaleHeaderID,
-                                       ItemID = d.ItemID.HasValue ? d.ItemID.Value : 0,
-                                       ItemName = i.ItemName,
-                                       ItemPrice = d.ItemPrice.HasValue ? d.ItemPrice.Value : 0,
-                                       ItemDescription = d.ItemDetail,
-                                       Amount = d.Amount,
-                                       Discount = d.Discount,
-                                       SerialNumber = d.SerialNumber,
-                                       Status = "Old",
-                                       
-                                   }).ToList();
-
-                            Session["saleDetail"] = lst;
+                            rdbVat.Checked = true;
+                        }
+                        else //if (obj.BillType.Equals("Cash"))
+                        {
+                            rdbCash.Checked = true;
                         }
                     }
+                    if (!string.IsNullOrEmpty(obj.PayType))
+                        ddlPay.SelectedIndex = ddlPay.Items.IndexOf(ddlPay.Items.FindByValue(obj.PayType)); //ToInt32(obj.PayType);
+                    #endregion
+
+                    #region 201901
+                    ddlAccount.SelectedIndex = ddlAccount.Items.IndexOf(ddlAccount.Items.FindByText(obj.AccountTransfer));
+                    ddlSaleName.SelectedIndex = ddlSaleName.Items.IndexOf(ddlSaleName.Items.FindByText(obj.SaleName));
+                    txtTimeTransfer.Text = obj.TimeTransfer;
+                    #endregion
+
+                    #region 201903
+                    ddlAccountInst.SelectedIndex = ddlAccountInst.Items.IndexOf(ddlAccountInst.Items.FindByText(obj.Installment));
+                    #endregion
+
+                    Session["saleDetail"] = lstDetail;
+
+                    #region Button
+                    btnAddModal.Visible = false;
+                    #endregion
+
+                    #region Comment
+                    //TransSaleHeader obj = new TransSaleHeader();
+                    //List<SaleDetailDTO> lst = new List<SaleDetailDTO>();
+                    //List<Entities.MasPackageDetail> lstPackageDetail = new List<Entities.MasPackageDetail>();
+                    //using (BillingEntities cre = new BillingEntities())
+                    //{
+                    //    obj = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(tid));
+                    //    if (obj != null)
+                    //    {
+                    //        hddID.Value = obj.SaleHeaderID.ToString();
+                    //        txtDate.Text = obj.ReceivedDate.HasValue ? obj.ReceivedDate.Value.ToString("dd/MM/yyyy") : "";
+                    //        txtCustAddress.Text = obj.CustomerAddress;
+                    //        txtCustDistrict.Text = obj.CustomerDistrict;
+                    //        txtCustCountry.Text = obj.CustomerCountry;
+                    //        txtCustProvince.Text = obj.CustomerProvince;
+                    //        txtCustPostalCode.Text = obj.CustomerPostalCode;
+                    //        //txtCustAddress2.Text = obj.CustomerAddress2;
+                    //        //txtCustAddress3.Text = obj.CustomerAddress3;
+                    //        txtDeliverAddress.Text = obj.DeliverAdd;
+                    //        txtDeliverDistrict.Text = obj.DeliverDistrict;
+                    //        txtDeliverCountry.Text = obj.DeliverCountry;
+                    //        txtDeliverProvince.Text = obj.DeliverProvince;
+                    //        txtDeliverPostalCode.Text = obj.DeliverPostalCode;
+                    //        //txtDeliverAddress2.Text = obj.DeliverAdd2;
+                    //        //txtDeliverAddress3.Text = obj.DeliverAdd3;
+                    //        txtCustName.Text = obj.CustomerName;
+                    //        txtDeliveryName.Text = obj.DeliveryName;
+                    //        txtTel.Text = obj.Tel;
+                    //        txtSaleNumber.Text = obj.SaleNumber;
+                    //        txtRemark.Text = obj.Remark;
+                    //        //chkCOD.Checked = string.IsNullOrEmpty(obj.COD) ? false : obj.COD.Equals("0") ? false : true;
+                    //        txtWarranty.Text = obj.WarrantyDate.HasValue ? obj.WarrantyDate.Value.ToString("dd/MM/yyyy") : "";
+                    //        txtConsignmentNo.Text = obj.ConsignmentNo;
+
+                    //        #region 201808
+                    //        if(!string.IsNullOrEmpty(obj.BillType))
+                    //        {
+                    //            if (obj.BillType.Equals("Vat"))
+                    //            {
+                    //                rdbVat.Checked = true;
+                    //            }
+                    //            else //if (obj.BillType.Equals("Cash"))
+                    //            {
+                    //                rdbCash.Checked = true;
+                    //            }
+                    //        }
+                    //        if (!string.IsNullOrEmpty(obj.PayType))
+                    //            ddlPay.SelectedIndex = ddlPay.Items.IndexOf(ddlPay.Items.FindByValue(obj.PayType)); //ToInt32(obj.PayType);
+                    //        #endregion
+
+                    //        #region 201901
+                    //        ddlAccount.SelectedIndex = ddlAccount.Items.IndexOf(ddlAccount.Items.FindByText(obj.AccountTransfer));
+                    //        ddlSaleName.SelectedIndex = ddlSaleName.Items.IndexOf(ddlSaleName.Items.FindByText(obj.SaleName));
+                    //        txtTimeTransfer.Text = obj.TimeTransfer;
+                    //        #endregion
+
+                    //        #region 201903
+                    //        ddlAccountInst.SelectedIndex = ddlAccountInst.Items.IndexOf(ddlAccountInst.Items.FindByText(obj.Installment));
+
+                    //        #endregion
+
+                    //        lst = (from d in cre.TransSaleDetails
+                    //               join i in cre.MasItems on d.ItemID equals i.ItemID
+                    //               where d.SaleHeaderID.Equals(tid)
+                    //               select new SaleDetailDTO()
+                    //               {
+                    //                   SaleDetailID = d.SaleDetailID,
+                    //                   SaleHeaderID = d.SaleHeaderID,
+                    //                   ItemID = d.ItemID.HasValue ? d.ItemID.Value : 0,
+                    //                   ItemName = i.ItemName,
+                    //                   ItemPrice = d.ItemPrice.HasValue ? d.ItemPrice.Value : 0,
+                    //                   ItemDescription = d.ItemDetail,
+                    //                   Amount = d.Amount,
+                    //                   Discount = d.Discount,
+                    //                   SerialNumber = d.SerialNumber,
+                    //                   Status = "Old",
+
+                    //               }).ToList();
+
+
+
+                    //        Session["saleDetail"] = lst;
+                    //    }
+                    //}
+                    #endregion
                 }
-                else
+                else  // Mode Add
                 {
                     txtDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtWarranty.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -285,12 +381,12 @@ namespace Billing.Transaction
                 }
 
                 string Message = "";
-                TransSaleHeader o = new TransSaleHeader();
+                var bal = TransactionDal.Instance;
+                Entities.TransSaleHeader o = new Entities.TransSaleHeader();
                 SaleHeaderDTO obj = new SaleHeaderDTO();
                 List<SaleDetailDTO> lst = new List<SaleDetailDTO>();
                 List<SaleDetailDTO> tmp = new List<SaleDetailDTO>();
-                int hid = 0;
-                int Change = 0;
+                Int32 hid = 0;
                 if (Session["saleDetail"] != null)
                 {
                     lst = (List<SaleDetailDTO>)Session["saleDetail"];
@@ -298,255 +394,382 @@ namespace Billing.Transaction
 
                 if (string.IsNullOrEmpty(hddID.Value)) //New --> Insert
                 {
-                    using (BillingEntities cre = new BillingEntities())
+                    #region Insert Header
+                    o.Tel = txtTel.Text;
+                    o.CustomerName = txtCustName.Text;
+                    o.CustomerAddress = txtCustAddress.Text;
+                    o.CustomerDistrict = txtCustDistrict.Text;
+                    o.CustomerCountry = txtCustCountry.Text;
+                    o.CustomerProvince = txtCustProvince.Text;
+                    o.CustomerPostalCode = txtCustPostalCode.Text;
+                    o.DeliveryName = txtDeliveryName.Text;
+                    o.DeliverAdd = txtDeliverAddress.Text;
+                    o.DeliverDistrict = txtDeliverDistrict.Text;
+                    o.DeliverCountry = txtDeliverCountry.Text;
+                    o.DeliverProvince = txtDeliverProvince.Text;
+                    o.DeliverPostalCode = txtDeliverPostalCode.Text;
+                    o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                    //o.ReceivedBy = "เงินสด";
+                    o.ReceivedBy = rdbCash.Checked ? "เงินสด" : "VAT";
+                    o.SaleNumber = txtSaleNumber.Text;
+                    o.Remark = txtRemark.Text;
+                    o.CreatedBy = GetUsername();
+                    o.CreatedDate = DateTime.Now;
+                    o.Active = "1";
+                    o.ConsignmentNo = txtConsignmentNo.Text;
+                    o.COD = "0";
+                    if (!string.IsNullOrEmpty(txtWarranty.Text))
+                        o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+
+                    #region 201808
+                    o.BillType = rdbVat.Checked ? "Vat" : "Cash";
+                    o.PayType = ddlPay.SelectedValue;
+                    #endregion
+
+                    #region 201901
+                    o.SaleName = ddlSaleName.SelectedItem.Text;
+                    if (ddlPay.SelectedItem.Value == "5")
                     {
-                        #region Header
-                        o.Tel = txtTel.Text;
-                        o.CustomerName = txtCustName.Text;
-                        o.CustomerAddress = txtCustAddress.Text;
-                        o.CustomerDistrict = txtCustDistrict.Text;
-                        o.CustomerCountry = txtCustCountry.Text;
-                        o.CustomerProvince = txtCustProvince.Text;
-                        o.CustomerPostalCode = txtCustPostalCode.Text;
-                        //o.CustomerAddress2 = txtCustAddress2.Text;
-                        //o.CustomerAddress3 = txtCustAddress3.Text;
-                        o.DeliveryName = txtDeliveryName.Text;
-                        o.DeliverAdd = txtDeliverAddress.Text;
-                        o.DeliverDistrict = txtDeliverDistrict.Text;
-                        o.DeliverCountry = txtDeliverCountry.Text;
-                        o.DeliverProvince = txtDeliverProvince.Text;
-                        o.DeliverPostalCode = txtDeliverPostalCode.Text;
-                        //o.DeliverAdd2 = txtDeliverAddress2.Text;
-                        //o.DeliverAdd3 = txtDeliverAddress3.Text;
-                        o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                        o.ReceivedBy = "เงินสด";
-                        o.SaleNumber = txtSaleNumber.Text;
-                        o.Remark = txtRemark.Text;
-                        o.CreatedBy = GetUsername();
-                        o.CreatedDate = DateTime.Now;
-                        o.Active = "1";
-                        o.ConsignmentNo = txtConsignmentNo.Text;
-                        //o.COD = chkCOD.Checked ? "1" : "0";
-                        o.COD = "0";
-                        if (!string.IsNullOrEmpty(txtWarranty.Text))
-                            o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                        o.AccountTransfer = ddlAccount.SelectedItem.Text;
+                        o.TimeTransfer = txtTimeTransfer.Text;
+                    }
+                    else
+                    {
+                        o.AccountTransfer = "";
+                        o.TimeTransfer = "";
+                    }
+                    #endregion
 
-                        #region 201808
-                        o.BillType = rdbVat.Checked ? "Vat" : "Cash";
-                        o.PayType = ddlPay.SelectedValue;
-                        #endregion
+                    #region 201903
+                    if (ddlPay.SelectedItem.Value == "8")
+                        o.Installment = ddlAccountInst.SelectedItem.Text;
+                    else
+                        o.Installment = "";
+                    #endregion
 
-                        #region 201901
-                        o.SaleName = ddlSaleName.SelectedItem.Text;
-                        if (ddlPay.SelectedItem.Value == "5")
-                        {
-                            o.AccountTransfer = ddlAccount.SelectedItem.Text;
-                            o.TimeTransfer = txtTimeTransfer.Text;
-                        }
-                        else
-                        {
-                            o.AccountTransfer = "";
-                            o.TimeTransfer = "";
-                        }
-                        #endregion
+                    Message = bal.InsertSaleHeader(o, lst);
+                    #endregion
 
-                        #region 201903
-                        if (ddlPay.SelectedItem.Value == "8")
-                            o.Installment = ddlAccountInst.SelectedItem.Text;
-                        else
-                            o.Installment = "";
-                        #endregion
+                    
+                    #region Comment
+                    //using (BillingEntities cre = new BillingEntities())
+                    //{
+                    //    #region Header
+                    //    o.Tel = txtTel.Text;
+                    //    o.CustomerName = txtCustName.Text;
+                    //    o.CustomerAddress = txtCustAddress.Text;
+                    //    o.CustomerDistrict = txtCustDistrict.Text;
+                    //    o.CustomerCountry = txtCustCountry.Text;
+                    //    o.CustomerProvince = txtCustProvince.Text;
+                    //    o.CustomerPostalCode = txtCustPostalCode.Text;
+                    //    //o.CustomerAddress2 = txtCustAddress2.Text;
+                    //    //o.CustomerAddress3 = txtCustAddress3.Text;
+                    //    o.DeliveryName = txtDeliveryName.Text;
+                    //    o.DeliverAdd = txtDeliverAddress.Text;
+                    //    o.DeliverDistrict = txtDeliverDistrict.Text;
+                    //    o.DeliverCountry = txtDeliverCountry.Text;
+                    //    o.DeliverProvince = txtDeliverProvince.Text;
+                    //    o.DeliverPostalCode = txtDeliverPostalCode.Text;
+                    //    //o.DeliverAdd2 = txtDeliverAddress2.Text;
+                    //    //o.DeliverAdd3 = txtDeliverAddress3.Text;
+                    //    o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                    //    o.ReceivedBy = "เงินสด";
+                    //    o.SaleNumber = txtSaleNumber.Text;
+                    //    o.Remark = txtRemark.Text;
+                    //    o.CreatedBy = GetUsername();
+                    //    o.CreatedDate = DateTime.Now;
+                    //    o.Active = "1";
+                    //    o.ConsignmentNo = txtConsignmentNo.Text;
+                    //    //o.COD = chkCOD.Checked ? "1" : "0";
+                    //    o.COD = "0";
+                    //    if (!string.IsNullOrEmpty(txtWarranty.Text))
+                    //        o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
 
-                        cre.TransSaleHeaders.Add(o);
-                        cre.SaveChanges();
-                        hid = o.SaleHeaderID;
-                        #endregion
+                    //    #region 201808
+                    //    o.BillType = rdbVat.Checked ? "Vat" : "Cash";
+                    //    o.PayType = ddlPay.SelectedValue;
+                    //    #endregion
 
-                        #region Description
-                        lst = lst.Where(w => w.Status == "New").ToList();
-                        if (lst != null && lst.Count > 0)
-                        {
-                            TransSaleDetail oDetail = new TransSaleDetail();
-                            //TransStock ts = new TransStock();
-                            int StockID = 0;
-                            foreach (SaleDetailDTO item in lst)
-                            {
-                                oDetail = new TransSaleDetail();
-                                oDetail.SaleHeaderID = hid;
-                                oDetail.ItemID = item.ItemID;
-                                oDetail.ItemPrice = item.ItemPrice;
-                                oDetail.Amount = item.Amount;
-                                oDetail.Discount = item.Discount;
-                                //oDetail.DiscountPer = item.DiscountPer;
-                                oDetail.SerialNumber = item.SerialNumber;
-                                oDetail.ItemDetail = item.ItemDescription;
-                                cre.TransSaleDetails.Add(oDetail);
-                                cre.SaveChanges();
+                    //    #region 201901
+                    //    o.SaleName = ddlSaleName.SelectedItem.Text;
+                    //    if (ddlPay.SelectedItem.Value == "5")
+                    //    {
+                    //        o.AccountTransfer = ddlAccount.SelectedItem.Text;
+                    //        o.TimeTransfer = txtTimeTransfer.Text;
+                    //    }
+                    //    else
+                    //    {
+                    //        o.AccountTransfer = "";
+                    //        o.TimeTransfer = "";
+                    //    }
+                    //    #endregion
 
-                                #region Stock
-                                //StockID = item.StockID;
-                                //ts = cre.TransStocks.FirstOrDefault(w => w.StockID.Equals(StockID) && w.Active.ToLower().Equals("y"));
-                                //if(ts != null)
-                                //{
-                                //    ts.Active = "N";
-                                //    ts.StockType = "Sold";
-                                //    ts.SaleHeaderID = hid;
-                                //    ts.SaleDetailID = oDetail.SaleDetailID;
-                                //    ts.UpdatedBy = GetUsername();
-                                //    ts.UpdatedDate = DateTime.Now;
-                                //    cre.SaveChanges();
-                                //}
-                                //else // Item Is Sold Already
-                                //{
-                                //    Message = Message + " " + item.ItemName + ",";
-                                //    cre.TransSaleDetails.Remove(oDetail);
-                                //    cre.SaveChanges();
-                                //}
-                                #endregion
+                    //    #region 201903
+                    //    if (ddlPay.SelectedItem.Value == "8")
+                    //        o.Installment = ddlAccountInst.SelectedItem.Text;
+                    //    else
+                    //        o.Installment = "";
+                    //    #endregion
 
-                                //Change = ToInt32(item.Amount.Value.ToString()) * -1;
-                                //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, oDetail.SaleDetailID);
-                            }
-                        }
-                        cre.SaveChanges();
-                        #endregion
-                    };
+                    //    cre.TransSaleHeaders.Add(o);
+                    //    cre.SaveChanges();
+                    //    hid = o.SaleHeaderID;
+                    //    #endregion
+
+                    //    #region Description
+                    //    lst = lst.Where(w => w.Status == "New").ToList();
+                    //    if (lst != null && lst.Count > 0)
+                    //    {
+                    //        TransSaleDetail oDetail = new TransSaleDetail();
+                    //        //TransStock ts = new TransStock();
+                    //        foreach (SaleDetailDTO item in lst)
+                    //        {
+                    //            oDetail = new TransSaleDetail();
+                    //            oDetail.SaleHeaderID = hid;
+                    //            oDetail.ItemID = item.ItemID;
+                    //            oDetail.ItemPrice = item.ItemPrice;
+                    //            oDetail.Amount = item.Amount;
+                    //            oDetail.Discount = item.Discount;
+                    //            //oDetail.DiscountPer = item.DiscountPer;
+                    //            oDetail.SerialNumber = item.SerialNumber;
+                    //            oDetail.ItemDetail = item.ItemDescription;
+                    //            cre.TransSaleDetails.Add(oDetail);
+                    //            cre.SaveChanges();
+                    //            did = oDetail.SaleDetailID;
+
+                    //            #region SaleDetailProduct
+                    //            foreach (Entities.MasPackageDetail dp in item.ProductDetail)
+                    //            {
+
+                    //            }
+                    //            #endregion
+
+                    //            #region Stock Comment
+                    //            //StockID = item.StockID;
+                    //            //ts = cre.TransStocks.FirstOrDefault(w => w.StockID.Equals(StockID) && w.Active.ToLower().Equals("y"));
+                    //            //if(ts != null)
+                    //            //{
+                    //            //    ts.Active = "N";
+                    //            //    ts.StockType = "Sold";
+                    //            //    ts.SaleHeaderID = hid;
+                    //            //    ts.SaleDetailID = oDetail.SaleDetailID;
+                    //            //    ts.UpdatedBy = GetUsername();
+                    //            //    ts.UpdatedDate = DateTime.Now;
+                    //            //    cre.SaveChanges();
+                    //            //}
+                    //            //else // Item Is Sold Already
+                    //            //{
+                    //            //    Message = Message + " " + item.ItemName + ",";
+                    //            //    cre.TransSaleDetails.Remove(oDetail);
+                    //            //    cre.SaveChanges();
+                    //            //}
+                    //            #endregion
+
+                    //            //Change = ToInt32(item.Amount.Value.ToString()) * -1;
+                    //            //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, oDetail.SaleDetailID);
+                    //        }
+                    //    }
+                    //    cre.SaveChanges();
+                    //    #endregion
+                    //};
+                    #endregion
                 }
                 else // --> Update
                 {
-                    hid = ToInt32(hddID.Value);
-                    using (BillingEntities cre = new BillingEntities())
+                    #region Header 
+                    o.SaleHeaderID = ToInt32(hddID.Value);
+                    o.Tel = txtTel.Text;
+                    o.CustomerName = txtCustName.Text;
+                    o.CustomerAddress = txtCustAddress.Text;
+                    o.CustomerDistrict = txtCustDistrict.Text;
+                    o.CustomerCountry = txtCustCountry.Text;
+                    o.CustomerProvince = txtCustProvince.Text;
+                    o.CustomerPostalCode = txtCustPostalCode.Text;
+                    o.DeliveryName = txtDeliveryName.Text;
+                    o.DeliverAdd = txtDeliverAddress.Text;
+                    o.DeliverDistrict = txtDeliverDistrict.Text;
+                    o.DeliverCountry = txtDeliverCountry.Text;
+                    o.DeliverProvince = txtDeliverProvince.Text;
+                    o.DeliverPostalCode = txtDeliverPostalCode.Text;
+                    o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                    o.ReceivedBy = rdbCash.Checked ? "เงินสด" : "VAT";
+                    o.SaleNumber = txtSaleNumber.Text;
+                    o.Remark = txtRemark.Text;
+                    o.UpdatedBy = GetUsername();
+                    o.UpdatedDate = DateTime.Now;
+                    o.ConsignmentNo = txtConsignmentNo.Text;
+                    //o.COD = chkCOD.Checked ? "1" : "0";
+                    o.COD = "0";
+                    if (!string.IsNullOrEmpty(txtWarranty.Text))
+                        o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+
+                    #region 201808
+                    o.BillType = rdbVat.Checked ? "Vat" : "Cash";
+                    o.PayType = ddlPay.SelectedValue;
+                    #endregion
+
+                    #region 201901
+                    o.SaleName = ddlSaleName.SelectedItem.Text;
+                    if (ddlPay.SelectedItem.Value == "5")
                     {
-                        o = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(hid));
-                        if (o != null)
-                        {
-                            #region Header 
-                            o.Tel = txtTel.Text;
-                            o.CustomerName = txtCustName.Text;
-                            o.CustomerAddress = txtCustAddress.Text;
-                            o.CustomerDistrict = txtCustDistrict.Text;
-                            o.CustomerCountry = txtCustCountry.Text;
-                            o.CustomerProvince = txtCustProvince.Text;
-                            o.CustomerPostalCode = txtCustPostalCode.Text;
-                            //o.CustomerAddress2 = txtCustAddress2.Text;
-                            //o.CustomerAddress3 = txtCustAddress3.Text;
-                            o.DeliveryName = txtDeliveryName.Text;
-                            o.DeliverAdd = txtDeliverAddress.Text;
-                            o.DeliverDistrict = txtDeliverDistrict.Text;
-                            o.DeliverCountry = txtDeliverCountry.Text;
-                            o.DeliverProvince = txtDeliverProvince.Text;
-                            o.DeliverPostalCode = txtDeliverPostalCode.Text;
-                            //o.DeliverAdd2 = txtDeliverAddress2.Text;
-                            //o.DeliverAdd3 = txtDeliverAddress3.Text;
-                            o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                            o.SaleNumber = txtSaleNumber.Text;
-                            o.Remark = txtRemark.Text;
-                            o.UpdatedBy = GetUsername();
-                            o.UpdatedDate = DateTime.Now;
-                            o.ConsignmentNo = txtConsignmentNo.Text;
-                            //o.COD = chkCOD.Checked ? "1" : "0";
-                            o.COD = "0";
-                            if (!string.IsNullOrEmpty(txtWarranty.Text)) 
-                                o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                        o.AccountTransfer = ddlAccount.SelectedItem.Text;
+                        o.TimeTransfer = txtTimeTransfer.Text;
+                    }
+                    else
+                    {
+                        o.AccountTransfer = "";
+                        o.TimeTransfer = "";
+                    }
+                    #endregion
 
-                            #region 201808
-                            o.BillType = rdbVat.Checked ? "Vat" : "Cash";
-                            o.PayType = ddlPay.SelectedValue;
-                            #endregion
+                    #region 201903
+                    if (ddlPay.SelectedItem.Value == "8")
+                        o.Installment = ddlAccountInst.SelectedItem.Text;
+                    else
+                        o.Installment = "";
+                    #endregion
 
-                            #region 201901
-                            o.SaleName = ddlSaleName.SelectedItem.Text;
-                            if(ddlPay.SelectedItem.Value == "5")
-                            {
-                                o.AccountTransfer = ddlAccount.SelectedItem.Text;
-                                o.TimeTransfer = txtTimeTransfer.Text;
-                            }
-                            else
-                            {
-                                o.AccountTransfer = "";
-                                o.TimeTransfer = "";
-                            }
-                            #endregion
+                    Message = bal.UpdateSaleHeader(o, lst);
+                    #endregion
 
-                            #region 201903
-                            if (ddlPay.SelectedItem.Value == "8")
-                                o.Installment = ddlAccountInst.SelectedItem.Text;
-                            else
-                                o.Installment = "";
-                            #endregion
+                    #region Comment
+                    //hid = ToInt32(hddID.Value);
+                    //using (BillingEntities cre = new BillingEntities())
+                    //{
+                    //    o = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(hid));
+                    //    if (o != null)
+                    //    {
+                    //        #region Header 
+                    //        o.Tel = txtTel.Text;
+                    //        o.CustomerName = txtCustName.Text;
+                    //        o.CustomerAddress = txtCustAddress.Text;
+                    //        o.CustomerDistrict = txtCustDistrict.Text;
+                    //        o.CustomerCountry = txtCustCountry.Text;
+                    //        o.CustomerProvince = txtCustProvince.Text;
+                    //        o.CustomerPostalCode = txtCustPostalCode.Text;
+                    //        //o.CustomerAddress2 = txtCustAddress2.Text;
+                    //        //o.CustomerAddress3 = txtCustAddress3.Text;
+                    //        o.DeliveryName = txtDeliveryName.Text;
+                    //        o.DeliverAdd = txtDeliverAddress.Text;
+                    //        o.DeliverDistrict = txtDeliverDistrict.Text;
+                    //        o.DeliverCountry = txtDeliverCountry.Text;
+                    //        o.DeliverProvince = txtDeliverProvince.Text;
+                    //        o.DeliverPostalCode = txtDeliverPostalCode.Text;
+                    //        //o.DeliverAdd2 = txtDeliverAddress2.Text;
+                    //        //o.DeliverAdd3 = txtDeliverAddress3.Text;
+                    //        o.ReceivedDate = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                    //        o.SaleNumber = txtSaleNumber.Text;
+                    //        o.Remark = txtRemark.Text;
+                    //        o.UpdatedBy = GetUsername();
+                    //        o.UpdatedDate = DateTime.Now;
+                    //        o.ConsignmentNo = txtConsignmentNo.Text;
+                    //        //o.COD = chkCOD.Checked ? "1" : "0";
+                    //        o.COD = "0";
+                    //        if (!string.IsNullOrEmpty(txtWarranty.Text)) 
+                    //            o.WarrantyDate = DateTime.ParseExact(txtWarranty.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
 
-                            cre.SaveChanges();
-                            #endregion
+                    //        #region 201808
+                    //        o.BillType = rdbVat.Checked ? "Vat" : "Cash";
+                    //        o.PayType = ddlPay.SelectedValue;
+                    //        #endregion
 
-                            #region Detail
-                            if (lst != null && lst.Count > 0)
-                            {                                
-                                TransSaleDetail objDetail = new TransSaleDetail();
-                                tmp = lst.Where(w => w.Status == "Old").ToList();
-                                foreach (SaleDetailDTO item in tmp)
-                                {
-                                    objDetail = cre.TransSaleDetails.FirstOrDefault(w => w.SaleDetailID.Equals(item.SaleDetailID));
-                                    if (objDetail != null)
-                                    {
-                                        if (objDetail.Amount.Value - item.Amount.Value != 0)
-                                            Change = ToInt32(objDetail.Amount.Value - item.Amount.Value);
+                    //        #region 201901
+                    //        o.SaleName = ddlSaleName.SelectedItem.Text;
+                    //        if(ddlPay.SelectedItem.Value == "5")
+                    //        {
+                    //            o.AccountTransfer = ddlAccount.SelectedItem.Text;
+                    //            o.TimeTransfer = txtTimeTransfer.Text;
+                    //        }
+                    //        else
+                    //        {
+                    //            o.AccountTransfer = "";
+                    //            o.TimeTransfer = "";
+                    //        }
+                    //        #endregion
 
-                                        objDetail.ItemID = item.ItemID;
-                                        objDetail.ItemPrice = item.ItemPrice;
-                                        objDetail.Amount = item.Amount;
-                                        objDetail.Discount = item.Discount;
-                                        //objDetail.DiscountPer = item.DiscountPer;
-                                        objDetail.SerialNumber = item.SerialNumber;
-                                        objDetail.ItemDetail = item.ItemDescription;
-                                    }
-                                    cre.SaveChanges();
+                    //        #region 201903
+                    //        if (ddlPay.SelectedItem.Value == "8")
+                    //            o.Installment = ddlAccountInst.SelectedItem.Text;
+                    //        else
+                    //            o.Installment = "";
+                    //        #endregion
 
-                                    //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
-                                }
+                    //        cre.SaveChanges();
+                    //        #endregion
 
-                                tmp = lst.Where(w => w.Status == "New").ToList();
-                                foreach (SaleDetailDTO item in tmp)
-                                {
-                                    Change = 0;
-                                    objDetail = new TransSaleDetail();
-                                    objDetail.SaleHeaderID = hid;
-                                    objDetail.ItemID = item.ItemID;
-                                    objDetail.ItemPrice = item.ItemPrice;
-                                    objDetail.Amount = item.Amount;
-                                    objDetail.Discount = item.Discount;
-                                    //objDetail.DiscountPer = item.DiscountPer;
-                                    objDetail.SerialNumber = item.SerialNumber;
-                                    objDetail.ItemDetail = item.ItemDescription;
-                                    cre.TransSaleDetails.Add(objDetail);
-                                    cre.SaveChanges();
+                    //        #region Detail
+                    //        if (lst != null && lst.Count > 0)
+                    //        {                                
+                    //            TransSaleDetail objDetail = new TransSaleDetail();
+                    //            tmp = lst.Where(w => w.Status == "Old").ToList();
+                    //            foreach (SaleDetailDTO item in tmp)
+                    //            {
+                    //                objDetail = cre.TransSaleDetails.FirstOrDefault(w => w.SaleDetailID.Equals(item.SaleDetailID));
+                    //                if (objDetail != null)
+                    //                {
+                    //                    if (objDetail.Amount.Value - item.Amount.Value != 0)
+                    //                        Change = ToInt32(objDetail.Amount.Value - item.Amount.Value);
 
-                                    //Change = ToInt32(item.Amount.Value.ToString()) * -1;
-                                    //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
-                                }
+                    //                    objDetail.ItemID = item.ItemID;
+                    //                    objDetail.ItemPrice = item.ItemPrice;
+                    //                    objDetail.Amount = item.Amount;
+                    //                    objDetail.Discount = item.Discount;
+                    //                    //objDetail.DiscountPer = item.DiscountPer;
+                    //                    objDetail.SerialNumber = item.SerialNumber;
+                    //                    objDetail.ItemDetail = item.ItemDescription;
+                    //                }
+                    //                cre.SaveChanges();
 
-                                tmp = lst.Where(w => w.Status == "Delete").ToList();
-                                foreach (SaleDetailDTO item in tmp)
-                                {
-                                    Change = 0;
-                                    objDetail = new TransSaleDetail();
-                                    objDetail = cre.TransSaleDetails.FirstOrDefault(w => w.SaleDetailID.Equals(item.SaleDetailID));
-                                    if (objDetail != null)
-                                    {
-                                        Change = ToInt32(objDetail.Amount.Value);
-                                        cre.TransSaleDetails.Remove(objDetail);
-                                    }
-                                    
-                                    cre.SaveChanges();
+                    //                //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
+                    //            }
 
-                                    //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
-                                }
-                            }
-                            #endregion
-                        }
-                    };
+                    //            tmp = lst.Where(w => w.Status == "New").ToList();
+                    //            foreach (SaleDetailDTO item in tmp)
+                    //            {
+                    //                Change = 0;
+                    //                objDetail = new TransSaleDetail();
+                    //                objDetail.SaleHeaderID = hid;
+                    //                objDetail.ItemID = item.ItemID;
+                    //                objDetail.ItemPrice = item.ItemPrice;
+                    //                objDetail.Amount = item.Amount;
+                    //                objDetail.Discount = item.Discount;
+                    //                //objDetail.DiscountPer = item.DiscountPer;
+                    //                objDetail.SerialNumber = item.SerialNumber;
+                    //                objDetail.ItemDetail = item.ItemDescription;
+                    //                cre.TransSaleDetails.Add(objDetail);
+                    //                cre.SaveChanges();
+
+                    //                //Change = ToInt32(item.Amount.Value.ToString()) * -1;
+                    //                //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
+                    //            }
+
+                    //            tmp = lst.Where(w => w.Status == "Delete").ToList();
+                    //            foreach (SaleDetailDTO item in tmp)
+                    //            {
+                    //                Change = 0;
+                    //                objDetail = new TransSaleDetail();
+                    //                objDetail = cre.TransSaleDetails.FirstOrDefault(w => w.SaleDetailID.Equals(item.SaleDetailID));
+                    //                if (objDetail != null)
+                    //                {
+                    //                    Change = ToInt32(objDetail.Amount.Value);
+                    //                    cre.TransSaleDetails.Remove(objDetail);
+                    //                }
+
+                    //                cre.SaveChanges();
+
+                    //                //ManageStock(ToInt32(item.ItemID.Value.ToString()), ToInt32(item.Amount.Value.ToString()), "Sale", GetUsername(), Change, item.SaleDetailID);
+                    //            }
+                    //        }
+                    //        #endregion
+                    //    }
+                    //};
+                    #endregion
                 }
 
-                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "TransactionSaleList.aspx");
+                if (string.IsNullOrEmpty(Message))
+                    ShowMessageBox("บันทึกสำเร็จ.", this.Page, "TransactionSaleList.aspx");
+                else
+                    ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
             }
             catch (Exception ex)
             {
@@ -555,7 +778,7 @@ namespace Billing.Transaction
             }
         }
 
-        #region Event Detail
+        #region Event Detail Modal1
         protected void btnAddModal_Click(object sender, EventArgs e)
         {
             try
@@ -617,6 +840,32 @@ namespace Billing.Transaction
                         o.Amount = ToDoudle(txtMAmount.Text);
                         o.SerialNumber = txtMSN.Text;
                         o.ItemDescription = GetItemDesc();// txtMDescription.Text;
+
+                        #region DetailProduct
+                        if(gvDetail.Rows.Count > 0)
+                        {
+                            o.ProductDetail = new List<Entities.MasPackageDetail>();
+                            HiddenField hdd = new HiddenField();
+                            ImageButton imb = new ImageButton();
+                            Entities.MasPackageDetail pd = new Entities.MasPackageDetail();
+                            foreach (GridViewRow item in gvDetail.Rows)
+                            {
+                                pd = new Entities.MasPackageDetail();
+                                hdd = (HiddenField)item.FindControl("hddProductID");
+                                pd.ProductID = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? ToInt32(hdd.Value) : 0;
+
+                                hdd = (HiddenField)item.FindControl("hddSaleDetailID");
+                                pd.PackageDetailID = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? ToInt32(hdd.Value) : 0;
+                                pd.Amount = ToInt32(item.Cells[2].Text);
+                                pd.ProductCode = item.Cells[0].Text;
+                                pd.ProductName = item.Cells[1].Text;
+
+                                imb = (ImageButton)item.FindControl("imgbtnDelete");
+                                pd.CanChange = (imb != null && imb.Visible == true) ? "Y" : "N";
+                                o.ProductDetail.Add(pd);
+                            }
+                        }
+                        #endregion
                     }
                 }
                 else
@@ -633,6 +882,33 @@ namespace Billing.Transaction
                     o.SerialNumber = txtMSN.Text;
                     o.ItemDescription = GetItemDesc();// txtMDescription.Text;
                     o.Status = "New";
+
+                    #region DetailProduct
+                    if (gvDetail.Rows.Count > 0)
+                    {
+                        o.ProductDetail = new List<Entities.MasPackageDetail>();
+                        HiddenField hdd = new HiddenField();
+                        ImageButton imb = new ImageButton();
+                        Entities.MasPackageDetail pd = new Entities.MasPackageDetail();
+                        foreach (GridViewRow item in gvDetail.Rows)
+                        {
+                            pd = new Entities.MasPackageDetail();
+                            hdd = (HiddenField)item.FindControl("hddProductID");
+                            pd.ProductID = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? ToInt32(hdd.Value) : 0;
+
+                            hdd = (HiddenField)item.FindControl("hddSaleDetailID");
+                            pd.PackageDetailID = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? ToInt32(hdd.Value) : 0;
+                            pd.Amount = ToInt32(item.Cells[2].Text);
+                            pd.ProductCode = item.Cells[0].Text;
+                            pd.ProductName = item.Cells[1].Text;
+
+                            imb = (ImageButton)item.FindControl("imgbtnDelete");
+                            pd.CanChange = (imb != null && imb.Visible == true) ? "Y" : "N";
+                            o.ProductDetail.Add(pd);
+                        }
+                    }
+                    #endregion
+
                     lst.Add(o);
                 }
                                 
@@ -673,40 +949,7 @@ namespace Billing.Transaction
             }
             return result;
         }
-
-        protected void BindItemDesc(string ItemDesc)
-        {
-            try
-            {
-                if(!string.IsNullOrEmpty(ItemDesc))
-                {
-                    string[] spl = ItemDesc.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-                    if(spl != null)
-                    {
-                        TextBox txt = new TextBox();
-                        for (int i = 1; i <= 10; i++)
-                        {
-                            txt = (TextBox)Panel1.FindControl("txtMDesc" + i.ToString());
-                            if (txt != null && !string.IsNullOrEmpty(spl[i-0]))
-                            {
-                                txt.Text = spl[i - 0];
-                                txt.Visible = true;
-                            }
-                            else
-                            {
-                                txt.Visible = false;
-                            }
-                        }
-                    }
-                    
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
-                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
-            }
-        }
+        
 
         protected void ClearTextDetail()
         {
@@ -719,6 +962,9 @@ namespace Billing.Transaction
             //txtMDiscountPer.Text = "0";
             txtMSN.Text = "";
             //txtMDescription.Text = "";
+            gvDetail.DataSource = null;
+            gvDetail.DataBind();
+            lkbm1Add.Visible = false;
         }
 
         protected void imgbtnEdit_Click(object sender, ImageClickEventArgs e)
@@ -746,10 +992,11 @@ namespace Billing.Transaction
                                 txtMPrice.Text = obj.ItemPriceStr;
                                 txtMAmount.Text = obj.AmountStr;
                                 txtMDiscount.Text = obj.DiscountStr;
-                                //txtMDiscountPer.Text = obj.DiscountPerStr;
                                 txtMSN.Text = obj.SerialNumber;
-                                //BindItemDesc(obj.ItemDescription);
                                 //txtMDescription.Text = obj.ItemDescription;
+
+                                BindPackageDetail(obj.ProductDetail);
+                                imgbtnSearchItem.Visible = false;
                             }
                         }
                     }
@@ -760,7 +1007,7 @@ namespace Billing.Transaction
 
             }
         }
-
+        
         protected void imgbtnDelete_Click(object sender, ImageClickEventArgs e)
         {
             try
@@ -777,7 +1024,9 @@ namespace Billing.Transaction
                         if (lst != null && lst.Count > 0)
                         {
                             obj = lst.FirstOrDefault(w => w.SaleDetailID.Equals(objID));
-                            obj.Status = "Delete";
+                            if(obj != null)
+                                lst.Remove(obj);
+                            //obj.Status = "Delete";
                             Session["saleDetail"] = lst;
                         }
                     }
@@ -796,42 +1045,86 @@ namespace Billing.Transaction
             }
         }
 
-        #endregion                
-
-        protected void txtDate_TextChanged(object sender, EventArgs e)
+        //Add gvDetail
+        protected void lkbm1Add_Click(object sender, EventArgs e)
         {
             try
             {
-                DateTime dt = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                TransSaleHeader o = new TransSaleHeader();                
-                using (BillingEntities cre = new BillingEntities())
-                {
-                    o = cre.TransSaleHeaders.Where(w => w.ReceivedDate.Value.Year == dt.Year && w.ReceivedDate.Value.Month == dt.Month)
-                        .OrderByDescending(od => od.SaleNumber).FirstOrDefault();
-
-                    if(o != null)
-                    {
-                        string[] spl = o.SaleNumber.Split('-');
-                        if(spl != null)
-                        {
-                            int no = ToInt32(spl[1]);
-                            no++;
-                            txtSaleNumber.Text = dt.ToString("yyMM") + "-" + no.ToString("000"); 
-                        }
-                    }
-                    else
-                    {
-                        txtSaleNumber.Text = dt.ToString("yyMM") + "-001";
-                    }
-                };
+                ModalPopupExtender1.Show();
+                ModalPopupExtender4.Show();
+                SearchProduct();
+                txtm5Amount.Text = "";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
+                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
+        //Delete from gvDetail
+        protected void imgbtngvDetailDelete_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                ImageButton imb = (ImageButton)sender;
+                if (imb != null)
+                {
+                    Int32 DetailID = ToInt32(hddDetailID.Value);
+                    int objID = ToInt32(imb.CommandArgument);
+                    List<SaleDetailDTO> lst = new List<SaleDetailDTO>();
+                    SaleDetailDTO obj = new SaleDetailDTO();
+                    Entities.MasPackageDetail pd = new Entities.MasPackageDetail();
+                    if (Session["saleDetail"] != null)
+                    {
+                        lst = (List<SaleDetailDTO>)Session["saleDetail"];
+                        if (lst != null && lst.Count > 0)
+                        {
+                            obj = lst.FirstOrDefault(w => w.SaleDetailID.Equals(DetailID));
+                            if(obj.ProductDetail != null && obj.ProductDetail.Count > 0)
+                            {
+                                pd = obj.ProductDetail.FirstOrDefault(w => w.PackageDetailID.Equals(objID));
+                                if(pd != null)
+                                {
+                                    obj.ProductDetail.Remove(pd);
+                                    gvDetail.DataSource = obj.ProductDetail;
+                                    gvDetail.DataBind();
+                                }
+                            }
+                            Session["saleDetail"] = lst;
+                        }
+                    }
+                    else if(Session["saleDetailProduct"] != null)
+                    {
+                        List<Entities.MasPackageDetail> lstPD = (List<Entities.MasPackageDetail>)Session["saleDetailProduct"];
+                        if(lstPD != null && lstPD.Count > 0)
+                        {
+                            pd = lstPD.FirstOrDefault(w => w.PackageDetailID.Equals(objID));
+                            if (pd != null)
+                            {
+                                lstPD.Remove(pd);
+                                Session["saleDetailProduct"] = lstPD;
+                                gvDetail.DataSource = lstPD;
+                                gvDetail.DataBind();
+                            }
+                        }
+                    }
+                    
+                    ModalPopupExtender1.Show();
+                }
+                else
+                {
+                    SendMailError("imb is null", System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
+                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+        #endregion
 
-        #region Modal2 Customer
+        #region Customer Modal2
         protected void btnMSearch_Click(object sender, EventArgs e)
         {
             try
@@ -1049,7 +1342,7 @@ namespace Billing.Transaction
         }
         #endregion
 
-        #region Modal Item
+        #region Modal Item Modal3
         protected void btnMItemSearch_Click(object sender, EventArgs e)
         {
             try
@@ -1057,7 +1350,7 @@ namespace Billing.Transaction
                 ModalPopupExtender1.Show();
                 ModalPopupExtender3.Show();
                 SearchItem();
-                //ClearTextSearchItem();
+                ClearTextSearchItem();
             }
             catch (Exception ex)
             {
@@ -1072,41 +1365,24 @@ namespace Billing.Transaction
                 ModalPopupExtender1.Show();
                 ImageButton imb = (ImageButton)sender;
                 HiddenField hdd = new HiddenField();
-                HiddenField hddStock = new HiddenField();
                 TextBox txt = new TextBox();
-                Int32 i = 1;
                 if (imb != null)
                 {
                     Int32 index = ToInt32(imb.CommandArgument);
                     hdd = (HiddenField)gvItemSearch.Rows[index].FindControl("hddItemID");
-                    //hddStock = (HiddenField)gvItemSearch.Rows[index].FindControl("hddStockID");
-                    if (hdd != null && hddStock != null)
+                    if (hdd != null)
                     {
                         hddItemID.Value = hdd.Value;
-                        //hddStockID.Value = hddStock.Value;
                         txtMItem.Text = gvItemSearch.Rows[index].Cells[1].Text;
                         txtMPrice.Text = gvItemSearch.Rows[index].Cells[2].Text;
-                        //txtMSN.Text = gvItemSearch.Rows[index].Cells[2].Text;
-                        //txtMDescription.Text = gvItemSearch.Rows[index].Cells[3].Text;
-                        //txtMDescription.Text = ((Label)gvItemSearch.Rows[index].FindControl("lbItemDesc")).Text;
                         
                         #region ItemDetail
                         var dal = ItemDal.Instance;
                         List<Entities.MasPackageDetail> lst = dal.GetSearchItemDetailByID(ToInt32(hddItemID.Value));
                         if (lst != null)
                         {
-                            foreach (Entities.MasPackageDetail item in lst)
-                            {
-                                //txt = (TextBox)Panel1.FindControl("txtMDesc" + i.ToString());
-                                //if (txt != null)
-                                //{
-                                //    txt.Text = item.ItemDetail;
-                                //    txt.ReadOnly = item.CanChange == "N" ? true : false;
-                                //    txt.Visible = !string.IsNullOrEmpty(item.ItemDetail);
-                                //}
-
-                                i++;
-                            }
+                            BindPackageDetail(lst);
+                            lkbm1Add.Visible = true;
                         }
                         #endregion
                     }                    
@@ -1139,8 +1415,6 @@ namespace Billing.Transaction
                 string ItemCode = txtSearchItemCode.Text.ToLower();
                 string ItemName = txtSearchItemName.Text.ToLower();
                 var dal = StockDal.Instance;
-                //List<Entities.DTO.InventoryDTO> lst = new List<Entities.DTO.InventoryDTO>();
-                //lst = dal.GetItemInStock();
                 List<Entities.MasPackageHeader> lst = new List<Entities.MasPackageHeader>();
                 lst = dal.GetItemInStock();
                 if (lst != null)
@@ -1187,7 +1461,139 @@ namespace Billing.Transaction
 
             }
         }
+
+        protected void BindPackageDetail(List<Entities.MasPackageDetail> lst)
+        {
+            try
+            {
+                Session["saleDetailProduct"] = lst;
+                gvDetail.DataSource = lst;
+                gvDetail.DataBind();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
         #endregion
-      
+
+        #region Search Product Model4
+        protected void btnSearchItemProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ModalPopupExtender1.Show();
+                ModalPopupExtender4.Show();
+                SearchProduct();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnModalClose4_Click(object sender, EventArgs e)
+        {
+            ModalPopupExtender1.Show();
+        }
+
+        protected void imgbtnChooseProduct_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                ModalPopupExtender1.Show();
+                ModalPopupExtender4.Show();
+                ModalPopupExtender5.Show();
+                ImageButton imb = (ImageButton)sender;
+                if(imb != null)
+                {
+                    hddm5Index.Value = imb.CommandArgument;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void SearchProduct()
+        {
+            try
+            {
+                var dal = ItemDal.Instance;
+                List<Entities.MasProduct> lst = dal.GetSearchProductAll();
+                if(lst != null && lst.Count > 0)
+                {
+                    string ProductName = txtProductName.Text.ToLower();
+                    if (!string.IsNullOrEmpty(ProductName))
+                    {
+                        lst = lst.Where(w => w.ProductName.ToLower().Contains(ProductName)).ToList();
+                    }
+                    gvProduct.DataSource = lst;
+                    gvProduct.DataBind();
+                    Session["ProductList"] = lst;
+                }
+                else
+                {
+                    gvProduct.DataSource = null;
+                    gvProduct.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+        #region Amount Modal5 
+        protected void btnm5OK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Session["ProductList"] != null)
+                {
+                    Int32 ProductID = ToInt32(hddm5Index.Value);
+                    List<Entities.MasProduct> lst = new List<Entities.MasProduct>();
+                    Entities.MasProduct masPro = new Entities.MasProduct();
+                    lst = (List<Entities.MasProduct>)Session["ProductList"];
+                    masPro = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                    if (masPro != null && Session["saleDetailProduct"] != null)
+                    {
+                        List<Entities.MasPackageDetail> lstDetailProduct = (List<Entities.MasPackageDetail>)Session["saleDetailProduct"];
+                        lstDetailProduct.Add(new Entities.MasPackageDetail()
+                        {
+                            ProductID = masPro.ProductID,
+                            ProductCode = masPro.ProductCode,
+                            ProductName = masPro.ProductName,
+                            Amount = ToInt32(txtm5Amount.Text),
+                            CanChange = "Y",
+                        });
+                        BindPackageDetail(lstDetailProduct);
+                        ModalPopupExtender1.Show();
+                    }
+                    else
+                    {
+                        ShowMessageBox("Session Timeout. !!!", this, "../Index.aspx");
+                    }
+                }
+                else
+                {
+                    ShowMessageBox("Session Timeout. !!!", this, "../Index.aspx");
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        protected void btnm5Cancel_Click(object sender, EventArgs e)
+        {
+            ModalPopupExtender1.Show();
+            ModalPopupExtender4.Show();
+            hddm5Index.Value = "";
+        }
+        #endregion
     }
 }

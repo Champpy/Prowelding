@@ -267,6 +267,7 @@
                                                     &nbsp;
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleDetailID").ToString()%>'
+                                                        Visible='<%# string.IsNullOrEmpty(hddID.Value) %>'
                                                         OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
                                                 </ItemTemplate>
                                                 <HeaderStyle CssClass="text-center width9 headerData" Height="30px"/>
@@ -388,12 +389,17 @@
             </div>--%>
             <div class="row" style="height:155px;">    
                 <div class="col-md-1"></div>            
-                <div class="col-md-1 headerData" style="height:200px;"><b>รายละเอียด :</b></div>
-                <div class="col-md-9 rowData" style="height:200px;">
+                <div class="col-md-1 headerData" style="height:200px;">
+                    <b>รายละเอียด :</b>
+                    <br />
+                    <b style="color:black;"><asp:LinkButton ID="lkbm1Add" runat="server" Text="<< Add >>" 
+                        Visible="false" OnClick="lkbm1Add_Click"></asp:LinkButton></b>
+                </div>
+                <div class="col-md-9 rowData" style="height:200px; overflow:auto;">
                     <%--<asp:TextBox ID="txtMDescription" runat="server" TextMode="MultiLine" Rows="7" Width="99%"></asp:TextBox>--%>
                     <asp:GridView ID="gvDetail" runat="server" Width="100%" AutoGenerateColumns="False">
                         <Columns>
-                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
+                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode" Visible="false">
                                 <HeaderStyle CssClass="text-center width20" Height="30px" />
                                 <ItemStyle CssClass="text-left paddingLeft5" Height="25px" />
                             </asp:BoundField>
@@ -401,17 +407,20 @@
                                 <HeaderStyle CssClass="text-center width60 " />
                                 <ItemStyle CssClass="text-left paddingLeft5" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="จำนวน" DataField="Amount" DataFormatString="{0:N0}">
+                            <asp:BoundField HeaderText="จำนวน" DataField="AmountStr">
                                 <HeaderStyle CssClass="text-center width10 " />
                                 <ItemStyle CssClass="text-right paddingRight5"/>
                             </asp:BoundField>
                             <asp:TemplateField HeaderText="Tools">
                                 <ItemTemplate>
-                                    <asp:ImageButton ID="imgbtnm1Delete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
-                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "TID").ToString()%>'
-                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "ItemIndex").ToString()%>'
+                                    <asp:HiddenField ID="hddSaleDetailID" runat="server"  Value='<%# DataBinder.Eval(Container.DataItem, "PackageDetailID").ToString()%>' />
+                                    <asp:HiddenField ID="hddProductID" runat="server" value='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'/>
+                                    <asp:HiddenField ID="hddCanChange" runat="server" value='<%# DataBinder.Eval(Container.DataItem, "CANCHANGE").ToString()%>'/>
+                                    <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
+                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageDetailID").ToString()%>'
+                                        CommandName='<%# Container.DataItemIndex %>'
                                         Visible='<%# (DataBinder.Eval(Container.DataItem, "CANCHANGE").ToString() == "N" ? false : true) %>'
-                                        OnClick="imgbtnm1Delete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
+                                        OnClick="imgbtngvDetailDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
                                 </ItemTemplate>
                                 <HeaderStyle CssClass="text-center width10" />
                                 <ItemStyle CssClass="text-center" />
@@ -640,8 +649,8 @@
                                     <asp:HiddenField ID="hddItemID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "PackageHeaderID").ToString()%>' />
                                     <%--<asp:HiddenField ID="hddStockID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "StockID").ToString()%>' />--%>
                                     <%--<asp:Label ID="lbItemDesc" runat="server" Visible="false" Text='<%# DataBinder.Eval(Container.DataItem, "ItemDesc").ToString()%>'></asp:Label>--%>
-                                    <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"                                        
-                                        CommandArgument='<%# Container.DataItemIndex.ToString()%>'
+                                    <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"  
+                                        CommandArgument='<%# Container.DataItemIndex %>'
                                         OnClick="imgbtnChooseItem_Click" />
                                 </ItemTemplate>
                                 <HeaderStyle CssClass="text-center width5 headerData" Height="30px"/>
@@ -678,5 +687,124 @@
             </div>
         </div>
     </asp:Panel>
+
+    <%--List Item (Product)--%>
+    <asp:ModalPopupExtender ID="ModalPopupExtender4" runat="server" BackgroundCssClass="modalBackground"
+        PopupControlID="Panel4" TargetControlID="lbl_modal_view">
+    </asp:ModalPopupExtender>
+    <asp:Panel ID="Panel4" Height="600px" Width="1100px" runat="server" Style="display: none;">
+        <%--Style="display: none;"--%>
+        <div class="panel panel-info-dark width100" style="min-height: 600px;">
+            <div class="panel-heading text-left">
+                <h3 class="panel-title">
+                    <asp:Label ID="Label3" runat="server" CssClass="modalHeader" Text="List Item"></asp:Label>
+                </h3>
+            </div>
+            <div class="row" style="margin-top: 20px;">    
+                <div class="col-md-1"></div>   
+                <div class="col-md-2 headerData"><b>ชื่อสินค้า :</b></div>
+                <div class="col-md-3 rowData">
+                    <asp:TextBox ID="txtProductName" runat="server"></asp:TextBox>                    
+                </div>            
+                <div class="col-md-2 headerData"><b></b></div>
+                <div class="col-md-3 rowData">
+                    <%--<asp:TextBox ID="txtProductCode" runat="server"></asp:TextBox>--%>
+                </div>
+                             
+                <div class="col-md-1"></div>
+            </div>                  
+            <div class="row" style="height:400px !important;">    
+                <div class="col-md-1"></div>            
+                <div class="col-md-10 rowData" style="overflow:auto; height:400px !important;">
+                    <asp:GridView ID="gvProduct" runat="server" Width="100%" AutoGenerateColumns="False">
+                        <Columns>
+                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode" Visible="false">
+                                <HeaderStyle CssClass="text-center width15 headerData" />
+                                <ItemStyle CssClass="text-left rowData"/>
+                            </asp:BoundField>
+                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="ProductName">
+                                <HeaderStyle CssClass="text-center width25 headerData" />
+                                <ItemStyle CssClass="text-left rowData"/>
+                            </asp:BoundField>
+                            <%--<asp:BoundField HeaderText="Serial" DataField="Serial">
+                                <HeaderStyle CssClass="text-center width10 headerData" />
+                                <ItemStyle CssClass="text-left rowData"/>
+                            </asp:BoundField>--%>
+                            <asp:BoundField HeaderText="ราคา" DataField="SellPrice">
+                                <HeaderStyle CssClass="text-center width15 headerData" />
+                                <ItemStyle CssClass="text-center rowData"/>
+                            </asp:BoundField>      
+                            <%--<asp:BoundField HeaderText="รายละเอียด" DataField="ItemDesc" Visible="false">
+                                <HeaderStyle CssClass="text-center width15 headerData" />
+                                <ItemStyle CssClass="text-right rowData"/>
+                            </asp:BoundField>   --%>                           
+                            <asp:TemplateField HeaderText="Tools">
+                                <ItemTemplate>
+                                    <asp:HiddenField ID="hddProductID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>' />
+                                    <asp:ImageButton ID="imgbtnChooseProduct" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
+                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
+                                        OnClick="imgbtnChooseProduct_Click" />
+                                </ItemTemplate>
+                                <HeaderStyle CssClass="text-center width5 headerData" Height="30px"/>
+                                <ItemStyle CssClass="text-center rowData" />
+                            </asp:TemplateField>                            
+                        </Columns>
+                        <HeaderStyle BackColor="#ff7777" />
+                        <EmptyDataTemplate>
+                            <table border="1" style="width:100%; padding:5px;">
+                                <tr>
+                                    <td>ชื่อสินค้า</td>
+                                    <td>ราคา</td>                                    
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align:left;">
+                                        No data.
+                                    </td>
+                                </tr>
+                            </table>
+                        </EmptyDataTemplate>
+                    </asp:GridView>
+                </div>                
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">&nbsp;</div> 
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12 text-center">
+                    <asp:Button ID="btnSearchItemProduct" runat="server" CssClass="btn btn-save" Text="Search" OnClick="btnSearchItemProduct_Click"/>
+                    <asp:Button ID="btnModalClose4" runat="server" CssClass="btn btn-save" Text="Close" OnClick="btnModalClose4_Click"/>
+                </div>
+            </div>
+        </div>
+    </asp:Panel>
     
+    <%--Amount--%>
+    <asp:ModalPopupExtender ID="ModalPopupExtender5" runat="server" BackgroundCssClass="modalBackground"
+        PopupControlID="Panel5" TargetControlID="lbl_modal_view">
+    </asp:ModalPopupExtender>
+    <asp:Panel ID="Panel5" Height="180px" Width="400px" runat="server" Style="display: none;">
+        <div class="panel panel-info-dark width100" style="min-height: 180px;">
+            <div class="panel-heading text-left">
+                <h3 class="panel-title">
+                    <asp:Label ID="Label4" runat="server" CssClass="modalHeader" Text="Amount"></asp:Label>
+                </h3>
+            </div>
+            <div class="row">    
+                <div class="col-md-1"></div>            
+                <div class="col-md-3 headerData"><b>จำนวน :</b></div>
+                <div class="col-md-7 rowData">
+                    <asp:TextBox ID="txtm5Amount" runat="server" Width="85%"></asp:TextBox>
+                    <asp:HiddenField id="hddm5Index" runat="server" />
+                </div>               
+                <div class="col-md-1"></div>
+            </div>     
+            <div class="row">&nbsp;</div> 
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12 text-center">
+                    <asp:Button ID="btnm5OK" runat="server" CssClass="btn btn-save" Text="OK" OnClick="btnm5OK_Click"/>
+                    <asp:Button ID="btnm5Cancel" runat="server" CssClass="btn btn-save" Text="Cancel" OnClick="btnm5Cancel_Click"/>
+                </div>
+            </div>
+        </div>
+    </asp:Panel>
 </asp:Content>

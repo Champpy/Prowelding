@@ -21,6 +21,13 @@ namespace Entities
         #region Product Detail
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
+        public string AmountStr
+        {
+            get
+            {
+                return Amount.ToString("###,##0");
+            }
+        }
         #endregion
     }
 }

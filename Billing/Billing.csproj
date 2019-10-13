@@ -516,6 +516,7 @@
     <Content Include="Stock\InventoryList.aspx" />
     <Content Include="Stock\Inbound.aspx" />
     <Content Include="Transaction\TransactionCustomerList.aspx" />
+    <Content Include="Transaction\TransactionSaleCancelList.aspx" />
     <Content Include="Transaction\TransactionSaleList.aspx" />
     <Content Include="Transaction\TransactionSales.aspx" />
     <Content Include="Usercontrols\ucPaging.ascx" />
@@ -794,6 +795,13 @@
     </Compile>
     <Compile Include="Transaction\TransactionCustomerList.aspx.designer.cs">
       <DependentUpon>TransactionCustomerList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Transaction\TransactionSaleCancelList.aspx.cs">
+      <DependentUpon>TransactionSaleCancelList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Transaction\TransactionSaleCancelList.aspx.designer.cs">
+      <DependentUpon>TransactionSaleCancelList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Transaction\TransactionSaleList.aspx.cs">
       <DependentUpon>TransactionSaleList.aspx</DependentUpon>

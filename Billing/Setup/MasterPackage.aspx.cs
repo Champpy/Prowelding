@@ -185,7 +185,6 @@ namespace Billing.Setup
                     if(o != null)
                     {
                         o.ItemID = ItemID;
-                        o.StockID = ToInt32(hddStockID.Value);
                         o.ItemName = txtMItem.Text;
                         o.ItemPrice = ToDoudle(txtMPrice.Text);
                         o.Discount = ToDoudle(txtMDiscount.Text);
@@ -199,8 +198,7 @@ namespace Billing.Setup
                 {
                     o = new SaleDetailDTO();
                     o.SaleDetailID = lst.Count == 0 ? 1 : ToInt32(lst.Max(m => m.SaleDetailID).ToString()) + 1;
-                    o.ItemID = ItemID; // ToInt32(hddItemID.Value);
-                    o.StockID = ToInt32(hddStockID.Value);
+                    o.ItemID = ItemID; // ToInt32(hddItemID.Value);\
                     o.ItemName = txtMItem.Text;
                     o.ItemPrice = ToDoudle(txtMPrice.Text);
                     o.Discount = ToDoudle(txtMDiscount.Text);

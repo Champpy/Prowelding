@@ -7,8 +7,8 @@ namespace Entities.DTO
 {
     public class SaleDetailDTO : TransSaleDetail
     {
+        public List<Entities.MasPackageDetail> ProductDetail { get; set; }
         public Int32 No { get; set; }
-        public Int32 StockID { get; set; }
         public string AmountStr 
         {
             get

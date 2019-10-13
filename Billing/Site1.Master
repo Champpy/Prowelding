@@ -44,6 +44,7 @@
                                     <%--<li><a href="/Setup/MasterDistributor.aspx">ผู้จัดจำหน่าย</a></li>
                                     <li role="separator" class="divider"></li>--%>
                                     <li><a href="/Setup/UserLogin.aspx">ผู้ใช้</a></li>
+                                    
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -56,6 +57,7 @@
                                     <li><a href="/Report/ReportWarranty.aspx">ใบรับประกัน</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Transaction/TransactionCustomerList.aspx">ค้นหาลูกค้า</a></li>
+                                    
                                     <%--<li role="separator" class="divider"></li>
                                     <li><a href="#">Transaction Dummy</a></li>--%>
                                 </ul>
@@ -73,18 +75,18 @@
                                     <%----%>
                                 </ul>
                             </li>
-                            <%--<li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">คลังสินค้า <span class="caret"></span></a>
+                            <li class="dropdown" id="liStock" runat="server" visible="false">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stock <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/Stock/InBound.aspx">รับเข้า</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Stock/InventoryList.aspx">สินค้าคงเหลือ</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/Stock/OutBound.aspx">ปรับยอด</a></li>
-                                    <li role="separator" class="divider"></li>
                                     <li><a href="/Stock/StockLogs.aspx">ประวัติ</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/Transaction/TransactionSaleCancelList.aspx">ยกเลิกรายการขาย</a></li>
                                 </ul>
-                            </li>--%>
+                            </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span id="Username" runat="server"></span> </a></li>

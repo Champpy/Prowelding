@@ -26,6 +26,7 @@ namespace Billing
                 {
                     liAdmin.Visible = true;
                     liReport.Visible = true;
+                    liStock.Visible = true;
                 }
 
                 if (user.ToLower() == "nut")
