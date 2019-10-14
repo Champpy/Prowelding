@@ -511,6 +511,7 @@
     <Content Include="bootstrap-3.3.7-dist\js\bootstrap.min.js" />
     <Content Include="bootstrap-3.3.7-dist\js\npm.js" />
     <Content Include="Script\jquery.min.js" />
+    <Content Include="Stock\ManageStock.aspx" />
     <Content Include="Stock\StockLogs.aspx" />
     <Content Include="Stock\Outbound.aspx" />
     <Content Include="Stock\InventoryList.aspx" />
@@ -760,6 +761,13 @@
     </Compile>
     <Compile Include="Site1.Master.designer.cs">
       <DependentUpon>Site1.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Stock\ManageStock.aspx.cs">
+      <DependentUpon>ManageStock.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Stock\ManageStock.aspx.designer.cs">
+      <DependentUpon>ManageStock.aspx</DependentUpon>
     </Compile>
     <Compile Include="Stock\StockLogs.aspx.cs">
       <DependentUpon>StockLogs.aspx</DependentUpon>

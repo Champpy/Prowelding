@@ -34,7 +34,7 @@ namespace Billing.Stock
                     if (lst != null && lst.Count > 0)
                     {
                         var dal = StockDal.Instance;
-                        err = dal.InsertStock(lst, GetUsername());
+                        //err = dal.InsertStock(lst, GetUsername());
                     }
                     else
                     {

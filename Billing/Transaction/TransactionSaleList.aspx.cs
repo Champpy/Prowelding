@@ -1,5 +1,6 @@
 ﻿using Billing.AppData;
 using Billing.Model;
+using DAL;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -33,18 +34,22 @@ namespace Billing.Transaction
         {
             try
             {
-                List<MasItem> lst = new List<MasItem>();
-                using (BillingEntities cre = new BillingEntities())
-                {
-                    lst = cre.MasItems.ToList();
-                };
+                var dal = StockDal.Instance;
+                List<Entities.MasPackageHeader> lst = new List<Entities.MasPackageHeader>();
+                lst = dal.GetPackageAll();
+
+                //List<MasItem> lst = new List<MasItem>();
+                //using (BillingEntities cre = new BillingEntities())
+                //{
+                //    lst = cre.MasItems.ToList();
+                //};
 
                 if (lst != null)
                 {
                     Session["TransItemList"] = lst;
                     ddlItem.DataSource = lst;
-                    ddlItem.DataValueField = "ItemID";
-                    ddlItem.DataTextField = "ItemName";
+                    ddlItem.DataValueField = "";// "ItemID";
+                    ddlItem.DataTextField = "";// "ItemName";
                 }
                 else
                 {

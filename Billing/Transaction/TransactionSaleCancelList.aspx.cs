@@ -1,5 +1,6 @@
 ﻿using Billing.AppData;
 using Billing.Model;
+using DAL;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -33,11 +34,14 @@ namespace Billing.Transaction
         {
             try
             {
-                List<MasItem> lst = new List<MasItem>();
-                using (BillingEntities cre = new BillingEntities())
-                {
-                    lst = cre.MasItems.ToList();
-                };
+                //List<MasItem> lst = new List<MasItem>();
+                //using (BillingEntities cre = new BillingEntities())
+                //{
+                //    lst = cre.MasItems.ToList();
+                //};
+                var dal = StockDal.Instance;
+                List<Entities.MasPackageHeader> lst = new List<Entities.MasPackageHeader>();
+                lst = dal.GetPackageAll();
 
                 if (lst != null)
                 {

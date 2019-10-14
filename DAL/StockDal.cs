@@ -72,29 +72,29 @@ namespace DAL
 
         #endregion
 
-        public string InsertStock(List<InventoryDTO> lst, string User)
-        {
-            string err = "";
-            try
-            {
-                List<SqlParameter> paramI = new List<SqlParameter>();
-                foreach (InventoryDTO item in lst)
-                {
-                    paramI = new List<SqlParameter>();
-                    paramI.Add(new SqlParameter() { ParameterName = "Remark", Value = item.Remark });
-                    paramI.Add(new SqlParameter() { ParameterName = "ItemID", Value = item.ItemID, DbType = DbType.Int32 });
-                    paramI.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
-                    paramI.Add(new SqlParameter() { ParameterName = "Serial", Value = item.Serial });
-                    paramI.Add(new SqlParameter() { ParameterName = "User", Value = User });
-                    conn.ExcuteNonQueryNClose("InsertTransInboundNStock", paramI, out err);
-                }
-            }
-            catch (Exception ex)
-            {
-                err = ex.Message;
-            }
-            return err;
-        }
+        //public string InsertStock(List<InventoryDTO> lst, string User)
+        //{
+        //    string err = "";
+        //    try
+        //    {
+        //        List<SqlParameter> paramI = new List<SqlParameter>();
+        //        foreach (InventoryDTO item in lst)
+        //        {
+        //            paramI = new List<SqlParameter>();
+        //            paramI.Add(new SqlParameter() { ParameterName = "Remark", Value = item.Remark });
+        //            paramI.Add(new SqlParameter() { ParameterName = "ItemID", Value = item.ItemID, DbType = DbType.Int32 });
+        //            paramI.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
+        //            paramI.Add(new SqlParameter() { ParameterName = "Serial", Value = item.Serial });
+        //            paramI.Add(new SqlParameter() { ParameterName = "User", Value = User });
+        //            conn.ExcuteNonQueryNClose("InsertTransInboundNStock", paramI, out err);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        err = ex.Message;
+        //    }
+        //    return err;
+        //}
 
         public List<TransStock> CheckRemainingItem(Int32 ItemID)
         {
@@ -223,6 +223,77 @@ namespace DAL
 
             }
             return lst;
+        }
+
+        public List<MasPackageHeader> GetPackageAll()
+        {
+            List<MasPackageHeader> lst = new List<MasPackageHeader>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                //DataSet ds = conn.GetDataSet("GetSearchItemInStock", param);
+                DataSet ds = conn.GetDataSet("GetSearchPackage", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    MasPackageHeader o = new MasPackageHeader();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new MasPackageHeader();
+                        //o.StockID = Convert.ToInt32(dr["StockID"].ToString());
+                        o.PackageHeaderID = Convert.ToInt32(dr["PackageHeaderID"].ToString());
+                        o.PackageCode = dr["PackageCode"].ToString();
+                        o.PackageName = dr["PackageName"].ToString();
+                        o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        //o.UnitName = dr["UnitName"].ToString();
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+
+        public string InsertStock(StockHeader header, string User)
+        {
+            string err = "";
+            try
+            {
+                conn.BeginTransaction();
+                DataSet ds = new DataSet();
+                Int32 HeaderID = 0;
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "StockType", Value = header.StockType });
+                param.Add(new SqlParameter() { ParameterName = "StockTime", Value = header.StockTime });
+                param.Add(new SqlParameter() { ParameterName = "Remark", Value = header.Remark });
+                param.Add(new SqlParameter() { ParameterName = "CreatedBy", Value = User });
+                conn.CallStoredProcedure("InsStockHeader", param, out ds, out err);
+                if(ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null && string.IsNullOrEmpty(err) && header.detail != null && header.detail.Count > 0)
+                {
+                    HeaderID = Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+                    foreach (StockDetail item in header.detail)
+                    {
+                        param = new List<SqlParameter>();
+                        param.Add(new SqlParameter() { ParameterName = "StockHeaderID", Value = HeaderID });
+                        param.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
+                        conn.CallStoredProcedure("InsStockDetail", param, out err);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(err))
+                    conn.Commit();
+                else
+                    conn.RollBack();
+                
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+            return err;
         }
 
     }

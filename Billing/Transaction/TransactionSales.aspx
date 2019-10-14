@@ -355,7 +355,7 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-1 headerData"><b>จำนวน :</b></div>
                 <div class="col-md-4 rowData">
-                    <asp:TextBox ID="txtMAmount" runat="server" onKeyPress="kteeyintNodot()"></asp:TextBox>
+                    <asp:TextBox ID="txtMAmount" runat="server" onKeyPress="keyintNodot()"></asp:TextBox>
                 </div>
                 <div class="col-md-1 headerData">                    
                     <%--<b>ส่วนลด (%) :</b>--%>
