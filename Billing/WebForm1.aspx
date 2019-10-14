@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <asp:Button ID="btnTest1" runat="server" Text="Testttt" 
+                <asp:Button ID="btnTest1" runat="server" Text="Test" 
                     class="btn btn-circle blue" OnClick="btnTest1_Click" Visible="true"/>
             </div>
         </div>
