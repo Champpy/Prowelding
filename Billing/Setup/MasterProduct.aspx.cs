@@ -1,4 +1,6 @@
 ﻿using Billing.AppData;
+using DAL;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,15 +37,14 @@ namespace Billing.Setup
         {
             try
             {
-                List<MasItem> lst = new List<MasItem>();
-                string code = txtCode.Text;
-                string name = txtName.Text;
-                using (BillingEntities cre = new BillingEntities())
-                {
-                    lst = cre.MasItems.Where(w => w.ItemCode.Contains(code) &&
-                                w.ItemName.Contains(name) && w.Active.Equals("Y")).ToList();
+                var dal = ProductDal.Instance;
+                List<MasProduct> lst = new List<MasProduct>();
 
-                };
+                MasProduct ModelSer = new MasProduct();
+
+                ModelSer.ProductCode = txtCode.Text;
+                ModelSer.ProductName = txtName.Text;
+                lst = dal.GetSearchProduct(ModelSer);
 
                 if (lst != null && lst.Count > 0)
                     gv.DataSource = lst;
@@ -64,13 +65,14 @@ namespace Billing.Setup
             {
                 txtMCode.Text = "";
                 txtMName.Text = "";
-                txtMDesc.Text = "";
+                txtMPurchasePrice.Text = "";
                 //txtMPrice.Text = "";
                 txtMPrice.Text = "";
 
                 ModalPopupExtender1.Show();
                 hddMode.Value = "Add";
                 hddID.Value = "";
+                txtMCode.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -83,13 +85,7 @@ namespace Billing.Setup
         {
             try
             {
-                //Validate
-                //if (txtMCode.Text == "")
-                //{
-                //    ShowMessageBox("กรุณาระบุ รหัสสินค้า !!!");
-                //    ModalPopupExtender1.Show();
-                //    return;
-                //}
+                var dal = ProductDal.Instance;
 
                 if (txtMName.Text == "")
                 {
@@ -98,42 +94,48 @@ namespace Billing.Setup
                     return;
                 }
 
-                MasItem o = new MasItem();
+                MasProduct ModelData = dal.GetSearchProductCode(txtMCode.Text.Trim());
+
+                if (ModelData.ProductCode != null && hddMode.Value == "Add")
+                {
+                    ShowMessageBox("รหัสสินค้า นี้ซ้ำ !!!");
+                    ModalPopupExtender1.Show();
+                    return;
+                }
+
+                MasProduct o = new MasProduct();
                 if (hddMode.Value == "Add") // Add
                 {
-                    o = new MasItem();
-                    o.ItemCode = txtMCode.Text;
-                    o.ItemName = txtMName.Text;
-                    o.ItemDesc = txtMDesc.Text;
-                    o.ItemPrice = ToDoudle(txtMPrice.Text);
+                    o = new MasProduct();
+                    o.ProductCode = txtMCode.Text;
+                    o.ProductName = txtMName.Text;
+                    o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
+                    o.SellPrice = ToDoudle(txtMPrice.Text);
                     o.Active = "Y";
                     o.CreatedBy = GetUsername();
                     o.CreatedDate = DateTime.Now;
-                    using (BillingEntities cre = new BillingEntities())
-                    {
-                        cre.MasItems.Add(o);
-                        cre.SaveChanges();
-                    };
+                    o.DMLFlag = "I".ToUpper();
+
+
+                    dal.InsUpdDelMasProduct(o);
                 }
                 else //Edit
                 {
-                    int objID = ToInt32(hddID.Value);
-                    using (BillingEntities cre = new BillingEntities())
-                    {
-                        o = cre.MasItems.FirstOrDefault(w => w.ItemID.Equals(objID));
-                        if (o != null)
-                        {
-                            o.ItemCode = txtMCode.Text;
-                            o.ItemName = txtMName.Text;
-                            o.ItemDesc = txtMDesc.Text;
-                            o.ItemPrice = ToDoudle(txtMPrice.Text);
-                            o.UpdatedBy = GetUsername();
-                            o.UpdatedDate = DateTime.Now;
-                        }
-                        cre.SaveChanges();
-                    };
+                    o = new MasProduct();
+                    o.ProductCode = txtMCode.Text;
+                    o.ProductName = txtMName.Text;
+                    o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
+                    o.SellPrice = ToDoudle(txtMPrice.Text);
+                    o.Active = "Y";
+                    o.CreatedBy = GetUsername();
+                    o.CreatedDate = DateTime.Now;
+                    o.DMLFlag = "U".ToUpper();
+
+                    dal.InsUpdDelMasProduct(o);
+
                 }
 
+                txtMCode.Enabled = true;
                 BindData();
                 ShowMessageBox("บันทึกข้อมูลสำเร็จ.");
             }
@@ -146,28 +148,28 @@ namespace Billing.Setup
 
         protected void imgbtnEdit_Click(object sender, ImageClickEventArgs e)
         {
+            var dal = ProductDal.Instance;
+
             try
             {
                 ImageButton imb = (ImageButton)sender;
-                MasItem obj = new MasItem();
+
                 if (imb != null)
                 {
-                    int objID = ToInt32(imb.CommandArgument);
-                    using (BillingEntities cre = new BillingEntities())
-                    {
-                        obj = cre.MasItems.FirstOrDefault(w => w.ItemID.Equals(objID));
-                    };
+                    string objCode = imb.CommandArgument;
 
-                    if (obj != null)
+                    MasProduct ModelData = dal.GetSearchProductCode(objCode);
+
+                    if (ModelData != null)
                     {
                         hddID.Value = imb.CommandArgument;
-                        txtMCode.Text = obj.ItemCode;
-                        txtMName.Text = obj.ItemName;
-                        txtMDesc.Text = obj.ItemDesc;
-                        //txtMPrice.Text = obj.ItemPrice.HasValue ? obj.ItemPrice.Value.ToString("###,##0") : "0";
-                        txtMPrice.Text = obj.ItemPrice.HasValue ? obj.ItemPrice.Value.ToString("###,##0") : "0";
+                        txtMCode.Text = ModelData.ProductCode;
+                        txtMName.Text = ModelData.ProductName;
+                        txtMPurchasePrice.Text = ModelData.PurchasePrice.ToString("###,##0");
+                        txtMPrice.Text = ModelData.SellPrice.ToString("###,##0");
                         ModalPopupExtender1.Show();
                         hddMode.Value = "Edit";
+                        txtMCode.Enabled = false;
                     }
                     else
                     {
@@ -190,18 +192,16 @@ namespace Billing.Setup
         {
             try
             {
+                var dal = ProductDal.Instance;
                 ImageButton imb = (ImageButton)sender;
                 if (imb != null)
                 {
-                    MasItem obj = new MasItem();
-                    int objID = ToInt32(imb.CommandArgument);
-                    using (BillingEntities cre = new BillingEntities())
-                    {
-                        obj = cre.MasItems.FirstOrDefault(w => w.ItemID.Equals(objID));
-                        obj.Active = "N";
-                        //cre.MasItems.Remove(obj);
-                        cre.SaveChanges();
-                    };
+                    MasProduct ModelData = new MasProduct();
+                    string objCode = imb.CommandArgument;
+                    ModelData.ProductCode = objCode;
+                    ModelData.DMLFlag = "D"; 
+                    dal.InsUpdDelMasProduct(ModelData);
+
                     BindData();
                 }
                 else

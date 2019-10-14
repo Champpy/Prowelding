@@ -72,23 +72,23 @@ namespace DAL
 
         #endregion
 
-        public string InsertMasProduct(MasProduct item)
+        public string InsUpdDelMasProduct(MasProduct item)
         {
             string err = "";
             try
             {
                 List<SqlParameter> paramI = new List<SqlParameter>();
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemCode", Value = item.ItemCode });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemName", Value = item.ItemName });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemDesc", Value = item.ItemDesc });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemPrice", Value = item.ItemPrice, DbType = DbType.Double });
-                //paramI.Add(new SqlParameter() { ParameterName = "UnitID", Value = item.UnitID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemTypeID", Value = item.ItemTypeID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "DistID", Value = item.UnitID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "MinRemaining", Value = item.MinRemaining, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "User", Value = item.CreatedBy });
-                //conn.ExcuteNonQueryNClose("InsertMasItem", paramI, out err);
-                
+                paramI.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
+                paramI.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
+                paramI.Add(new SqlParameter() { ParameterName = "PurchasePrice", Value = item.PurchasePrice, DbType = DbType.Double });
+                paramI.Add(new SqlParameter() { ParameterName = "SellPrice", Value = item.SellPrice, DbType = DbType.Double });
+                paramI.Add(new SqlParameter() { ParameterName = "Active", Value = item.Active, DbType = DbType.String });
+                paramI.Add(new SqlParameter() { ParameterName = "CreatedBy", Value = item.CreatedBy, DbType = DbType.String });
+                paramI.Add(new SqlParameter() { ParameterName = "UnitID", Value = item.UnitID, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "TypeID", Value = item.TypeID, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "Remaining", Value = item.Remaining, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
+                conn.ExcuteNonQueryNClose("InsUpdDelMasProduct", paramI, out err);
             }
             catch (Exception ex)
             {
@@ -97,71 +97,71 @@ namespace DAL
             return err;
         }
 
-        public string UpdateMasProduct(MasProduct item)
+        public MasProduct GetSearchProductCode(string ProductCode)
         {
-            string err = "";
+            MasProduct item = new MasProduct();
             try
             {
-                List<SqlParameter> paramI = new List<SqlParameter>();
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemID", Value = item.ItemID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemCode", Value = item.ItemCode });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemName", Value = item.ItemName });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemDesc", Value = item.ItemDesc });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemPrice", Value = item.ItemPrice, DbType = DbType.Double });
-                //paramI.Add(new SqlParameter() { ParameterName = "UnitID", Value = item.UnitID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemTypeID", Value = item.ItemTypeID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "DistID", Value = item.UnitID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "MinRemaining", Value = item.MinRemaining, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "User", Value = item.UpdatedBy });
-                //conn.ExcuteNonQueryNClose("UpdateMasItem", paramI, out err);
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = ProductCode, DbType = DbType.String });
 
+                DataSet ds = conn.GetDataSet("GetProductByID", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {                                          
+                        item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        item.ProductCode = dr["ProductCode"].ToString();
+                        item.ProductName = dr["ProductName"].ToString();
+                        item.Active = dr["Active"].ToString();
+                        item.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.CreatedBy = dr["CreatedBy"].ToString();
+                        item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        item.UpdatedBy = dr["UpdatedBy"].ToString();
+                        item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+
+                        break;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                err = ex.Message;
+
             }
-            return err;
+            return item;
         }
 
-        public string DeleteMasProduct(MasProduct item)
-        {
-            string err = "";
-            try
-            {
-                List<SqlParameter> paramI = new List<SqlParameter>();
-                //paramI.Add(new SqlParameter() { ParameterName = "ItemID", Value = item.ItemID, DbType = DbType.Int32 });
-                //paramI.Add(new SqlParameter() { ParameterName = "User", Value = item.UpdatedBy });
-                //conn.ExcuteNonQueryNClose("DeleteMasItem", paramI, out err);
-
-            }
-            catch (Exception ex)
-            {
-                err = ex.Message;
-            }
-            return err;
-        }
-
-        public List<MasProduct> GetSearchProduct()
+        public List<MasProduct> GetSearchProduct(MasProduct item)
         {
             List<MasProduct> lst = new List<MasProduct>();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
-                DataSet ds = conn.GetDataSet("GetSearchItem", param);
+
+                param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
+                param.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
+
+                DataSet ds = conn.GetDataSet("GetSearchProductAll", param);
+
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
                     MasProduct o = new MasProduct();
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        //o = new MasItemDTO();
-                        //o.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
-                        //o.ItemCode = dr["ItemCode"].ToString();
-                        //o.ItemName = dr["ItemName"].ToString();
-                        //o.ItemDesc = dr["ItemDesc"].ToString();
-                        //o.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
-                        //o.UnitName = dr["UnitName"].ToString();
-                        //o.Active = dr["Active"].ToString();
-                        //lst.Add(o);
+                        o = new MasProduct();
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        o.Active = dr["Active"].ToString();
+                        o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        o.CreatedBy = dr["CreatedBy"].ToString();
+                        o.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        o.UpdatedBy = dr["UpdatedBy"].ToString();
+                        o.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+
+                        lst.Add(o);
                     }
                 }
             }

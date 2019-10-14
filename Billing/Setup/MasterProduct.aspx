@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site1.Master" AutoEventWireup="true" CodeBehind="MasterProduct.aspx.cs" Inherits="Billing.Setup.MasterProduct" %>
+
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
@@ -43,15 +44,15 @@
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-xs-4"></div>
                             <div class="col-xs-2">
-                                <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-default" OnClick="btnSearch_Click"/>                             
+                                <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-default" OnClick="btnSearch_Click" />
                             </div>
                             <div class="col-xs-2">
-                                <asp:Button ID="btnAdd" runat="server" Text="Add" CssClass="btn btn-default" OnClick="btnAdd_Click"/>
+                                <asp:Button ID="btnAdd" runat="server" Text="Add" CssClass="btn btn-default" OnClick="btnAdd_Click" />
                             </div>
                             <div class="col-xs-4">
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 15px; max-height:350px; overflow:auto;">
+                        <div class="row" style="margin-top: 15px; max-height: 350px; overflow: auto;">
                             <div class="col-xs-12">
                                 <div class="alert alert-info dark text-left">
                                     <strong>List Product</strong>
@@ -60,31 +61,31 @@
                                     <Columns>
                                         <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
                                             <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-left" />
+                                            <ItemStyle CssClass="text-center" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="สินค้า" DataField="ProductName">
                                             <HeaderStyle CssClass="text-center width27" />
                                             <ItemStyle CssClass="text-left" />
                                         </asp:BoundField>
-                                        <%--<asp:BoundField HeaderText="ราคา" DataField="ItemPrice" DataFormatString="{0:N2}">
+                                        <asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
                                             <ItemStyle CssClass="text-right" />
-                                        </asp:BoundField>--%>
-                                        <asp:BoundField HeaderText="ราคา" DataField="ItemPrice" DataFormatString="{0:N2}">
+                                        </asp:BoundField>
+                                        <asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-right"/>
+                                            <ItemStyle CssClass="text-right" />
                                         </asp:BoundField>
                                         <asp:TemplateField HeaderText="Tools">
                                             <ItemTemplate>
                                                 <%--<asp:HiddenField ID="hddGID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>' />--%>
-                                                <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png" 
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>'
-                                                    OnClick="imgbtnEdit_Click"/>
+                                                <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                    OnClick="imgbtnEdit_Click" />
                                                 &nbsp;
-                                                <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>'
-                                                    OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
-                                                    <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
+                                                <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                    OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');" />
+                                                <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
                                                     Visible='<%# string.IsNullOrEmpty(DataBinder.Eval(Container.DataItem, "Name").ToString()) ? false : true %>'--%>
                                             </ItemTemplate>
                                             <HeaderStyle CssClass="text-center width10" />
@@ -97,8 +98,7 @@
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4">
-                                                    No data.
+                                                <td colspan="4">No data.
                                                 </td>
                                             </tr>
                                         </table>
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-1"></div>  
+        <div class="col-xs-1"></div>
     </div>
 
     <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" BackgroundCssClass="modalBackground"
@@ -144,25 +144,17 @@
                 </div>
                 <div class="col-md-1"></div>
             </div>
-            <div class="row" style="height:120px;">
+            <div class="row">
                 <div class="col-md-1"></div>
-                <div class="col-md-2 headerData" style="height:120px;"><b>รายละเอียด :</b></div> 
-                <div class="col-md-8 rowData" style="height:120px;">
-                    <asp:TextBox ID="txtMDesc" runat="server" Width="95%" TextMode="MultiLine" Rows="5"></asp:TextBox>
+                <div class="col-md-2 headerData"><b>ราคาซื้อ :</b></div>
+                <div class="col-md-8 rowData">
+                    <asp:TextBox ID="txtMPurchasePrice" runat="server" Width="95%" onKeyPress="keyintdot()"></asp:TextBox>
                 </div>
                 <div class="col-md-1"></div>
             </div>
-            <%--<div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-2 headerData"><b>ราคา :</b></div>
-                <div class="col-md-8 rowData">
-                    <asp:TextBox ID="txtMPrice" runat="server" Width="95%" onKeyPress="keyintdot()"></asp:TextBox>
-                </div>
-                <div class="col-md-1"></div>
-            </div>--%>
             <div class="row">
                 <div class="col-md-1"></div>
-                <div class="col-md-2 headerData"><b>ราคา :</b></div>
+                <div class="col-md-2 headerData"><b>ราคาขาย :</b></div>
                 <div class="col-md-8 rowData">
                     <asp:TextBox ID="txtMPrice" runat="server" Width="95%" onKeyPress="keyintdot()"></asp:TextBox>
                 </div>
@@ -170,7 +162,7 @@
             </div>
             <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12 text-center">
-                    <asp:Button ID="btnModalSave" runat="server" CssClass="btn btn-default" Text="Save" OnClick="btnModalSave_Click"/>
+                    <asp:Button ID="btnModalSave" runat="server" CssClass="btn btn-default" Text="Save" OnClick="btnModalSave_Click" />
                     &nbsp;&nbsp;
                     <asp:Button ID="btnModalClose" runat="server" CssClass="btn btn-default" Text="Close"></asp:Button>
                 </div>

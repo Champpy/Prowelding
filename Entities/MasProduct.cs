@@ -17,7 +17,8 @@ namespace Entities
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
-        
+        public string DMLFlag { get; set; }
+
         #region Other
         public Int32 UnitID { get; set; }
         public string UnitName { get; set; }
