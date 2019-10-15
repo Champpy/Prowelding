@@ -70,6 +70,7 @@
                                 <div class="text-left" style="height: 25px; padding-left: 35px;">
                                     <strong>Header</strong>
                                     <asp:HiddenField ID="hddID" runat="server" />
+                                      <asp:HiddenField ID="hddHeaderMode" Value="Add" runat="server" />
                                 </div>
                             </div>
                             <div class="row width99" style="padding-left: 35px;">
@@ -85,7 +86,7 @@
                             <div class="row width99" style="padding-left: 35px;">
                                 <div class="col-xs-2 headerData"><b>ราคาขาย :</b></div>
                                 <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtSellPrice" runat="server" Width="90%"></asp:TextBox>
+                                    <asp:TextBox ID="txtPackageSellPrice" runat="server" Width="90%"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -124,6 +125,12 @@
                                         <asp:TextBox ID="txtProductAmount" runat="server" Width="90%"></asp:TextBox>
                                     </div>
                                 </div>
+                                  <div class="row width99" style="padding-left: 35px;">
+                                    <div class="col-xs-2 headerData"><b>CanChange :</b></div>
+                                    <div class="col-xs-4 rowData">
+                                        <asp:CheckBox ID="ChkCanChange" runat="server" />
+                                    </div>
+                                </div>
 
 
                                 <div class="text-right col-xs-12" style="height: 25px; padding-right: 40px; margin-top: 10px;">
@@ -150,6 +157,10 @@
                                                 <HeaderStyle CssClass="text-center width7 headerData" />
                                                 <ItemStyle CssClass="text-center rowData" />
                                             </asp:BoundField>
+                                              <asp:BoundField HeaderText="CanChange" DataField="CanChange">
+                                                <HeaderStyle CssClass="text-center width7 headerData" />
+                                                <ItemStyle CssClass="text-center rowData" />
+                                            </asp:BoundField>
                                             <asp:TemplateField HeaderText="Tools">
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
@@ -157,8 +168,7 @@
                                                         OnClick="imgbtnEdit_Click" />
                                                     &nbsp;
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"
-                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
-                                                        Visible='<%# string.IsNullOrEmpty(hddID.Value) %>'
+                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'                                  
                                                         OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');" />
                                                 </ItemTemplate>
                                                 <HeaderStyle CssClass="text-center width9 headerData" Height="30px" />
@@ -257,6 +267,7 @@
                                     <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
                                         CommandArgument='<%# Container.DataItemIndex %>'
                                         OnClick="imgbtnChooseItem_Click" />
+
                                 </ItemTemplate>
                                 <HeaderStyle CssClass="text-center width5 headerData" Height="30px" />
                                 <ItemStyle CssClass="text-center rowData" />

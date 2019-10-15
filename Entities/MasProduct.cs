@@ -19,6 +19,7 @@ namespace Entities
         public DateTime UpdatedDate { get; set; }
         public string DMLFlag { get; set; }
         public int Amount { get; set; }
+        public string CanChange { get; set; }
 
         #region Other
         public Int32 UnitID { get; set; }

@@ -78,6 +78,7 @@ namespace DAL
             try
             {
                 List<SqlParameter> paramI = new List<SqlParameter>();
+                paramI.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
                 paramI.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
                 paramI.Add(new SqlParameter() { ParameterName = "PurchasePrice", Value = item.PurchasePrice, DbType = DbType.Double });
@@ -88,6 +89,8 @@ namespace DAL
                 paramI.Add(new SqlParameter() { ParameterName = "TypeID", Value = item.TypeID, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "Remaining", Value = item.Remaining, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
+          
+
                 conn.ExcuteNonQueryNClose("InsUpdDelMasProduct", paramI, out err);
             }
             catch (Exception ex)

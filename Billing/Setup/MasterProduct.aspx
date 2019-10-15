@@ -59,6 +59,10 @@
                                 </div>
                                 <asp:GridView ID="gv" runat="server" Width="100%" AutoGenerateColumns="False">
                                     <Columns>
+                                        <asp:BoundField HeaderText="IDสินค้า" DataField="ProductID" Visible="False">
+                                            <HeaderStyle CssClass="text-center width15" />
+                                            <ItemStyle CssClass="text-center" />
+                                        </asp:BoundField>
                                         <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
                                             <HeaderStyle CssClass="text-center width15" />
                                             <ItemStyle CssClass="text-center" />
@@ -83,7 +87,7 @@
                                                     OnClick="imgbtnEdit_Click" />
                                                 &nbsp;
                                                 <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
                                                     OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');" />
                                                 <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
                                                     Visible='<%# string.IsNullOrEmpty(DataBinder.Eval(Container.DataItem, "Name").ToString()) ? false : true %>'--%>

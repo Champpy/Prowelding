@@ -31,6 +31,15 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.HiddenField hddID;
         
         /// <summary>
+        /// hddHeaderMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hddHeaderMode;
+        
+        /// <summary>
         /// txtPackageCode control.
         /// </summary>
         /// <remarks>
@@ -49,13 +58,13 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.TextBox txtPackageName;
         
         /// <summary>
-        /// txtSellPrice control.
+        /// txtPackageSellPrice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSellPrice;
+        protected global::System.Web.UI.WebControls.TextBox txtPackageSellPrice;
         
         /// <summary>
         /// hddProductMode control.
@@ -119,6 +128,15 @@ namespace Billing.Setup {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtProductAmount;
+        
+        /// <summary>
+        /// ChkCanChange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ChkCanChange;
         
         /// <summary>
         /// btnAddModal control.

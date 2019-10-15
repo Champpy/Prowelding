@@ -199,6 +199,7 @@ namespace Billing.Setup
                     MasProduct ModelData = new MasProduct();
                     string objCode = imb.CommandArgument;
                     ModelData.ProductCode = objCode;
+                    ModelData.ProductID = Convert.ToInt32(objCode);
                     ModelData.DMLFlag = "D"; 
                     dal.InsUpdDelMasProduct(ModelData);
 

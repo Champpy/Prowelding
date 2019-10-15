@@ -17,6 +17,9 @@ namespace Entities
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public string Active { get; set; }
+
+        public string DMLFlag { get; set; }
 
         #region Product Detail
         public string ProductCode { get; set; }

@@ -18,9 +18,23 @@ namespace Billing.Setup
         {
             if (!IsPostBack)
             {
+                var dal = PackageDal.Instance;
                 List<MasProduct> lst = new List<MasProduct>();
-                string ID = Request.QueryString.Get("ID");
-                hddID.Value = ID;
+                string PackageCode = Request.QueryString.Get("PackageCode");
+
+                if (PackageCode != null)
+                {
+                    MasPackageHeader Modeldata = dal.GetSearchMasPackageHeaderByID(PackageCode);
+                    txtPackageCode.Text = Modeldata.PackageCode;
+                    txtPackageName.Text = Modeldata.PackageName;
+                    txtPackageSellPrice.Text = Convert.ToDouble(Modeldata.SellPrice).ToString("#,###0.00");
+                    hddID.Value = Modeldata.PackageHeaderID.ToString();
+                    hddHeaderMode.Value = "Edit";
+                    Modeldata = new MasPackageHeader();
+                    Modeldata.PackageHeaderID = Convert.ToInt32(hddID.Value);
+                    lst = dal.GetSearchPackageDetail(Modeldata);
+                }
+
                 Session["DetailProdcut"] = lst;
                 BindDataGrid();
             }
@@ -29,6 +43,60 @@ namespace Billing.Setup
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            var dal = PackageDal.Instance;
+
+            try
+            {
+
+
+                if (txtPackageCode.Text == "")
+                {
+                    ShowMessageBox("กรุณาระบุ รหัส Packag !!!");
+                    return;
+                }
+                if (txtPackageName.Text == "")
+                {
+                    ShowMessageBox("กรุณาระบุ ชื่อ Package  !!!");
+                    return;
+                }
+                if (txtPackageSellPrice.Text == "")
+                {
+                    ShowMessageBox("กรุณาระบุ ราคาขาย !!!");
+                    return;
+                }
+
+                MasPackageHeader DataHeader = new MasPackageHeader();
+
+                DataHeader.PackageCode = txtPackageCode.Text;
+                DataHeader.PackageName = txtPackageName.Text;
+                DataHeader.SellPrice = Convert.ToDouble(txtPackageSellPrice.Text);
+                DataHeader.DMLFlag = hddHeaderMode.Value != "Edit" ? "I" : "U";
+                DataHeader.Active = "Y";
+                DataHeader.CreatedBy = GetUsername();
+                string ResultHearder = dal.InsUpdDelMasPackageHeader(DataHeader);
+                List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
+                if (ResultHearder == "")
+                {
+                    dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text, "D");
+
+                    string ResultDetail = dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text);
+
+                    if (ResultDetail == "")
+                    {
+                        ShowMessageBox("บันทึกข้อมูลสำเร็จ.", this.Page, "MasterPackageList.aspx");
+                    }
+                    else
+                    {
+                        ShowMessageBox(ResultDetail);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
+                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+            }
 
         }
 
@@ -50,11 +118,10 @@ namespace Billing.Setup
                 txtProductName.Text = Data.ProductName;
                 txtProductSellPrice.Text = Data.SellPrice.ToString("#,###0.00");
                 txtProductAmount.Text = Data.Amount.ToString();
+                ChkCanChange.Checked = Data.CanChange == "Change" ? true : false;
+
+                //ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
                 hddProductMode.Value = "Edit";
-
-                //CleartxtDetail();
-
-                //BindDataGrid();
             }
         }
         protected void imgbtnDelete_Click(object sender, ImageClickEventArgs e)
@@ -137,6 +204,11 @@ namespace Billing.Setup
             ModelDataAdd.ProductName = txtProductName.Text;
             ModelDataAdd.SellPrice = Convert.ToDouble(txtProductSellPrice.Text);
             ModelDataAdd.Amount = Convert.ToInt32(txtProductAmount.Text);
+            ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
+            ModelDataAdd.DMLFlag = "I";
+            ModelDataAdd.Active = "Y";
+            ModelDataAdd.CreatedBy = GetUsername();
+            //chkCOD.Checked = string.IsNullOrEmpty(obj.COD) ? false : obj.COD.Equals("0") ? false : true;
 
             if (hddProductMode.Value == "Add")
             {
@@ -181,6 +253,7 @@ namespace Billing.Setup
             txtProductAmount.Text = "";
             hddProductID.Value = "";
             hddProductMode.Value = "Add";
+            ChkCanChange.Checked = false;
         }
 
         protected void btnMItemSearch_Click(object sender, EventArgs e)
@@ -195,8 +268,8 @@ namespace Billing.Setup
             txtSearchProductName.Text = "";
         }
 
-        #endregion      
-        
+        #endregion
+
         protected void BindDataGrid()
         {
             List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
