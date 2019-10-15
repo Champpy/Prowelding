@@ -18,6 +18,8 @@ namespace Entities
         public string UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
         public Int32 Remaining { get; set; }
-        
+        public string DMLFlag { get; set; }
+
+
     }
 }

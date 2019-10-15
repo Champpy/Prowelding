@@ -31,22 +31,22 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.HiddenField hddID;
         
         /// <summary>
-        /// txtSaleNumber control.
+        /// txtPackageCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSaleNumber;
+        protected global::System.Web.UI.WebControls.TextBox txtPackageCode;
         
         /// <summary>
-        /// txtTel control.
+        /// txtPackageName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTel;
+        protected global::System.Web.UI.WebControls.TextBox txtPackageName;
         
         /// <summary>
         /// txtSellPrice control.
@@ -58,6 +58,69 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.TextBox txtSellPrice;
         
         /// <summary>
+        /// hddProductMode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hddProductMode;
+        
+        /// <summary>
+        /// hddProductID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hddProductID;
+        
+        /// <summary>
+        /// txtProductCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductCode;
+        
+        /// <summary>
+        /// imgbtnSearchProduct control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgbtnSearchProduct;
+        
+        /// <summary>
+        /// txtProductName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductName;
+        
+        /// <summary>
+        /// txtProductSellPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductSellPrice;
+        
+        /// <summary>
+        /// txtProductAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductAmount;
+        
+        /// <summary>
         /// btnAddModal control.
         /// </summary>
         /// <remarks>
@@ -67,13 +130,13 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.Button btnAddModal;
         
         /// <summary>
-        /// gvItem control.
+        /// gvProdcutDetail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvItem;
+        protected global::System.Web.UI.WebControls.GridView gvProdcutDetail;
         
         /// <summary>
         /// btnSave control.
@@ -94,141 +157,6 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.Button btnBack;
         
         /// <summary>
-        /// ModalPopupExtender1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender1;
-        
-        /// <summary>
-        /// Panel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
-        
-        /// <summary>
-        /// lbl_modal_view control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_modal_view;
-        
-        /// <summary>
-        /// hddDetailID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hddDetailID;
-        
-        /// <summary>
-        /// hddItemID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hddItemID;
-        
-        /// <summary>
-        /// hddStockID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hddStockID;
-        
-        /// <summary>
-        /// txtMItem control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMItem;
-        
-        /// <summary>
-        /// imgbtnSearchItem_Click control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton imgbtnSearchItem_Click;
-        
-        /// <summary>
-        /// txtMPrice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMPrice;
-        
-        /// <summary>
-        /// txtMAmount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMAmount;
-        
-        /// <summary>
-        /// txtMSN control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMSN;
-        
-        /// <summary>
-        /// txtMDiscount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMDiscount;
-        
-        /// <summary>
-        /// txtMDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMDescription;
-        
-        /// <summary>
-        /// btnMSave control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMSave;
-        
-        /// <summary>
-        /// btnModalClose control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnModalClose;
-        
-        /// <summary>
         /// ModalPopupExtender3 control.
         /// </summary>
         /// <remarks>
@@ -247,31 +175,31 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.Panel Panel3;
         
         /// <summary>
-        /// Label2 control.
+        /// lbl_modal_view control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.Label lbl_modal_view;
         
         /// <summary>
-        /// txtSearchItemCode control.
+        /// txtSearchProductCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearchItemCode;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchProductCode;
         
         /// <summary>
-        /// txtSearchItemName control.
+        /// txtSearchProductName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearchItemName;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchProductName;
         
         /// <summary>
         /// gvItemSearch control.
