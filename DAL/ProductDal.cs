@@ -90,7 +90,6 @@ namespace DAL
                 paramI.Add(new SqlParameter() { ParameterName = "Remaining", Value = item.Remaining, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
           
-
                 conn.ExcuteNonQueryNClose("InsUpdDelMasProduct", paramI, out err);
             }
             catch (Exception ex)
@@ -100,6 +99,40 @@ namespace DAL
             return err;
         }
 
+        public MasProduct GetSearchProductID(Int32 ProductID)
+        {
+            MasProduct item = new MasProduct();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "ProductID", Value = ProductID, DbType = DbType.Int32 });
+
+                DataSet ds = conn.GetDataSet("GetProductByID", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {                                          
+                        item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        item.ProductCode = dr["ProductCode"].ToString();
+                        item.ProductName = dr["ProductName"].ToString();
+                        item.Active = dr["Active"].ToString();
+                        item.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.CreatedBy = dr["CreatedBy"].ToString();
+                        item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        item.UpdatedBy = dr["UpdatedBy"].ToString();
+                        item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return item;
+        }
         public MasProduct GetSearchProductCode(string ProductCode)
         {
             MasProduct item = new MasProduct();
@@ -108,11 +141,11 @@ namespace DAL
                 List<SqlParameter> param = new List<SqlParameter>();
                 param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = ProductCode, DbType = DbType.String });
 
-                DataSet ds = conn.GetDataSet("GetProductByID", param);
+                DataSet ds = conn.GetDataSet("GetProductByCode", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
-                    {                                          
+                    {
                         item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();

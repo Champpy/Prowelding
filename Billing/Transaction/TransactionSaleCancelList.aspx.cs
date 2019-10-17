@@ -191,19 +191,35 @@ namespace Billing.Transaction
                 double SellPrice = ToDoudle(txtmSellPrice.Text.Replace(",", ""));
                 double SellPriceHdd = ToDoudle(hddSellPrice.Value);
                 Int32 ID = ToInt32(hddHeaderID.Value);
-                TransSaleHeader o = new TransSaleHeader();
-                using (BillingEntities cre = new BillingEntities())
+                var bal = StockDal.Instance;
+                string err = "";
+                if (SellPrice == SellPriceHdd)
                 {
-                    o = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(ID));
-                    if (o != null && SellPrice == SellPriceHdd)
+                    err = bal.UpdateSaleCancel(ID, GetUsername());
+                    if(string.IsNullOrEmpty(err))
                     {
-                        o.Active = "0";
-                        cre.SaveChanges();
+                        ShowMessageBox("ยกเลิกรายการขายเรียบร้อยแล้ว.");
+                        BindData();
                     }
-                };
-                
-                ShowMessageBox("ยกเลิกรายการขายเรียบร้อยแล้ว.");
-                BindData();
+                }
+                else
+                {
+                    ShowMessageBox("ระบุยอดเงินไม่ถูกต้อง. !!");
+                }
+
+                #region Comment
+                //UpdTransSaleCancel
+                //TransSaleHeader o = new TransSaleHeader();
+                //using (BillingEntities cre = new BillingEntities())
+                //{
+                //    o = cre.TransSaleHeaders.FirstOrDefault(w => w.SaleHeaderID.Equals(ID));
+                //    if (o != null && SellPrice == SellPriceHdd)
+                //    {
+                //        o.Active = "0";
+                //        cre.SaveChanges();
+                //    }
+                //};
+                #endregion
             }
             catch (Exception ex)
             {

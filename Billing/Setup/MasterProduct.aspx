@@ -65,25 +65,29 @@
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
                                             <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-center" />
+                                            <ItemStyle CssClass="text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="สินค้า" DataField="ProductName">
                                             <HeaderStyle CssClass="text-center width27" />
-                                            <ItemStyle CssClass="text-left" />
+                                            <ItemStyle CssClass="text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-right" />
+                                            <ItemStyle CssClass="text-right paddingRight5" />
                                         </asp:BoundField>
-                                        <asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
+                                        <asp:BoundField HeaderText="คงเหลือ" DataField="Remaining" DataFormatString="{0:N0}">
+                                            <HeaderStyle CssClass="text-center width5" />
+                                            <ItemStyle CssClass="text-right paddingRight5" />
+                                        </asp:BoundField>
+                                        <%--<asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
                                             <ItemStyle CssClass="text-right" />
-                                        </asp:BoundField>
+                                        </asp:BoundField>--%>
                                         <asp:TemplateField HeaderText="Tools">
                                             <ItemTemplate>
                                                 <%--<asp:HiddenField ID="hddGID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>' />--%>
                                                 <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
                                                     OnClick="imgbtnEdit_Click" />
                                                 &nbsp;
                                                 <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"
@@ -156,14 +160,14 @@
                 </div>
                 <div class="col-md-1"></div>
             </div>
-            <div class="row">
+            <%--<div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 headerData"><b>ราคาขาย :</b></div>
                 <div class="col-md-8 rowData">
                     <asp:TextBox ID="txtMPrice" runat="server" Width="95%" onKeyPress="keyintdot()"></asp:TextBox>
                 </div>
                 <div class="col-md-1"></div>
-            </div>
+            </div>--%>
             <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12 text-center">
                     <asp:Button ID="btnModalSave" runat="server" CssClass="btn btn-default" Text="Save" OnClick="btnModalSave_Click" />

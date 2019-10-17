@@ -296,5 +296,24 @@ namespace DAL
             return err;
         }
 
+        public string UpdateSaleCancel(Int32 HeaderID, string User)
+        {
+            string err = "";
+            try
+            {
+                DataSet ds = new DataSet();
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "SaleHeaderID", Value = HeaderID });
+                param.Add(new SqlParameter() { ParameterName = "UpdatedBy", Value = User });
+                conn.ExcuteNonQueryNClose("UpdTransSaleCancel", param, out err);
+                
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+            return err;
+        }
+
     }
 }

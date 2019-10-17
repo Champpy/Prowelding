@@ -67,7 +67,7 @@ namespace Billing.Setup
                 txtMName.Text = "";
                 txtMPurchasePrice.Text = "";
                 //txtMPrice.Text = "";
-                txtMPrice.Text = "";
+                //txtMPrice.Text = "";
 
                 ModalPopupExtender1.Show();
                 hddMode.Value = "Add";
@@ -110,7 +110,7 @@ namespace Billing.Setup
                     o.ProductCode = txtMCode.Text;
                     o.ProductName = txtMName.Text;
                     o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
-                    o.SellPrice = ToDoudle(txtMPrice.Text);
+                    //o.SellPrice = ToDoudle(txtMPrice.Text);
                     o.Active = "Y";
                     o.CreatedBy = GetUsername();
                     o.CreatedDate = DateTime.Now;
@@ -122,10 +122,11 @@ namespace Billing.Setup
                 else //Edit
                 {
                     o = new MasProduct();
+                    o.ProductID = ToInt32(hddID.Value);
                     o.ProductCode = txtMCode.Text;
                     o.ProductName = txtMName.Text;
                     o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
-                    o.SellPrice = ToDoudle(txtMPrice.Text);
+                    //o.SellPrice = ToDoudle(txtMPrice.Text);
                     o.Active = "Y";
                     o.CreatedBy = GetUsername();
                     o.CreatedDate = DateTime.Now;
@@ -156,9 +157,9 @@ namespace Billing.Setup
 
                 if (imb != null)
                 {
-                    string objCode = imb.CommandArgument;
+                    Int32 obj = ToInt32(imb.CommandArgument);
 
-                    MasProduct ModelData = dal.GetSearchProductCode(objCode);
+                    MasProduct ModelData = dal.GetSearchProductID(obj);
 
                     if (ModelData != null)
                     {
@@ -166,7 +167,7 @@ namespace Billing.Setup
                         txtMCode.Text = ModelData.ProductCode;
                         txtMName.Text = ModelData.ProductName;
                         txtMPurchasePrice.Text = ModelData.PurchasePrice.ToString("###,##0");
-                        txtMPrice.Text = ModelData.SellPrice.ToString("###,##0");
+                        //txtMPrice.Text = ModelData.SellPrice.ToString("###,##0");
                         ModalPopupExtender1.Show();
                         hddMode.Value = "Edit";
                         txtMCode.Enabled = false;
