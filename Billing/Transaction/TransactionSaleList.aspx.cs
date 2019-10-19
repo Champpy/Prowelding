@@ -48,8 +48,8 @@ namespace Billing.Transaction
                 {
                     Session["TransItemList"] = lst;
                     ddlItem.DataSource = lst;
-                    ddlItem.DataValueField = "";// "ItemID";
-                    ddlItem.DataTextField = "";// "ItemName";
+                    ddlItem.DataValueField = "PackageHeaderID";
+                    ddlItem.DataTextField = "PackageName";
                 }
                 else
                 {

@@ -47,8 +47,8 @@ namespace Billing.Transaction
                 {
                     Session["TransItemCancelList"] = lst;
                     ddlItem.DataSource = lst;
-                    ddlItem.DataValueField = "ItemID";
-                    ddlItem.DataTextField = "ItemName";
+                    ddlItem.DataValueField = "PackageHeaderID";
+                    ddlItem.DataTextField = "PackageName";
                 }
                 else
                 {

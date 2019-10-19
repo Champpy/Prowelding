@@ -247,13 +247,13 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.TextBox txtProductName;
         
         /// <summary>
-        /// txtProductSellPrice control.
+        /// ChkCanChange control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtProductSellPrice;
+        protected global::System.Web.UI.WebControls.CheckBox ChkCanChange;
         
         /// <summary>
         /// txtProductAmount control.
@@ -263,15 +263,6 @@ namespace Billing.Setup {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtProductAmount;
-        
-        /// <summary>
-        /// ChkCanChange control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ChkCanChange;
         
         /// <summary>
         /// BtnSaveProductDetail control.

@@ -121,7 +121,7 @@ namespace Billing.Setup
                 hddProductID.Value = Data.ProductID.ToString();
                 txtProductCode.Text = Data.ProductCode;
                 txtProductName.Text = Data.ProductName;
-                txtProductSellPrice.Text = Data.SellPrice.ToString("#,###0.00");
+                //txtProductSellPrice.Text = Data.SellPrice.ToString("#,###0.00");
                 txtProductAmount.Text = Data.Amount.ToString();
                 ChkCanChange.Checked = Data.CanChange == "Change" ? true : false;
 
@@ -165,7 +165,7 @@ namespace Billing.Setup
                     hddProductID.Value = ModelData.ProductID.ToString();
                     txtProductCode.Text = ModelData.ProductCode;
                     txtProductName.Text = ModelData.ProductName;
-                    txtProductSellPrice.Text = ModelData.SellPrice.ToString("#,###0.00");
+                    //txtProductSellPrice.Text = ModelData.SellPrice.ToString("#,###0.00");
                 }
 
 
@@ -248,7 +248,7 @@ namespace Billing.Setup
             ModelDataAdd.ProductID = Convert.ToInt32(hddProductID.Value);
             ModelDataAdd.ProductCode = txtProductCode.Text;
             ModelDataAdd.ProductName = txtProductName.Text;
-            ModelDataAdd.SellPrice = Convert.ToDouble(txtProductSellPrice.Text);
+            //ModelDataAdd.SellPrice = Convert.ToDouble(txtProductSellPrice.Text);
             ModelDataAdd.Amount = Convert.ToInt32(txtProductAmount.Text);
             ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
             ModelDataAdd.DMLFlag = "I";
@@ -295,7 +295,7 @@ namespace Billing.Setup
         {
             txtProductCode.Text = "";
             txtProductName.Text = "";
-            txtProductSellPrice.Text = "";
+            //txtProductSellPrice.Text = "";
             txtProductAmount.Text = "";
             hddProductID.Value = "";
             hddProductMode.Value = "Add";

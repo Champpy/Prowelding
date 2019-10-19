@@ -76,7 +76,7 @@
                             <div class="col-xs-8">
                                 <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="btn btn-default" OnClick="btnSearch_Click"/>
                                 &nbsp;&nbsp;&nbsp;
-                               <asp:Button ID="btnAdd" runat="server" Text="Add" CssClass="btn btn-default" PostBackUrl="/Transaction/TransactionSales.aspx"/>
+                               <%--<asp:Button ID="btnAdd" runat="server" Text="Add" CssClass="btn btn-default" PostBackUrl="/Transaction/TransactionSales.aspx"/>--%>
                             </div>
                             <div class="col-xs-2">
                             </div>

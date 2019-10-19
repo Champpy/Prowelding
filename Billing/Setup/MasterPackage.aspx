@@ -16,40 +16,7 @@
             }
         }
     </script>
-    <script>
-        $(document).ready(function () {
-            SetPayType();
-
-            $("#ddlPay").change(function () {
-                SetPayType();
-            });
-
-        });
-        function SetPayType() {
-            if ($("#ddlPay").val() == "5") {
-                $("#dvTransfer").show();
-                $("#dvInst").hide();
-                $("#dvNull").hide();
-                $("#txtTimeTransfer").prop("disabled", false);
-                $("#ddlAccountInst").val('');
-            } else if ($("#ddlPay").val() == "8") {
-                $("#dvNull").hide();
-                $("#dvTransfer").hide();
-                $("#dvInst").show();
-                $("#txtTimeTransfer").prop("disabled", true);
-                $("#txtTimeTransfer").val('');
-                $("#ddlAccount").val('');
-            } else {
-                $("#dvNull").show();
-                $("#dvTransfer").hide();
-                $("#dvInst").hide();
-                $("#txtTimeTransfer").prop("disabled", true);
-                $("#txtTimeTransfer").val('');
-                $("#ddlAccount").val('');
-                $("#ddlAccountInst").val('');
-            }
-        }
-    </script>
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="row">
@@ -86,7 +53,7 @@
                             <div class="row width99" style="padding-left: 35px;">
                                 <div class="col-xs-2 headerData"><b>ราคาขาย :</b></div>
                                 <div class="col-xs-4 rowData">
-                                    <asp:TextBox ID="txtPackageSellPrice" runat="server" Width="90%"></asp:TextBox>
+                                    <asp:TextBox ID="txtPackageSellPrice" runat="server" Width="90%" onKeyPress="keyintNodot()"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -118,10 +85,10 @@
                                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                                 <ItemStyle CssClass="text-left rowData" />
                                             </asp:BoundField>
-                                            <asp:BoundField HeaderText="ราคา/หน่วย" DataField="SellPrice" DataFormatString="{0:N2}">
+                                            <%--<asp:BoundField HeaderText="ราคา/หน่วย" DataField="SellPrice" DataFormatString="{0:N2}">
                                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                                 <ItemStyle CssClass="text-right rowData" />
-                                            </asp:BoundField>
+                                            </asp:BoundField>--%>
                                             <asp:BoundField HeaderText="จำนวน" DataField="Amount">
                                                 <HeaderStyle CssClass="text-center width7 headerData" />
                                                 <ItemStyle CssClass="text-center rowData" />
@@ -224,10 +191,10 @@
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-center rowData" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
+                            <%--<asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-center rowData" />
-                            </asp:BoundField>
+                            </asp:BoundField>--%>
 
                             <asp:TemplateField HeaderText="Tools">
                                 <ItemTemplate>
@@ -275,9 +242,9 @@
     <asp:ModalPopupExtender ID="ModalPopupExtender4" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel4" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
-    <asp:Panel ID="Panel4" Height="600px" Width="1100px" runat="server" Style="display: none;">
+    <asp:Panel ID="Panel4" Height="300px" Width="1100px" runat="server" Style="display: none;">
         <%--Style="display: none;"--%>
-        <div class="panel panel-info-dark width100" style="min-height: 600px;">
+        <div class="panel panel-info-dark width100" style="min-height: 300px;">
             <div class="panel-heading text-left">
                 <h3 class="panel-title">
                     <asp:Label ID="Label1" runat="server" CssClass="modalHeader" Text="List Item"></asp:Label>
@@ -297,21 +264,25 @@
                 </div>
             </div>
             <div class="row width99" style="padding-left: 35px;">
-                <div class="col-xs-2 headerData"><b>ราคาขาย :</b></div>
+                <%--<div class="col-xs-2 headerData"><b>ราคาขาย :</b></div>
                 <div class="col-xs-4 rowData">
                     <asp:TextBox ID="txtProductSellPrice" runat="server" Width="90%" Enabled="False"></asp:TextBox>
-                </div>
-                <div class="col-xs-2 headerData"><b>จำนวน :</b></div>
-                <div class="col-xs-4 rowData">
-                    <asp:TextBox ID="txtProductAmount" runat="server" Width="90%"></asp:TextBox>
-                </div>
-            </div>
-            <div class="row width99" style="padding-left: 35px;">
+                </div>--%>
                 <div class="col-xs-2 headerData"><b>CanChange :</b></div>
                 <div class="col-xs-4 rowData">
                     <asp:CheckBox ID="ChkCanChange" runat="server" />
                 </div>
+                <div class="col-xs-2 headerData"><b>จำนวน :</b></div>
+                <div class="col-xs-4 rowData">
+                    <asp:TextBox ID="txtProductAmount" runat="server" Width="90%" onKeyPress="keyintNodot()"></asp:TextBox>
+                </div>
             </div>
+            <%--<div class="row width99" style="padding-left: 35px;">
+                <div class="col-xs-2 headerData"><b>CanChange :</b></div>
+                <div class="col-xs-4 rowData">
+                    <asp:CheckBox ID="ChkCanChange" runat="server" />
+                </div>
+            </div>--%>
 
             <div class="row">&nbsp;</div>
             <div class="row" style="margin-top: 15px;">
