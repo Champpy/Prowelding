@@ -43,7 +43,7 @@ namespace Billing.Setup
                 ModelSer.PackageCode = txtCode.Text;
                 ModelSer.PackageName = txtName.Text;
 
-                lst = dal.GetSearchPackageHeader(ModelSer); 
+                lst = dal.GetSearchPackageHeader(ModelSer);
 
                 if (lst != null && lst.Count > 0)
                     gv.DataSource = lst;
@@ -56,18 +56,18 @@ namespace Billing.Setup
             {
                 SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
             }
-        }     
+        }
 
         protected void imgbtnEdit_Click(object sender, ImageClickEventArgs e)
         {
             try
             {
                 ImageButton imb = (ImageButton)sender;
-              
+
                 if (imb != null)
                 {
-                    string  objCode = imb.CommandArgument;
-      
+                    string objCode = imb.CommandArgument;
+
                     if (objCode != null)
                     {
 
@@ -95,11 +95,18 @@ namespace Billing.Setup
         {
             try
             {
-                ImageButton imb = (ImageButton)sender;
-                if (imb != null)
-                {    
-                    int objID = ToInt32(imb.CommandArgument);
+                var dal = PackageDal.Instance;
 
+                ImageButton imb = (ImageButton)sender;
+                MasPackageHeader DataHeader = new MasPackageHeader();
+                if (imb != null)
+                {
+                    string objCode = imb.CommandArgument;
+
+                    DataHeader.DMLFlag = "D";
+                    DataHeader.PackageCode = objCode;
+
+                    dal.InsUpdDelMasPackageHeader(DataHeader);
                 }
                 else
                 {

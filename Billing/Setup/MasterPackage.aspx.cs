@@ -67,6 +67,11 @@ namespace Billing.Setup
 
                 MasPackageHeader DataHeader = new MasPackageHeader();
 
+                if (hddHeaderMode.Value == "Edit")
+                {
+                    DataHeader.PackageHeaderID = Convert.ToInt32(hddID.Value);
+                }
+
                 DataHeader.PackageCode = txtPackageCode.Text;
                 DataHeader.PackageName = txtPackageName.Text;
                 DataHeader.SellPrice = Convert.ToDouble(txtPackageSellPrice.Text);
@@ -123,6 +128,8 @@ namespace Billing.Setup
                 //ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
                 hddProductMode.Value = "Edit";
             }
+
+            ModalPopupExtender4.Show();
         }
         protected void imgbtnDelete_Click(object sender, ImageClickEventArgs e)
         {
@@ -160,7 +167,11 @@ namespace Billing.Setup
                     txtProductName.Text = ModelData.ProductName;
                     txtProductSellPrice.Text = ModelData.SellPrice.ToString("#,###0.00");
                 }
+
+
             }
+
+            ModalPopupExtender4.Show();
         }
 
         protected void imgbtnSearchProduct_Click(object sender, ImageClickEventArgs e)
@@ -171,19 +182,54 @@ namespace Billing.Setup
 
         protected void btnAddModal_Click(object sender, EventArgs e)
         {
+            ModalPopupExtender4.Show();
+        }
+
+        protected void BtnSaveProductDetail_Click(object sender, EventArgs e)
+        {
             List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
-            MasProduct ModelDataAdd = new MasProduct();
+
+            bool IsCheckData = true;
 
             if (hddProductID.Value == "")
             {
                 ShowMessageBox("กรุณาระบุ สินค้า !!!");
-                return;
+
             }
             if (txtProductAmount.Text == "")
             {
                 ShowMessageBox("กรุณาระบุ จำนวน !!!");
-                return;
+
             }
+
+            if (hddProductMode.Value == "Add")
+            {
+                if (lst.Where(x => x.ProductCode == txtProductCode.Text).ToList().Count > 0)
+                {
+                    ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
+
+                }
+            }
+
+            if (IsCheckData)
+            {
+                SaveProductDetail();
+            }
+            else
+            {
+                ModalPopupExtender4.Show();
+            }
+        }
+
+        protected void BtnCloseProductDetail_Click(object sender, EventArgs e)
+        {
+            CleartxtDetail();
+        }
+
+        private void SaveProductDetail()
+        {
+            List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
+            MasProduct ModelDataAdd = new MasProduct();
 
             if (hddProductMode.Value == "Add")
             {
@@ -217,8 +263,8 @@ namespace Billing.Setup
             CleartxtDetail();
 
             BindDataGrid();
-        }
 
+        }
         protected void BindDataProduct()
         {
             try
@@ -260,6 +306,7 @@ namespace Billing.Setup
         {
             ModalPopupExtender3.Show();
             BindDataProduct();
+
         }
 
         protected void btnModalClose3_Click(object sender, EventArgs e)
@@ -283,6 +330,7 @@ namespace Billing.Setup
 
             }
         }
+
 
     }
 }
