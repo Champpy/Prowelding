@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="BaseDal.cs" />
     <Compile Include="PackageDal.cs" />
+    <Compile Include="ReportDal.cs" />
     <Compile Include="ProductDal.cs" />
     <Compile Include="TransactionDal.cs" />
     <Compile Include="StockDal.cs" />

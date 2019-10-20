@@ -337,6 +337,7 @@ namespace DAL
                         d.SaleDetailID = Convert.ToInt32(dr["SaleDetailID"].ToString());
                         d.ItemID = Convert.ToInt32(dr["ItemID"].ToString());
                         d.ItemName = dr["PackageName"].ToString();
+                        d.ItemCode = dr["PackageCode"].ToString();
                         d.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
                         d.ItemDescription = dr["ItemDetail"].ToString();
                         d.Amount = Convert.ToDouble(dr["Amount"].ToString());

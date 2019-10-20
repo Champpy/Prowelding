@@ -931,16 +931,20 @@ namespace Billing.Transaction
             string result = "";
             try
             {
-                //result = txtMDescription.Text;
-                //TextBox txt = new TextBox();
-                //for (int i = 1; i <= 10; i++)
-                //{
-                //    txt = (TextBox)Panel1.FindControl("txtMDesc" + i.ToString());
-                //    if (txt != null && txt.Visible)
-                //    {
-                //        result = result + txt.Text + "\r\n";
-                //    }
-                //}
+                int i = 1, c = 1;
+                string ItemName = txtMItem.Text;
+                foreach (GridViewRow item in gvDetail.Rows)
+                {
+                    if(ItemName.Trim() != item.Cells[1].Text)
+                    {
+                        result = result + c.ToString() + "." + i.ToString() + " "+ item.Cells[1].Text + " จำนวน " + item.Cells[2].Text + " \r\n";
+                        i++;
+                    } 
+                }
+
+                if(!string.IsNullOrEmpty(result))
+                    result = result.Substring(0, result.Length - 2);
+                
             }
             catch (Exception ex)
             {

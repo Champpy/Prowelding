@@ -45,5 +45,15 @@ namespace Entities
         public string AccountTransfer { get; set; }
         public string TimeTransfer { get; set; }
         public string Installment { get; set; }
+
+        #region Other
+        public string ReceivedDateStr
+        {
+            get
+            {
+                return ReceivedDate.HasValue ? ReceivedDate.Value.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-US")) : "";
+            }
+        }
+        #endregion
     }
 }

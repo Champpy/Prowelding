@@ -1,6 +1,7 @@
 ﻿using Billing.AppData;
 using Billing.Common;
 using Billing.Model;
+using DAL;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using OfficeOpenXml;
@@ -107,7 +108,7 @@ namespace Billing.Report
         {
             try
             {
-                List<ReportSaleMonthDTO> lst = new List<ReportSaleMonthDTO>();
+                List<Entities.DTO.ReportSaleMonthDTO> lst = new List<Entities.DTO.ReportSaleMonthDTO>();
                 List<MasValueList> lstVal = new List<MasValueList>();
                 double xx = string.IsNullOrEmpty(txtXX.Text) ? 0 : Convert.ToDouble(txtXX.Text);
                 double MM200 = string.IsNullOrEmpty(txtMM200.Text) ? 0 : Convert.ToDouble(txtMM200.Text);
@@ -120,57 +121,66 @@ namespace Billing.Report
                 xx = xx / 100;
                 MM200 = MM200 / 100;
                 MM225 = MM225 / 100;
+                var dal = ReportDal.Instance;
+                lst = dal.GetSearchReportSaleMonth(dateFrom, dateTo, xx, MM200, MM225);
 
                 using (BillingEntities cre = new BillingEntities())
                 {
                     lstVal = cre.MasValueLists.Where(w => w.FUNC.Equals("PAYMENT")).ToList();
-                    lst = (from h in cre.TransSaleHeaders
-                           join d in cre.TransSaleDetails on h.SaleHeaderID equals d.SaleHeaderID
-                           join i in cre.MasItems on d.ItemID equals i.ItemID
-                           where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
-                           
-                           //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
-                           select new ReportSaleMonthDTO()
-                           {
-                               HeaderID = h.SaleHeaderID,
-                               DetailID = d.SaleDetailID,
-                               Remark = h.Remark,
-                               CustomerName = h.CustomerName,
-                               CustomerAddress = h.CustomerAddress,
-                               CustomerDistrict = h.CustomerDistrict,
-                               CustomerCountry = h.CustomerCountry,
-                               CustomerProvince = h.CustomerProvince,
-                               CustomerPostalCode = h.CustomerPostalCode,
-                               ReceivedDate = h.ReceivedDate,
-                               WarrantyDate = h.WarrantyDate,
-                               SaleNumber = h.SaleNumber,
-                               ItemCode = i.ItemCode,
-                               ItemName = i.ItemName,
-                               SerialNumber = d.SerialNumber,
-                               ItemDescription = i.ItemDesc,
-                               ItemPrice = d.ItemPrice.Value,
-                               Discount = d.Discount.Value,
-                               Amount = d.Amount.Value,
-                               Tel = h.Tel,
-                               Address = h.CustomerAddress,
-                               District = h.CustomerDistrict,
-                               Country = h.CustomerCountry,
-                               Province = h.CustomerProvince,
-                               PostalCode = h.CustomerPostalCode,
-                               PayTypeID = h.PayType,
-                               BillTypeID = h.BillType,
-                               VAT = xx,
-                               MAXMIG200 = MM200,
-                               MAXMIG225 = MM225,
-                               VisImgBtn = "true",
-                               ConsignmentNo = h.ConsignmentNo,
-                               AccountTransfer = h.AccountTransfer,
-                               Installment = h.Installment,
-                           }).OrderBy(od => od.ReceivedDate).ThenBy(od => od.SaleNumber).ThenBy(od => od.DetailID).ToList();
-                };
+                }
+
+                #region Comment Entity
+                //using (BillingEntities cre = new BillingEntities())
+                //{
+                //    lstVal = cre.MasValueLists.Where(w => w.FUNC.Equals("PAYMENT")).ToList();
+                //    lst = (from h in cre.TransSaleHeaders
+                //           join d in cre.TransSaleDetails on h.SaleHeaderID equals d.SaleHeaderID
+                //           join i in cre.MasItems on d.ItemID equals i.ItemID
+                //           where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
+
+                //           //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
+                //           select new ReportSaleMonthDTO()
+                //           {
+                //               HeaderID = h.SaleHeaderID,
+                //               DetailID = d.SaleDetailID,
+                //               Remark = h.Remark,
+                //               CustomerName = h.CustomerName,
+                //               CustomerAddress = h.CustomerAddress,
+                //               CustomerDistrict = h.CustomerDistrict,
+                //               CustomerCountry = h.CustomerCountry,
+                //               CustomerProvince = h.CustomerProvince,
+                //               CustomerPostalCode = h.CustomerPostalCode,
+                //               ReceivedDate = h.ReceivedDate,
+                //               WarrantyDate = h.WarrantyDate,
+                //               SaleNumber = h.SaleNumber,
+                //               ItemCode = i.ItemCode,
+                //               ItemName = i.ItemName,
+                //               SerialNumber = d.SerialNumber,
+                //               ItemDescription = i.ItemDesc,
+                //               ItemPrice = d.ItemPrice.Value,
+                //               Discount = d.Discount.Value,
+                //               Amount = d.Amount.Value,
+                //               Tel = h.Tel,
+                //               Address = h.CustomerAddress,
+                //               District = h.CustomerDistrict,
+                //               Country = h.CustomerCountry,
+                //               Province = h.CustomerProvince,
+                //               PostalCode = h.CustomerPostalCode,
+                //               PayTypeID = h.PayType,
+                //               BillTypeID = h.BillType,
+                //               VAT = xx,
+                //               MAXMIG200 = MM200,
+                //               MAXMIG225 = MM225,
+                //               VisImgBtn = "true",
+                //               ConsignmentNo = h.ConsignmentNo,
+                //               AccountTransfer = h.AccountTransfer,
+                //               Installment = h.Installment,
+                //           }).OrderBy(od => od.ReceivedDate).ThenBy(od => od.SaleNumber).ThenBy(od => od.DetailID).ToList();
+                //};
+                #endregion
 
                 if (lst != null && lst.Count > 0)
-                {                    
+                {
                     ModData(lst, lstVal);
                     gv.DataSource = lst;
                     Session["ReportSaleMonth"] = lst;
@@ -186,7 +196,7 @@ namespace Billing.Report
             }
         }
 
-        protected void ModData(List<ReportSaleMonthDTO> lst, List<MasValueList> lstVal)
+        protected void ModData(List<Entities.DTO.ReportSaleMonthDTO> lst, List<MasValueList> lstVal)
         {
             try
             {
@@ -195,7 +205,7 @@ namespace Billing.Report
                 int OldHeader = 0, CurrHeader = 0;
                 int i = 0;
                 double Summary = 0;
-                foreach (ReportSaleMonthDTO item in lst)
+                foreach (Entities.DTO.ReportSaleMonthDTO item in lst)
                 {
                     bill = !string.IsNullOrEmpty(item.BillTypeID) ? item.BillTypeID : "";
                     pay = !string.IsNullOrEmpty(item.PayTypeID) ? item.PayTypeID : "";
@@ -237,7 +247,7 @@ namespace Billing.Report
                     BindData();
                 }
 
-                List<ReportSaleMonthDTO> lst = (List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
+                List<Entities.DTO.ReportSaleMonthDTO> lst = (List<Entities.DTO.ReportSaleMonthDTO>)Session["ReportSaleMonth"];
                 if(lst != null && lst.Count > 0)
                 {
                     System.GC.Collect();
@@ -250,7 +260,7 @@ namespace Billing.Report
             }
         }
 
-        protected void ReportExportPDF(List<ReportSaleMonthDTO> lst)
+        protected void ReportExportPDF(List<Entities.DTO.ReportSaleMonthDTO> lst)
         {
             MemoryStream ms = new MemoryStream();
             Document doc = new Document(PageSize.A4.Rotate(), 3, 3, 7, 3);
@@ -319,7 +329,7 @@ namespace Billing.Report
                 tableGrid.SetWidths(widths);
                 tableGrid.Rows.Add(row);
 
-                foreach (ReportSaleMonthDTO item in lst)
+                foreach (Entities.DTO.ReportSaleMonthDTO item in lst)
                 {
                     cell1 = GetNewCell(true);
                     cell2 = GetNewCell(true);
@@ -375,7 +385,7 @@ namespace Billing.Report
                     BindData();
                 }
 
-                List<ReportSaleMonthDTO> lst = (List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
+                List<Entities.DTO.ReportSaleMonthDTO> lst = (List<Entities.DTO.ReportSaleMonthDTO>)Session["ReportSaleMonth"];
                 if (lst != null && lst.Count > 0)
                 {
                     System.GC.Collect();
@@ -388,7 +398,7 @@ namespace Billing.Report
             }
         }
 
-        protected void ExportExcel(List<ReportSaleMonthDTO> lst)
+        protected void ExportExcel(List<Entities.DTO.ReportSaleMonthDTO> lst)
         {
             try
             {
@@ -475,7 +485,7 @@ namespace Billing.Report
                     ws.Cells["A1:W1"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                     ws.Cells["A2:W2"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;                    
 
-                    foreach (ReportSaleMonthDTO item in lst)
+                    foreach (Entities.DTO.ReportSaleMonthDTO item in lst)
                     {
                         ws.Row(row).Height = 18;
                         ws.Cells["A" + row.ToString() + ":" + "X" + row.ToString()].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
@@ -541,7 +551,7 @@ namespace Billing.Report
                             BindData();
                         }
 
-                        List<ReportSaleMonthDTO> lst = (List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
+                        List<Entities.DTO.ReportSaleMonthDTO> lst = (List<Entities.DTO.ReportSaleMonthDTO>)Session["ReportSaleMonth"];
                         if (lst != null && lst.Count > 0)
                         {
                             lst = lst.Where(w => w.HeaderID.Equals(headerID)).ToList();
@@ -567,16 +577,16 @@ namespace Billing.Report
             {
                 ImageButton imb = new ImageButton();
                 CheckBox chk;
-                List<ReportSaleMonthDTO> lst = new List<ReportSaleMonthDTO>();//(List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
-                List<ReportSaleMonthDTO> temp = new List<ReportSaleMonthDTO>();
-                List<ReportSaleMonthDTO> lstSelect = new List<ReportSaleMonthDTO>();
+                List<Entities.DTO.ReportSaleMonthDTO> lst = new List<Entities.DTO.ReportSaleMonthDTO>();//(List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
+                List<Entities.DTO.ReportSaleMonthDTO> temp = new List<Entities.DTO.ReportSaleMonthDTO>();
+                List<Entities.DTO.ReportSaleMonthDTO> lstSelect = new List<Entities.DTO.ReportSaleMonthDTO>();
                 Int32 headerID = 0;
                 if (Session["ReportSaleMonth"] == null)
                 {
                     BindData();
                 }
 
-                lst = (List<ReportSaleMonthDTO>)Session["ReportSaleMonth"];
+                lst = (List<Entities.DTO.ReportSaleMonthDTO>)Session["ReportSaleMonth"];
                 foreach (GridViewRow item in gv.Rows)
                 {
                     chk = (CheckBox)item.FindControl("chk");

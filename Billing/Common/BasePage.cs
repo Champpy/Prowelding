@@ -175,7 +175,7 @@ namespace Billing.Common
 
         #region PDF Bill Vat
         // Version 1.0 กระดาษต่อเนื่อง
-        public string ExportPDFBillVat(Model.SaleHeaderDTO Header, List<Model.SaleDetailDTO> Detail)
+        public string ExportPDFBillVat(Entities.TransSaleHeader Header, List<Entities.DTO.SaleDetailDTO> Detail)
         {
             //string filename = "/ExportPDF/MyFirstPDF.pdf";            
             string error = "";
@@ -257,7 +257,7 @@ namespace Billing.Common
                 string[] spl, splAmt;
                 string sn = "", RealSN = "", ItemDesc = "", ItemDescAmt = "";
                 double pItem = 0, pVat = 0, pTotal = 0, Discount = 0;
-                foreach (SaleDetailDTO item in Detail)
+                foreach (Entities.DTO.SaleDetailDTO item in Detail)
                 {
                     ItemDesc = "";
                     ItemDescAmt = "";
@@ -455,7 +455,7 @@ namespace Billing.Common
         }
 
         // Version 2.0 A4
-        public string ExportPDFBillVat2(Model.SaleHeaderDTO Header, List<Model.SaleDetailDTO> Detail)
+        public string ExportPDFBillVat2(Entities.TransSaleHeader Header, List<Entities.DTO.SaleDetailDTO> Detail)
         {           
             string error = "";
             MemoryStream ms = new MemoryStream();
@@ -686,7 +686,7 @@ namespace Billing.Common
                 #endregion
 
                 #region Item Detail & Process Summary
-                foreach (SaleDetailDTO item in Detail)
+                foreach (Entities.DTO.SaleDetailDTO item in Detail)
                 {
                     #region Reset
                     ItemDesc = "";
@@ -1323,7 +1323,7 @@ namespace Billing.Common
         }
 
         //Version 2.0
-        public string ExportPDFManyBillVatFromMonthly(List<ReportSaleMonthDTO> lst)//Model.SaleHeaderDTO Header, List<Model.SaleDetailMonthlyDTO> Detail)
+        public string ExportPDFManyBillVatFromMonthly(List<Entities.DTO.ReportSaleMonthDTO> lst)//Model.SaleHeaderDTO Header, List<Model.SaleDetailMonthlyDTO> Detail)
         {          
             string error = "";
             MemoryStream ms = new MemoryStream();
@@ -1377,8 +1377,8 @@ namespace Billing.Common
                 List<Int32> lstHeaderID = new List<Int32>();
                 string sn = "", RealSN = "", ItemDesc = "", ItemDescAmt = "";
                 double pItem = 0, pVat = 0, pTotal = 0;//, Discount = 0;
-                List<ReportSaleMonthDTO> lstDetail = new List<ReportSaleMonthDTO>();
-                ReportSaleMonthDTO header = new ReportSaleMonthDTO();
+                List<Entities.DTO.ReportSaleMonthDTO> lstDetail = new List<Entities.DTO.ReportSaleMonthDTO>();
+                Entities.DTO.ReportSaleMonthDTO header = new Entities.DTO.ReportSaleMonthDTO();
                 #endregion
 
                 //Header
@@ -1595,7 +1595,7 @@ namespace Billing.Common
                         lstDetail = lst.Where(w => w.HeaderID.Equals(HeaderID)).OrderBy(od => od.DetailID).ToList();
                         if (lstDetail != null && lstDetail.Count > 0)
                         {
-                            foreach (ReportSaleMonthDTO item in lstDetail)
+                            foreach (Entities.DTO.ReportSaleMonthDTO item in lstDetail)
                             {
                                 #region Reset
                                 ItemDesc = "";
@@ -2033,7 +2033,7 @@ namespace Billing.Common
         #endregion
 
         #region PDF Bill Cash
-        public string ExportPDFBillCash(Model.SaleHeaderDTO Header, List<Model.SaleDetailDTO> Detail)
+        public string ExportPDFBillCash(Entities.TransSaleHeader Header, List<Entities.DTO.SaleDetailDTO> Detail)
         {
             //string filename = "/ExportPDF/MyFirstPDF.pdf";            
             string error = "";
@@ -2229,7 +2229,7 @@ namespace Billing.Common
                 string sn = "", RealSN = "", ItemDesc = "", ItemDescAmt = "";
                 double pItem = 0, pVat = 0, pTotal = 0, Discount = 0;
                 int Count = 0;
-                foreach (SaleDetailDTO item in Detail)
+                foreach (Entities.DTO.SaleDetailDTO item in Detail)
                 {                    
                     ItemDesc = "";
                     ItemDescAmt = "";
@@ -2599,7 +2599,7 @@ namespace Billing.Common
             try
             {
                 using (BillingEntities cre = new BillingEntities())
-                {                    
+                {
                     Detail = (from d in cre.TransSaleDetails
                               join i in cre.MasItems on d.ItemID equals i.ItemID
                               where d.SaleHeaderID.Equals(headerID)

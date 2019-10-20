@@ -305,10 +305,16 @@ namespace Billing.Transaction
                    
                     headerID = ToInt32(imb.CommandArgument);
                     //ExportExcel(headerID);
-                    SaleHeaderDTO Header = new SaleHeaderDTO();
-                    List<SaleDetailDTO> Detail = new List<SaleDetailDTO>();
-                    Header = GetSaleHeaderFromDB(headerID);
-                    Detail = GetSaleDetailFromDB(headerID);
+                    //SaleHeaderDTO Header = new SaleHeaderDTO();
+                    //List<SaleDetailDTO> Detail = new List<SaleDetailDTO>();
+                    //Header = GetSaleHeaderFromDB(headerID);
+                    //Detail = GetSaleDetailFromDB(headerID);
+
+                    Entities.TransSaleHeader Header = new Entities.TransSaleHeader();
+                    List<Entities.DTO.SaleDetailDTO> Detail = new List<Entities.DTO.SaleDetailDTO>();
+                    var dal = TransactionDal.Instance;
+                    dal.GetTransSaleByID(headerID, ref Header, ref Detail);
+                    
 
                     #region Comment
                     //using (BillingEntities cre = new BillingEntities())
