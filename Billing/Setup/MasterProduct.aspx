@@ -60,24 +60,24 @@
                                 <asp:GridView ID="gv" runat="server" Width="100%" AutoGenerateColumns="False">
                                     <Columns>
                                         <asp:BoundField HeaderText="IDสินค้า" DataField="ProductID" Visible="False">
-                                            <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-center" />
+                                            <HeaderStyle CssClass="headerData text-center width15" />
+                                            <ItemStyle CssClass="rowData text-center" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
-                                            <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-left paddingLeft5" />
+                                            <HeaderStyle CssClass="headerData text-center width15" />
+                                            <ItemStyle CssClass="rowData text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="สินค้า" DataField="ProductName">
-                                            <HeaderStyle CssClass="text-center width27" />
-                                            <ItemStyle CssClass="text-left paddingLeft5" />
+                                            <HeaderStyle CssClass="headerData text-center width27" />
+                                            <ItemStyle CssClass="rowData text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
-                                            <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-right paddingRight5" />
+                                            <HeaderStyle CssClass="headerData text-center width10" />
+                                            <ItemStyle CssClass="rowData text-right paddingRight5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="คงเหลือ" DataField="Remaining" DataFormatString="{0:N0}">
-                                            <HeaderStyle CssClass="text-center width5" />
-                                            <ItemStyle CssClass="text-right paddingRight5" />
+                                            <HeaderStyle CssClass="headerData text-center width5" />
+                                            <ItemStyle CssClass="rowData text-right paddingRight5" />
                                         </asp:BoundField>
                                         <%--<asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
@@ -96,8 +96,8 @@
                                                 <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
                                                     Visible='<%# string.IsNullOrEmpty(DataBinder.Eval(Container.DataItem, "Name").ToString()) ? false : true %>'--%>
                                             </ItemTemplate>
-                                            <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-center" />
+                                            <HeaderStyle CssClass="headerData text-center width10" />
+                                            <ItemStyle CssClass="rowData text-center" />
                                         </asp:TemplateField>
                                     </Columns>
                                     <EmptyDataTemplate>

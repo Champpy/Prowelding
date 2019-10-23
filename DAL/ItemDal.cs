@@ -281,7 +281,7 @@ namespace DAL
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
                         item.Amount = 1;
-                        item.OrderNo = Convert.ToInt32(dr["OrderNo"].ToString());
+                        item.OrderNo = string.IsNullOrEmpty(dr["OrderNo"].ToString()) ? 0 : Convert.ToInt32(dr["OrderNo"].ToString());
                         item.CanChange = dr["CanChange"].ToString();
                         lst.Add(item);
                     }

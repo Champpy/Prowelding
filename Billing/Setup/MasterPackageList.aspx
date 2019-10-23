@@ -59,16 +59,16 @@
                                 <asp:GridView ID="gv" runat="server" Width="100%" AutoGenerateColumns="False">
                                     <Columns>
                                         <asp:BoundField HeaderText="รหัส Package" DataField="PackageCode">
-                                            <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-left paddingLeft5" />
+                                            <HeaderStyle CssClass="headerData text-center width15" />
+                                            <ItemStyle CssClass="rowData text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="ชื่อ Package" DataField="PackageName">
-                                            <HeaderStyle CssClass="text-center width27" />
-                                            <ItemStyle CssClass="text-left paddingLeft5" />
+                                            <HeaderStyle CssClass="headerData text-center width27" />
+                                            <ItemStyle CssClass="rowData text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="คงเหลือ" DataField="remaining">
-                                            <HeaderStyle CssClass="text-center width5" />
-                                            <ItemStyle CssClass="text-right paddingRight5" />
+                                            <HeaderStyle CssClass="headerData text-center width5" />
+                                            <ItemStyle CssClass="rowData text-right paddingRight5" />
                                         </asp:BoundField>
                                        <%-- <asp:BoundField HeaderText="รายละเอียด" DataField="ItemDesc">
                                             <HeaderStyle CssClass="text-center width38" />
@@ -79,8 +79,8 @@
                                             <ItemStyle CssClass="text-right" />
                                         </asp:BoundField>--%>
                                         <asp:BoundField HeaderText="ราคา" DataField="SellPrice" DataFormatString="{0:N2}">
-                                            <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-right paddingRight5"/>
+                                            <HeaderStyle CssClass="headerData text-center width10" />
+                                            <ItemStyle CssClass="rowData text-right paddingRight5"/>
                                         </asp:BoundField>
                                         <asp:TemplateField HeaderText="Tools">
                                             <ItemTemplate>
@@ -95,8 +95,8 @@
                                                     <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
                                                     Visible='<%# string.IsNullOrEmpty(DataBinder.Eval(Container.DataItem, "Name").ToString()) ? false : true %>'--%>
                                             </ItemTemplate>
-                                            <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-center" />
+                                            <HeaderStyle CssClass="headerData text-center width10" />
+                                            <ItemStyle CssClass="rowData text-center" />
                                         </asp:TemplateField>
                                     </Columns>
                                     <EmptyDataTemplate>
