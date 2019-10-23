@@ -147,28 +147,26 @@ namespace Billing.Setup
         }
         protected void imgbtnChooseItem_Click(object sender, ImageClickEventArgs e)
         {
-
             var dal = ProductDal.Instance;
-
             ImageButton imb = (ImageButton)sender;
             if (imb != null)
             {
-                int objCode = Convert.ToInt32(imb.CommandArgument);
-
-                MasProduct ModelData = new MasProduct();
-
-
-                ModelData = dal.GetSearchProductCode(gvItemSearch.Rows[objCode].Cells[0].Text);
-
-                if (ModelData.ProductName != null)
+                //int rowIndex = Convert.ToInt32(imb.CommandArgument);
+                int objCode = ToInt32(imb.CommandArgument);
+                HiddenField hdd = (HiddenField)gvItemSearch.Rows[objCode].FindControl("hddItemID");
+                if(hdd != null)
                 {
-                    hddProductID.Value = ModelData.ProductID.ToString();
-                    txtProductCode.Text = ModelData.ProductCode;
-                    txtProductName.Text = ModelData.ProductName;
-                    //txtProductSellPrice.Text = ModelData.SellPrice.ToString("#,###0.00");
+                    int pid = ToInt32(hdd.Value);
+                    MasProduct ModelData = new MasProduct();
+                    ModelData = dal.GetSearchProductID(pid);
+                    if (ModelData.ProductName != null)
+                    {
+                        hddProductID.Value = ModelData.ProductID.ToString();
+                        txtProductCode.Text = ModelData.ProductCode;
+                        txtProductName.Text = ModelData.ProductName;
+                        //txtProductSellPrice.Text = ModelData.SellPrice.ToString("#,###0.00");
+                    }
                 }
-
-
             }
 
             ModalPopupExtender4.Show();
@@ -194,20 +192,24 @@ namespace Billing.Setup
             if (hddProductID.Value == "")
             {
                 ShowMessageBox("กรุณาระบุ สินค้า !!!");
-
+                ModalPopupExtender4.Show();
+                return;
             }
             if (txtProductAmount.Text == "")
             {
                 ShowMessageBox("กรุณาระบุ จำนวน !!!");
-
+                ModalPopupExtender4.Show();
+                return;
             }
 
             if (hddProductMode.Value == "Add")
             {
-                if (lst.Where(x => x.ProductCode == txtProductCode.Text).ToList().Count > 0)
+                int pid = ToInt32(hddProductID.Value);
+                if (lst.Where(x => x.ProductID == pid).ToList().Count > 0)
                 {
                     ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
-
+                    ModalPopupExtender4.Show();
+                    return;
                 }
             }
 
@@ -231,14 +233,15 @@ namespace Billing.Setup
             List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
             MasProduct ModelDataAdd = new MasProduct();
 
-            if (hddProductMode.Value == "Add")
-            {
-                if (lst.Where(x => x.ProductCode == txtProductCode.Text).ToList().Count > 0)
-                {
-                    ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
-                    return;
-                }
-            }
+            //if (hddProductMode.Value == "Add")
+            //{
+            //    if (lst.Where(x => x.ProductCode == txtProductCode.Text).ToList().Count > 0)
+            //    {
+            //        ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
+            //        ModalPopupExtender4.Show();
+            //        return;
+            //    }
+            //}
 
             if (hddProductMode.Value != "Add")
             {
@@ -313,6 +316,7 @@ namespace Billing.Setup
         {
             txtSearchProductCode.Text = "";
             txtSearchProductName.Text = "";
+            ModalPopupExtender4.Show();
         }
 
         #endregion

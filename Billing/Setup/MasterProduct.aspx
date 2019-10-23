@@ -131,7 +131,7 @@
         <div class="panel panel-info-dark width98" style="min-height: 450px;">
             <div class="panel-heading text-left">
                 <h3 class="panel-title">
-                    <asp:Label ID="lbl_modal_view" runat="server" CssClass="modalHeader" Text="Manage Item"></asp:Label>
+                    <asp:Label ID="lbl_modal_view" runat="server" CssClass="modalHeader" Text="Manage Product"></asp:Label>
                 </h3>
             </div>
             <div class="row" style="margin-top: 20px;">
@@ -139,8 +139,6 @@
                 <div class="col-md-2 headerData"><b>รหัสสินค้า :</b></div>
                 <div class="col-md-8 rowData">
                     <asp:TextBox ID="txtMCode" runat="server" Width="95%"></asp:TextBox>
-                    <asp:HiddenField ID="hddMode" runat="server" />
-                    <asp:HiddenField ID="hddID" runat="server" />
                 </div>
                 <div class="col-md-1"></div>
             </div>
@@ -149,6 +147,8 @@
                 <div class="col-md-2 headerData"><b>สินค้า :</b></div>
                 <div class="col-md-8 rowData">
                     <asp:TextBox ID="txtMName" runat="server" Width="95%"></asp:TextBox>
+                    <asp:HiddenField ID="hddMode" runat="server" />
+                    <asp:HiddenField ID="hddID" runat="server" />
                 </div>
                 <div class="col-md-1"></div>
             </div>

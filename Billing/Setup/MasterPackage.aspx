@@ -198,7 +198,7 @@
 
                             <asp:TemplateField HeaderText="Tools">
                                 <ItemTemplate>
-                                    <asp:HiddenField ID="hddItemID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>' />
+                                    <asp:HiddenField ID="hddItemID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>' />
 
                                     <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
                                         CommandArgument='<%# Container.DataItemIndex %>'

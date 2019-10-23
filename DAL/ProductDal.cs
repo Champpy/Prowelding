@@ -189,6 +189,7 @@ namespace DAL
                         o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         o.ProductCode = dr["ProductCode"].ToString();
                         o.ProductName = dr["ProductName"].ToString();
+                        o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
                         o.Active = dr["Active"].ToString();
                         o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
                         o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());

@@ -201,6 +201,8 @@ namespace Billing.Setup
                     string objCode = imb.CommandArgument;
                     ModelData.ProductCode = objCode;
                     ModelData.ProductID = Convert.ToInt32(objCode);
+                    ModelData.Active = "N";
+                    ModelData.CreatedBy = GetUsername();
                     ModelData.DMLFlag = "D"; 
                     dal.InsUpdDelMasProduct(ModelData);
 
