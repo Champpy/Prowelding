@@ -60,11 +60,15 @@
                                     <Columns>
                                         <asp:BoundField HeaderText="รหัส Package" DataField="PackageCode">
                                             <HeaderStyle CssClass="text-center width15" />
-                                            <ItemStyle CssClass="text-left" />
+                                            <ItemStyle CssClass="text-left paddingLeft5" />
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="ชื่อ Package" DataField="PackageName">
                                             <HeaderStyle CssClass="text-center width27" />
-                                            <ItemStyle CssClass="text-left" />
+                                            <ItemStyle CssClass="text-left paddingLeft5" />
+                                        </asp:BoundField>
+                                        <asp:BoundField HeaderText="คงเหลือ" DataField="remaining">
+                                            <HeaderStyle CssClass="text-center width5" />
+                                            <ItemStyle CssClass="text-right paddingRight5" />
                                         </asp:BoundField>
                                        <%-- <asp:BoundField HeaderText="รายละเอียด" DataField="ItemDesc">
                                             <HeaderStyle CssClass="text-center width38" />
@@ -76,7 +80,7 @@
                                         </asp:BoundField>--%>
                                         <asp:BoundField HeaderText="ราคา" DataField="SellPrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="text-center width10" />
-                                            <ItemStyle CssClass="text-right"/>
+                                            <ItemStyle CssClass="text-right paddingRight5"/>
                                         </asp:BoundField>
                                         <asp:TemplateField HeaderText="Tools">
                                             <ItemTemplate>

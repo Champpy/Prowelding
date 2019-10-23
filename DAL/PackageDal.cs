@@ -194,10 +194,11 @@ namespace DAL
                         item.PackageName = dr["PackageName"].ToString();
                         item.Active = dr["Active"].ToString();
                         item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
-                        item.CreatedBy = dr["CreatedBy"].ToString();
-                        item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
-                        item.UpdatedBy = dr["UpdatedBy"].ToString();
-                        item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+                        item.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
+                        //item.CreatedBy = dr["CreatedBy"].ToString();
+                        //item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        //item.UpdatedBy = dr["UpdatedBy"].ToString();
+                        //item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
 
                         lstData.Add(item);
 
