@@ -101,6 +101,10 @@
                                             <HeaderStyle CssClass="text-center width5" />
                                             <ItemStyle CssClass="text-left"/>
                                         </asp:BoundField>  
+                                        <asp:BoundField HeaderText="S/N" DataField="SerialNumber">
+                                            <HeaderStyle CssClass="text-center width5" />
+                                            <ItemStyle CssClass="text-left"/>
+                                        </asp:BoundField> 
                                         <asp:BoundField HeaderText="จำนวน" DataField="AmountStr">
                                             <HeaderStyle CssClass="text-center width2" />
                                             <ItemStyle CssClass="text-center"/>

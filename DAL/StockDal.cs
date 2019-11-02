@@ -273,12 +273,14 @@ namespace DAL
                 if(ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null && string.IsNullOrEmpty(err) && header.detail != null && header.detail.Count > 0)
                 {
                     HeaderID = Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+                    string cal = header.StockType == "IN" ? "+" : "-";
                     foreach (StockDetail item in header.detail)
                     {
                         param = new List<SqlParameter>();
                         param.Add(new SqlParameter() { ParameterName = "StockHeaderID", Value = HeaderID });
                         param.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
                         param.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
                         conn.CallStoredProcedure("InsStockDetail", param, out err);
                     }
                 }

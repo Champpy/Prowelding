@@ -71,10 +71,10 @@
                                             <HeaderStyle CssClass="headerData text-center width27" />
                                             <ItemStyle CssClass="rowData text-left paddingLeft5" />
                                         </asp:BoundField>
-                                        <asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
+                                        <%--<asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
                                             <HeaderStyle CssClass="headerData text-center width10" />
                                             <ItemStyle CssClass="rowData text-right paddingRight5" />
-                                        </asp:BoundField>
+                                        </asp:BoundField>--%>
                                         <asp:BoundField HeaderText="คงเหลือ" DataField="Remaining" DataFormatString="{0:N0}">
                                             <HeaderStyle CssClass="headerData text-center width5" />
                                             <ItemStyle CssClass="rowData text-right paddingRight5" />
@@ -152,7 +152,7 @@
                 </div>
                 <div class="col-md-1"></div>
             </div>
-            <div class="row">
+            <%--<div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 headerData"><b>ราคาซื้อ :</b></div>
                 <div class="col-md-8 rowData">
@@ -160,7 +160,7 @@
                 </div>
                 <div class="col-md-1"></div>
             </div>
-            <%--<div class="row">
+            <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 headerData"><b>ราคาขาย :</b></div>
                 <div class="col-md-8 rowData">

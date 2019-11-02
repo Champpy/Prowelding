@@ -17,7 +17,9 @@ namespace Billing.Stock
         {
             if (!IsPostBack)
             {
+                txtDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 hddType.Value = Request.QueryString["t"].ToString();
+                lblHeader.Text = hddType.Value.ToLower() == "i" ? "รับเข้า" : "คืนสินค้า";
                 Session["StockDetail"] = null;
                 BindDataDetail();
             }

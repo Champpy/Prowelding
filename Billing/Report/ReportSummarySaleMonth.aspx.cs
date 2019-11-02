@@ -152,6 +152,7 @@ namespace Billing.Report
                            join i in cre.MasItems on d.ItemID equals i.ItemID
                            where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
                            && (string.IsNullOrEmpty(SaleName) ? true : h.SaleName.Equals(SaleName))
+                           && h.Active == "1"
                            //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
                            select new ReportSaleMonthDTO()
                            {

@@ -62,6 +62,7 @@ namespace Billing.Report
                            join d in cre.TransSaleDetails on h.SaleHeaderID equals d.SaleHeaderID
                            join i in cre.MasItems on d.ItemID equals i.ItemID                           
                            where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
+                           && h.Active == "1"
                            //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
                            select new ReportSaleDTO()
                            {
@@ -72,6 +73,7 @@ namespace Billing.Report
                                SaleNumber = h.SaleNumber,
                                ItemCode = i.ItemCode,
                                ItemName = i.ItemName,
+                               SerialNumber = d.SerialNumber,
                                ItemPrice = d.ItemPrice.Value,
                                Discount = d.Discount.Value,
                                Amount = d.Amount.Value,
@@ -329,11 +331,11 @@ namespace Billing.Report
                     ws.Column(6).Width = 10;
                     ws.Column(7).Width = 35;
                     ws.Column(8).Width = 20;
-                    ws.Column(9).Width = 10;
-                    ws.Column(10).Width = 15;
+                    ws.Column(9).Width = 20;
+                    ws.Column(10).Width = 10;
                     ws.Column(11).Width = 15;
-                    ws.Column(12).Width = 20;
-                    ws.Column(13).Width = 15;
+                    ws.Column(12).Width = 15;
+                    ws.Column(13).Width = 20;
                     ws.Column(14).Width = 15;
                     ws.Column(15).Width = 15;
                     ws.Column(16).Width = 15;
@@ -341,6 +343,7 @@ namespace Billing.Report
                     ws.Column(18).Width = 15;
                     ws.Column(19).Width = 15;
                     ws.Column(20).Width = 15;
+                    ws.Column(21).Width = 15;
                     
                     ws.Column(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     ws.Column(8).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
@@ -361,7 +364,7 @@ namespace Billing.Report
 
                     //Header
                     ws.Row(1).Height = 20;
-                    ws.Cells["A1:R1"].Merge = true;
+                    ws.Cells["A1:S1"].Merge = true;
                     ws.Cells["A1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                     ws.Cells["A1"].Style.Font.Size = 16f;
                     ws.Cells["A1"].Style.Font.Bold = true;
@@ -369,7 +372,7 @@ namespace Billing.Report
 
                     ws.Row(2).Height = 18;
                     ws.Row(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells["A2:P2"].Style.Font.Size = 11f;
+                    ws.Cells["A2:S2"].Style.Font.Size = 11f;
                     ws.Cells["A2"].Value = "No.";
                     ws.Cells["B2"].Value = "ชื่อลูกค้า";
                     ws.Cells["C2"].Value = "โทร";
@@ -378,18 +381,19 @@ namespace Billing.Report
                     ws.Cells["F2"].Value = "เลขที่";
                     ws.Cells["G2"].Value = "สินค้า";
                     ws.Cells["H2"].Value = "รหัส";
-                    ws.Cells["I2"].Value = "จำนวน";
-                    ws.Cells["J2"].Value = "ราคา";
-                    ws.Cells["K2"].Value = "ส่วนลด";
-                    ws.Cells["L2"].Value = "รวม";
-                    ws.Cells["M2"].Value = "ประเภทบิล";
-                    ws.Cells["N2"].Value = "ช่องทางการชำระเงิน";
-                    ws.Cells["O2"].Value = "บัญชีโอน";
-                    ws.Cells["P2"].Value = "ผ่อน";
-                    ws.Cells["Q2"].Value = "Consignment No.";
-                    ws.Cells["R2"].Value = "ผู้ขาย";
-                    ws.Cells["A1:R1"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                    ws.Cells["A2:R2"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    ws.Cells["I2"].Value = "S/N";
+                    ws.Cells["J2"].Value = "จำนวน";
+                    ws.Cells["K2"].Value = "ราคา";
+                    ws.Cells["L2"].Value = "ส่วนลด";
+                    ws.Cells["M2"].Value = "รวม";
+                    ws.Cells["N2"].Value = "ประเภทบิล";
+                    ws.Cells["O2"].Value = "ช่องทางการชำระเงิน";
+                    ws.Cells["P2"].Value = "บัญชีโอน";
+                    ws.Cells["Q2"].Value = "ผ่อน";
+                    ws.Cells["R2"].Value = "Consignment No.";
+                    ws.Cells["S2"].Value = "ผู้ขาย";
+                    ws.Cells["A1:S1"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    ws.Cells["A2:S2"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
 
                     foreach (ReportSaleDTO item in lst)
                     {
@@ -403,21 +407,22 @@ namespace Billing.Report
                         ws.Cells["F" + row.ToString()].Value = item.SaleNumber;
                         ws.Cells["G" + row.ToString()].Value = item.ItemName;
                         ws.Cells["H" + row.ToString()].Value = item.ItemCode;
-                        ws.Cells["I" + row.ToString()].Value = item.Amount;
-                        ws.Cells["J" + row.ToString()].Value = item.ItemPrice;
-                        ws.Cells["K" + row.ToString()].Value = item.Discount;
-                        ws.Cells["L" + row.ToString()].Value = item.Total;
-                        ws.Cells["M" + row.ToString()].Value = item.BillType;
-                        ws.Cells["N" + row.ToString()].Value = item.PayType;
-                        ws.Cells["O" + row.ToString()].Value = item.AccountTransfer;
-                        ws.Cells["P" + row.ToString()].Value = item.Installment;
-                        ws.Cells["Q" + row.ToString()].Value = item.ConsignmentNo;
-                        ws.Cells["R" + row.ToString()].Value = item.SaleName;
+                        ws.Cells["I" + row.ToString()].Value = item.SerialNumber;
+                        ws.Cells["J" + row.ToString()].Value = item.Amount;
+                        ws.Cells["K" + row.ToString()].Value = item.ItemPrice;
+                        ws.Cells["L" + row.ToString()].Value = item.Discount;
+                        ws.Cells["M" + row.ToString()].Value = item.Total;
+                        ws.Cells["N" + row.ToString()].Value = item.BillType;
+                        ws.Cells["O" + row.ToString()].Value = item.PayType;
+                        ws.Cells["P" + row.ToString()].Value = item.AccountTransfer;
+                        ws.Cells["Q" + row.ToString()].Value = item.Installment;
+                        ws.Cells["R" + row.ToString()].Value = item.ConsignmentNo;
+                        ws.Cells["S" + row.ToString()].Value = item.SaleName;
                         i++;
                         row++;
                     }
 
-                    ws.Cells["S3:S" + (row - 1).ToString()].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    ws.Cells["T3:T" + (row - 1).ToString()].Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
                     package.SaveAs(Response.OutputStream);
                     string FileName = "ReportSale_" + DateTime.Now.ToString("yyyyMMdd", new System.Globalization.CultureInfo("en-US"));

@@ -430,7 +430,7 @@ namespace Billing.Transaction
                     o.SaleName = ddlSaleName.SelectedItem.Text;
                     if (ddlPay.SelectedItem.Value == "5")
                     {
-                        o.AccountTransfer = ddlAccount.SelectedItem.Text;
+                        o.AccountTransfer = ddlAccount.SelectedItem == null ? "" : ddlAccount.SelectedItem.Text;
                         o.TimeTransfer = txtTimeTransfer.Text;
                     }
                     else
