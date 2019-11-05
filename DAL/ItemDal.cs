@@ -322,5 +322,34 @@ namespace DAL
             }
             return lst;
         }
+
+        public List<Entities.MasProduct> GetSearchProductHeadQAll()
+        {
+            List<Entities.MasProduct> lst = new List<Entities.MasProduct>();
+            Entities.MasProduct o = new Entities.MasProduct();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                DataSet ds = conn.GetDataSet("GetSearchProductHeadQAll", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new Entities.MasProduct();
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        o.Remaining = string.IsNullOrEmpty(dr["Remaining"].ToString()) ? 0 : Convert.ToInt32(dr["Remaining"].ToString());
+                        o.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToInt32(dr["SellPrice"].ToString());
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
     }
 }

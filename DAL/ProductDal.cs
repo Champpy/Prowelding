@@ -328,5 +328,48 @@ namespace DAL
             }
             return lst;
         }
+
+        #region Product HeadQ
+        public List<MasProduct> GetSearchProductHeadQ(MasProduct item)
+        {
+            List<MasProduct> lst = new List<MasProduct>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+
+                param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
+                param.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
+
+                DataSet ds = conn.GetDataSet("GetSearchProductHeadQAll", param);
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    MasProduct o = new MasProduct();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new MasProduct();
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
+                        o.Active = dr["Active"].ToString();
+                        o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        o.CreatedBy = dr["CreatedBy"].ToString();
+                        o.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        o.UpdatedBy = dr["UpdatedBy"].ToString();
+                        o.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+        #endregion
     }
 }

@@ -11,7 +11,7 @@ using Entities;
 
 namespace Billing.Stock
 {
-    public partial class ManageStock : Billing.Common.BasePage
+    public partial class ManageStockHeadQ : Billing.Common.BasePage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,8 +19,8 @@ namespace Billing.Stock
             {
                 txtDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 hddType.Value = Request.QueryString["t"].ToString();
-                lblHeader.Text = hddType.Value.ToLower() == "i" ? "รับเข้า" : "คืนสินค้า";
-                Session["StockDetail"] = null;
+                lblHeader.Text = "คลังใหญ่ : " + (hddType.Value.ToLower() == "i" ? "รับเข้า" : "คืนสินค้า");
+                Session["StockDetailHeadQ"] = null;
                 BindDataDetail();
             }
         }
@@ -33,9 +33,9 @@ namespace Billing.Stock
                 List<StockDetail> lst = new List<StockDetail>();
                 StockHeader Header = new StockHeader();
                 var dal = StockDal.Instance;
-                if (Session["StockDetail"] != null)
+                if (Session["StockDetailHeadQ"] != null)
                 {
-                    lst = (List<StockDetail>)Session["StockDetail"];
+                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
                     if(lst == null && lst.Count == 0 )
                     {
                         ShowMessageBox("กรุณาเพิ่ม สินค้า ที่ต้องการบันทึก!!");
@@ -47,7 +47,7 @@ namespace Billing.Stock
                     Header.StockTime = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                     Header.Remark = txtRemark.Text;
                     Header.detail = lst;
-                    err = dal.InsertStock(Header, GetUsername());
+                    err = dal.InsertStockHeadQ(Header, GetUsername());
                 }
                 
                 if (!string.IsNullOrEmpty(err))
@@ -55,7 +55,7 @@ namespace Billing.Stock
                     ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.!!" + err);
                     return;
                 }
-                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Setup/MasterProduct.aspx");
+                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Setup/MasterProductHeadQ.aspx");
             }
             catch (Exception ex)
             {
@@ -88,9 +88,9 @@ namespace Billing.Stock
                 {
                     int objID = ToInt32(imb.CommandArgument);
                     List<StockDetail> lst = new List<StockDetail>();
-                    if (Session["StockDetail"] != null)
+                    if (Session["StockDetailHeadQ"] != null)
                     {
-                        lst = (List<StockDetail>)Session["StockDetail"];
+                        lst = (List<StockDetail>)Session["StockDetailHeadQ"];
                         if (lst != null && lst.Count > 0)
                         {
                             StockDetail obj = lst.FirstOrDefault(w => w.ProductID.Equals(objID));
@@ -119,9 +119,9 @@ namespace Billing.Stock
             try
             {
                 List<StockDetail> lst = new List<StockDetail>();
-                if (Session["StockDetail"] != null)
+                if (Session["StockDetailHeadQ"] != null)
                 {
-                    lst = (List<StockDetail>)Session["StockDetail"];
+                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
                 }
 
                 if (lst == null || lst.Count() == 0)
@@ -168,7 +168,7 @@ namespace Billing.Stock
                 string ProductName = txtSearchItemName.Text.ToLower();
                 List<MasProduct> lst = new List<MasProduct>();
                 var dal = ItemDal.Instance;
-                lst = dal.GetSearchProductAll();
+                lst = dal.GetSearchProductHeadQAll();
                 if (lst != null)
                 {
                     if (!string.IsNullOrEmpty(ProductCode))
@@ -180,7 +180,7 @@ namespace Billing.Stock
                     }
 
                     lst = lst.OrderBy(od => od.ProductName).ToList();
-                    Session["StockProductList"] = lst;
+                    Session["StockProductHeadQList"] = lst;
                     gvItemSearch.DataSource = lst;
                     gvItemSearch.DataBind();
                 }
@@ -245,15 +245,15 @@ namespace Billing.Stock
             try
             {
                 List<StockDetail> lst = new List<StockDetail>();
-                if(Session["StockDetail"] != null)
-                    lst = (List<StockDetail>)Session["StockDetail"];
+                if(Session["StockDetailHeadQ"] != null)
+                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
 
                 Int32 Amt = ToInt32(txtm5Amount.Text);
                 Int32 ProductID = ToInt32(hddm5Index.Value);
 
-                if(Session["StockProductList"] != null)
+                if(Session["StockProductHeadQList"] != null)
                 {
-                    List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductList"];
+                    List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
                     if(lstProduct != null && lstProduct.Count > 0)
                     {
                         MasProduct o = lstProduct.FirstOrDefault(w => w.ProductID.Equals(ProductID));
@@ -275,7 +275,7 @@ namespace Billing.Stock
                                 s.Amount = s.Amount + Amt;
                             }
                             
-                            Session["StockDetail"] = lst;
+                            Session["StockDetailHeadQ"] = lst;
                             BindDataDetail();
                         }
                     }

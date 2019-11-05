@@ -27,6 +27,7 @@ namespace Billing
                     liAdmin.Visible = true;
                     liReport.Visible = true;
                     liStock.Visible = true;
+                    liStockHeadQ.Visible = true;
                 }
 
                 if (user.ToLower() == "nut")
@@ -39,7 +40,7 @@ namespace Billing
                     liReport.Visible = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 
             }

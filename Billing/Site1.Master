@@ -87,6 +87,21 @@
                                     <li><a href="/Transaction/TransactionSaleCancelList.aspx">ยกเลิกรายการขาย</a></li>
                                 </ul>
                             </li>
+                            <li class="dropdown" id="liStockHeadQ" runat="server" visible="false">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Stock HeadQ<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/Stock/ManageStockHeadQ.aspx?t=i">รับเข้า</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/Stock/ManageStockHeadQ.aspx?t=o">HeadQ ขายสินค้า</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/Stock/TransferStockHeadQ.aspx?t=o">ย้ายเข้าคลังขาย</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/Setup/MasterProductHeadQ.aspx">Product HeadQ</a></li>
+                                    <%--<li role="separator" class="divider"></li>
+                                    <li><a href="/Stock/StockLogs.aspx">ประวัติ</a></li>
+                                    <li role="separator" class="divider"></li>--%>
+                                </ul>
+                            </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#"><span class="glyphicon glyphicon-user"></span> <span id="Username" runat="server"></span> </a></li>

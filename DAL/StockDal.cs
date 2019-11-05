@@ -256,6 +256,7 @@ namespace DAL
             return lst;
         }
 
+        #region Stock
         public string InsertStock(StockHeader header, string User)
         {
             string err = "";
@@ -297,6 +298,51 @@ namespace DAL
             }
             return err;
         }
+        #endregion
+
+        #region Stock HeadQ
+        public string InsertStockHeadQ(StockHeader header, string User)
+        {
+            string err = "";
+            try
+            {
+                conn.BeginTransaction();
+                DataSet ds = new DataSet();
+                Int32 HeaderID = 0;
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "StockType", Value = header.StockType });
+                param.Add(new SqlParameter() { ParameterName = "StockTime", Value = header.StockTime });
+                param.Add(new SqlParameter() { ParameterName = "Remark", Value = header.Remark });
+                param.Add(new SqlParameter() { ParameterName = "CreatedBy", Value = User });
+                conn.CallStoredProcedure("InsStockHeadQHeader", param, out ds, out err);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null && string.IsNullOrEmpty(err) && header.detail != null && header.detail.Count > 0)
+                {
+                    HeaderID = Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
+                    string cal = header.StockType == "IN" ? "+" : "-";
+                    foreach (StockDetail item in header.detail)
+                    {
+                        param = new List<SqlParameter>();
+                        param.Add(new SqlParameter() { ParameterName = "StockHeaderID", Value = HeaderID });
+                        param.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
+                        conn.CallStoredProcedure("InsStockHeadQDetail", param, out err);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(err))
+                    conn.Commit();
+                else
+                    conn.RollBack();
+
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+            return err;
+        }
+        #endregion
 
         public string UpdateSaleCancel(Int32 HeaderID, string User)
         {
