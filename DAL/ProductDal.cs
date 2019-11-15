@@ -190,6 +190,7 @@ namespace DAL
                         o.ProductCode = dr["ProductCode"].ToString();
                         o.ProductName = dr["ProductName"].ToString();
                         o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
+                        o.RemainingHeadQ = Convert.ToInt32(dr["RemainingHeadQ"].ToString());
                         o.Active = dr["Active"].ToString();
                         o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
                         o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
@@ -340,7 +341,7 @@ namespace DAL
                 param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
                 param.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
 
-                DataSet ds = conn.GetDataSet("GetSearchProductHeadQAll", param);
+                DataSet ds = conn.GetDataSet("GetSearchProductAll", param);
 
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
@@ -352,6 +353,7 @@ namespace DAL
                         o.ProductCode = dr["ProductCode"].ToString();
                         o.ProductName = dr["ProductName"].ToString();
                         o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
+                        o.RemainingHeadQ = Convert.ToInt32(dr["RemainingHeadQ"].ToString()); 
                         o.Active = dr["Active"].ToString();
                         o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
                         o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
@@ -369,6 +371,32 @@ namespace DAL
 
             }
             return lst;
+        }
+        public string InsUpdDelMasProductHeadQ(MasProduct item)
+        {
+            string err = "";
+            try
+            {
+                List<SqlParameter> paramI = new List<SqlParameter>();
+                paramI.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "ProductCode", Value = item.ProductCode });
+                paramI.Add(new SqlParameter() { ParameterName = "ProductName", Value = item.ProductName });
+                paramI.Add(new SqlParameter() { ParameterName = "PurchasePrice", Value = item.PurchasePrice, DbType = DbType.Double });
+                paramI.Add(new SqlParameter() { ParameterName = "SellPrice", Value = item.SellPrice, DbType = DbType.Double });
+                paramI.Add(new SqlParameter() { ParameterName = "Active", Value = item.Active, DbType = DbType.String });
+                paramI.Add(new SqlParameter() { ParameterName = "CreatedBy", Value = item.CreatedBy, DbType = DbType.String });
+                paramI.Add(new SqlParameter() { ParameterName = "UnitID", Value = item.UnitID, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "TypeID", Value = item.TypeID, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "Remaining", Value = item.Remaining, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
+
+                conn.ExcuteNonQueryNClose("InsUpdDelMasProductHeadQ", paramI, out err);
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+            return err;
         }
         #endregion
     }

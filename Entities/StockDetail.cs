@@ -23,6 +23,10 @@ namespace Entities
                 return Amount.ToString();
             }
         }
+        //public List<string> lstSN { get; set; }
+        public int ProductTypeID { get; set; }
+        public string ProductTypeName { get; set; }
+        public List<TransProductSerial> lstSerial {get; set;}
         #endregion
     }
 }

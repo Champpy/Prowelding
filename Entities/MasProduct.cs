@@ -27,6 +27,8 @@ namespace Entities
         public Int32 TypeID { get; set; }
         public string TypeName { get; set; }
         public Int32 Remaining { get; set; }
+        public Int32 RemainingHeadQ { get; set; }
+        public string ProductSN { get; set; }
         #endregion
 
     }

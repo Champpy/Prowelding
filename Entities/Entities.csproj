@@ -49,6 +49,7 @@
     <Compile Include="MasItemType.cs" />
     <Compile Include="MasUnit.cs" />
     <Compile Include="StockDetail.cs" />
+    <Compile Include="TransProductSerial.cs" />
     <Compile Include="TransSaleDetailProduct.cs" />
     <Compile Include="StockHeader.cs" />
     <Compile Include="TransStock.cs" />

@@ -244,46 +244,114 @@ namespace Billing.Stock
         {
             try
             {
-                List<StockDetail> lst = new List<StockDetail>();
-                if(Session["StockDetail"] != null)
-                    lst = (List<StockDetail>)Session["StockDetail"];
-
                 Int32 Amt = ToInt32(txtm5Amount.Text);
                 Int32 ProductID = ToInt32(hddm5Index.Value);
 
-                if(Session["StockProductList"] != null)
+                if (Session["StockProductList"] != null)
                 {
                     List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductList"];
-                    if(lstProduct != null && lstProduct.Count > 0)
+                    if (lstProduct != null && lstProduct.Count > 0)
                     {
                         MasProduct o = lstProduct.FirstOrDefault(w => w.ProductID.Equals(ProductID));
                         if(o != null)
                         {
-                            StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
-                            if(s == null)
+                            if(o.ProductSN == "Y")
                             {
-                                lst.Add(new StockDetail()
+                                List<StockDetail> lst = new List<StockDetail>();
+                                if (Session["StockDetail"] != null)
+                                    lst = (List<StockDetail>)Session["StockDetail"];
+                                
+                                StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                                if (s != null)
                                 {
-                                    ProductID = ProductID,
-                                    ProductCode = o.ProductCode,
-                                    ProductName = o.ProductName,
-                                    Amount = Amt,
-                                });
+                                    s.lstSerial = new List<TransProductSerial>();
+                                    s.Amount = Amt;
+                                }
+                                    
+                                ClearModal6();
+
+                                lbM6Header.Text = o.ProductName + " (" + Amt.ToString() + ")";
+                                hddM6ProductID.Value = hddm5Index.Value;
+                                
+                                ModalPopupExtender6.Show();
                             }
-                            else // Found In List
+                            else
                             {
-                                s.Amount = s.Amount + Amt;
+                                List<StockDetail> lst = new List<StockDetail>();
+                                if (Session["StockDetail"] != null)
+                                    lst = (List<StockDetail>)Session["StockDetail"];
+
+                                StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                                if (s == null)
+                                {
+                                    lst.Add(new StockDetail()
+                                    {
+                                        ProductID = ProductID,
+                                        ProductCode = o.ProductCode,
+                                        ProductName = o.ProductName,
+                                        ProductTypeID = o.TypeID,
+                                        ProductTypeName = o.TypeName,
+                                        Amount = Amt,
+                                    });
+                                }
+                                else // Found In List
+                                {
+                                    s.Amount = s.Amount + Amt;
+                                }
+
+                                Session["StockDetail"] = lst;
+                                BindDataDetail();
                             }
-                            
-                            Session["StockDetail"] = lst;
-                            BindDataDetail();
                         }
                     }
                 }
                 else
                 {
-                    //ShowMessageBox("Session Timeout. !!", this, "../Index.aspx");
+                    ShowMessageBox("Session Timeout. !!", this, "../Index.aspx");
                 }
+
+
+                #region Comment
+                //List<StockDetail> lst = new List<StockDetail>();
+                //if(Session["StockDetail"] != null)
+                //    lst = (List<StockDetail>)Session["StockDetail"];
+
+                //if(Session["StockProductList"] != null)
+                //{
+                //    List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductList"];
+                //    if(lstProduct != null && lstProduct.Count > 0)
+                //    {
+                //        MasProduct o = lstProduct.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                //        if(o != null)
+                //        {
+                //            StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                //            if(s == null)
+                //            {
+                //                lst.Add(new StockDetail()
+                //                {
+                //                    ProductID = ProductID,
+                //                    ProductCode = o.ProductCode,
+                //                    ProductName = o.ProductName,
+                //                    ProductTypeID = o.TypeID,
+                //                    ProductTypeName = o.TypeName,
+                //                    Amount = Amt,
+                //                });
+                //            }
+                //            else // Found In List
+                //            {
+                //                s.Amount = s.Amount + Amt;
+                //            }
+
+                //            Session["StockDetail"] = lst;
+                //            BindDataDetail();
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    //ShowMessageBox("Session Timeout. !!", this, "../Index.aspx");
+                //}
+                #endregion
             }
             catch (Exception ex)
             {
@@ -294,6 +362,243 @@ namespace Billing.Stock
         protected void btnm5Cancel_Click(object sender, EventArgs e)
         {
             ModalPopupExtender3.Show();
+        }
+
+        #endregion
+
+        #region Modal6
+        protected void btnM6Add_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Validate
+                if(string.IsNullOrEmpty(txtM6SN.Text))
+                {
+                    ShowMessageBox("Add Serial Number First. !!!");
+                    return;
+                }
+
+                Int32 Amt = ToInt32(txtm5Amount.Text);
+                int productID = ToInt32(hddM6ProductID.Value);
+                List<StockDetail> lst = new List<StockDetail>();
+                List<TransProductSerial> lstTPS = new List<TransProductSerial>();
+                TransProductSerial tps = new TransProductSerial();
+                if (Session["StockDetail"] != null)
+                {
+                    lst = (List<StockDetail>)Session["StockDetail"];
+                    StockDetail o = lst.FirstOrDefault(w => w.ProductID.Equals(productID));
+                    if (o != null)
+                    {
+                        if (o.lstSerial == null)
+                        {
+                            o.lstSerial = new List<TransProductSerial>();
+                        }
+                        else
+                        {
+                            if(o.Amount <= o.lstSerial.Count)
+                            {
+                                ShowMessageBox("Serial Number Too much.");
+                                ModalPopupExtender6.Show();
+                                return;
+                            }
+                        }
+
+                        //Check S/N Duplicate
+                        tps = o.lstSerial.FirstOrDefault(w => w.SerialNumber.Trim().Equals(txtM6SN.Text.Trim()));
+                        if(tps != null)
+                        {
+                            ShowMessageBox("Serial Number is duplicate.");
+                            ModalPopupExtender6.Show();
+                            return;
+                        }
+
+                        tps = new TransProductSerial();
+                        tps.ProductID = productID;
+                        tps.SerialNumber = txtM6SN.Text.Trim();
+                        o.lstSerial.Add(tps);
+
+                        //Binding
+                        BindGridSerial(o.lstSerial);
+                    }
+                    else
+                    {
+                        if (Session["StockProductList"] != null)
+                        {
+                            List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductList"];
+                            if (lstProduct != null && lstProduct.Count > 0)
+                            {
+                                MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
+                                if (pd != null)
+                                {
+                                    lstTPS = new List<TransProductSerial>();
+
+                                    tps = new TransProductSerial();
+                                    tps.ProductID = productID;
+                                    tps.SerialNumber = txtM6SN.Text.Trim();
+                                    lstTPS.Add(tps);
+
+                                    lst.Add(new StockDetail()
+                                    {
+                                        ProductID = productID,
+                                        ProductCode = pd.ProductCode,
+                                        ProductName = pd.ProductName,
+                                        ProductTypeID = pd.TypeID,
+                                        ProductTypeName = pd.TypeName,
+                                        Amount = Amt,
+                                        lstSerial = lstTPS,
+                                    });
+
+                                    //Binding
+                                    BindGridSerial(lstTPS);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    if(Session["StockProductList"] != null)
+                    {
+                        List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductList"];
+                        if(lstProduct != null && lstProduct.Count > 0)
+                        {
+                            MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
+                            if (pd != null)
+                            {
+                                lstTPS = new List<TransProductSerial>();
+                                tps = new TransProductSerial();
+                                tps.ProductID = productID;
+                                tps.SerialNumber = txtM6SN.Text.Trim();
+                                lstTPS.Add(tps);
+
+                                //Binding
+                                BindGridSerial(lstTPS);
+
+                                lst.Add(new StockDetail()
+                                {
+                                    ProductID = productID,
+                                    ProductCode = pd.ProductCode,
+                                    ProductName = pd.ProductName,
+                                    ProductTypeID = pd.TypeID,
+                                    ProductTypeName = pd.TypeName,
+                                    Amount = Amt,
+                                    lstSerial = lstTPS,
+                                });
+                            }
+                        }
+                    }
+                }
+                //Clear Txt
+                txtM6SN.Text = "";
+
+                //Save Session
+                Session["StockDetail"] = lst;
+
+                ModalPopupExtender6.Show();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        protected void btnM6Save_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BindDataDetail();
+                //ModalPopupExtender6.Show();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnM6Cancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ModalPopupExtender5.Show();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void imgbtnDeleteSN_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                ImageButton imb = (ImageButton)sender;
+                List<StockDetail> lst = new List<StockDetail>();
+                if (Session["StockDetail"] != null && imb != null)
+                {
+                    lst = (List<StockDetail>)Session["StockDetail"];
+                    int productID = ToInt32(hddM6ProductID.Value);
+                    StockDetail o = lst.FirstOrDefault(w => w.ProductID.Equals(productID));
+                    if (o != null)
+                    {
+                        TransProductSerial tps = o.lstSerial.FirstOrDefault(w => w.SerialNumber.Equals(imb.CommandName));
+                        if (tps != null)
+                            o.lstSerial.Remove(tps);
+
+                        //Binding
+                        BindGridSerial(o.lstSerial);
+
+                        //Save Session
+                        Session["StockDetail"] = lst;
+                    }
+                }
+                else
+                {
+                    ShowMessageBox("Session Timeout. !!", this, "../Index.aspx");
+                }
+
+
+                ModalPopupExtender6.Show();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void BindGridSerial(List<TransProductSerial> lst)
+        {
+            try
+            {
+                if (lst != null)
+                {
+                    gvSerial.DataSource = lst;
+                    gvSerial.DataBind();
+                }
+                else
+                {
+                    gvSerial.DataSource = null;
+                    gvSerial.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void ClearModal6()
+        {
+            try
+            {
+                hddM6ProductID.Value = "";
+                txtM6SN.Text = "";
+                BindGridSerial(new List<TransProductSerial>());
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
         #endregion
 

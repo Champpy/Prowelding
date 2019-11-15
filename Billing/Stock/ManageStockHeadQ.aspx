@@ -89,10 +89,6 @@
                                             </asp:BoundField>              
                                             <asp:TemplateField HeaderText="Tools">
                                                 <ItemTemplate>
-                                                    <%--<asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
-                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "TempID").ToString()%>'
-                                                        OnClick="imgbtnEdit_Click" />
-                                                    &nbsp;--%>
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
                                                         OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
@@ -178,7 +174,7 @@
                                 <HeaderStyle CssClass="text-center width55 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>  
-                            <asp:BoundField HeaderText="เหลือ" DataField="Remaining">
+                            <asp:BoundField HeaderText="เหลือ" DataField="RemainingHeadQ">
                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                 <ItemStyle CssClass="text-right rowData"/>
                             </asp:BoundField>                       

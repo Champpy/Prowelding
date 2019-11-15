@@ -117,7 +117,7 @@ namespace Billing.Setup
                     o.DMLFlag = "I".ToUpper();
 
 
-                    dal.InsUpdDelMasProduct(o);
+                    dal.InsUpdDelMasProductHeadQ(o);
                 }
                 else //Edit
                 {
@@ -132,7 +132,7 @@ namespace Billing.Setup
                     o.CreatedDate = DateTime.Now;
                     o.DMLFlag = "U".ToUpper();
 
-                    dal.InsUpdDelMasProduct(o);
+                    dal.InsUpdDelMasProductHeadQ(o);
 
                 }
 
@@ -204,7 +204,7 @@ namespace Billing.Setup
                     ModelData.Active = "N";
                     ModelData.CreatedBy = GetUsername();
                     ModelData.DMLFlag = "D"; 
-                    dal.InsUpdDelMasProduct(ModelData);
+                    dal.InsUpdDelMasProductHeadQ(ModelData);
 
                     BindData();
                 }

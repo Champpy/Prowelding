@@ -75,7 +75,7 @@
                                             <HeaderStyle CssClass="headerData text-center width10" />
                                             <ItemStyle CssClass="rowData text-right paddingRight5" />
                                         </asp:BoundField>--%>
-                                        <asp:BoundField HeaderText="คงเหลือ" DataField="Remaining" DataFormatString="{0:N0}">
+                                        <asp:BoundField HeaderText="คงเหลือ" DataField="RemainingHeadQ" DataFormatString="{0:N0}">
                                             <HeaderStyle CssClass="headerData text-center width5" />
                                             <ItemStyle CssClass="rowData text-right paddingRight5" />
                                         </asp:BoundField>

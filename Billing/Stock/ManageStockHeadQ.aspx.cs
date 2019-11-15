@@ -168,7 +168,7 @@ namespace Billing.Stock
                 string ProductName = txtSearchItemName.Text.ToLower();
                 List<MasProduct> lst = new List<MasProduct>();
                 var dal = ItemDal.Instance;
-                lst = dal.GetSearchProductHeadQAll();
+                lst = dal.GetSearchProductAll();
                 if (lst != null)
                 {
                     if (!string.IsNullOrEmpty(ProductCode))
@@ -295,8 +295,7 @@ namespace Billing.Stock
         {
             ModalPopupExtender3.Show();
         }
+
         #endregion
-
-
     }
 }
