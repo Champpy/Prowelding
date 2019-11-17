@@ -165,6 +165,9 @@ namespace DAL
                     HeaderID = Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
                     if(lstDetail != null && lstDetail.Count > 0)
                     {
+                        Int32 TransID = 0;
+                        string tid = "";
+                        string[] tidArr;
                         foreach (SaleDetailDTO item in lstDetail)
                         {
                             param = new List<SqlParameter>();
@@ -176,6 +179,24 @@ namespace DAL
                             param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = item.SerialNumber, DbType = DbType.String });
                             param.Add(new SqlParameter() { ParameterName = "ItemDetail", Value = item.ItemDescription, DbType = DbType.String });
                             conn.CallStoredProcedure("InsTransSaleDetail", param, out ds, out error);
+
+                            #region Status = 'N' on SerialNumber
+                            tid = item.SNID;
+                            if(!string.IsNullOrEmpty(tid) && string.IsNullOrEmpty(error))
+                            {
+                                tidArr = tid.Split(',');
+                                if(tidArr != null && tidArr.Length > 0)
+                                {
+                                    foreach (string s in tidArr)
+                                    {
+                                        TransID = Convert.ToInt32(s);
+                                        param = new List<SqlParameter>();
+                                        param.Add(new SqlParameter() { ParameterName = "TransID", Value = TransID, DbType = DbType.Int32 });
+                                        conn.CallStoredProcedure("UpdTransProductSerialStatus", param, out error);
+                                    }
+                                }
+                            }
+                            #endregion
 
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0 && item.ProductDetail != null && item.ProductDetail.Count > 0 && string.IsNullOrEmpty(error))
                             {

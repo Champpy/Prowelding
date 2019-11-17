@@ -177,6 +177,13 @@ namespace Entities.DTO
                 return TotalExVatAmount.ToString("###,##0.00");
             }
         }
+        public string TotalExVatAmount3DGStr
+        {
+            get
+            {
+                return TotalExVatAmount.ToString("###,##0.000");
+            }
+        }
         public string TotalPriceStr
         {
             get

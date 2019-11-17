@@ -31,6 +31,7 @@ namespace Entities
                 return Amount.ToString("###,##0");
             }
         }
+        public string ProductSN { get; set; }
         #endregion
     }
 }

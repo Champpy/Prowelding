@@ -280,9 +280,10 @@ namespace DAL
                         item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
-                        item.Amount = 1;
+                        item.Amount = Convert.ToInt32(dr["Amount"].ToString());
                         item.OrderNo = string.IsNullOrEmpty(dr["OrderNo"].ToString()) ? 0 : Convert.ToInt32(dr["OrderNo"].ToString());
                         item.CanChange = dr["CanChange"].ToString();
+                        item.ProductSN = dr["ProductSN"].ToString();
                         lst.Add(item);
                     }
                 }
@@ -355,5 +356,33 @@ namespace DAL
         //    }
         //    return lst;
         //}
+
+        public List<Entities.TransProductSerial> GetSearchSNByPackageHeaderID(Int32 PackageHeaderID)
+        {
+            List<Entities.TransProductSerial> lst = new List<Entities.TransProductSerial>();
+            Entities.TransProductSerial o = new Entities.TransProductSerial();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "PackageHeaderID", Value = PackageHeaderID });
+                DataSet ds = conn.GetDataSet("GetSearchSNByPackageHeaderID", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new Entities.TransProductSerial();
+                        o.TransID = Convert.ToInt32(dr["TransID"].ToString());
+                        o.SerialNumber = dr["SerialNumber"].ToString();
+                        
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
     }
 }

@@ -196,5 +196,7 @@ namespace Entities.DTO
                 return TotalIndVat.ToString("###,##0.00");
             }
         }
+        public string HaveSN { get; set; }
+        public string SNID { get; set; }
     }
 }

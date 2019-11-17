@@ -840,6 +840,8 @@ namespace Billing.Transaction
                         o.Amount = ToDoudle(txtMAmount.Text);
                         o.SerialNumber = txtMSN.Text;
                         o.ItemDescription = GetItemDesc();// txtMDescription.Text;
+                        o.HaveSN = hddSN.Value;
+                        o.SNID = hddMSNID.Value;
 
                         #region DetailProduct
                         if(gvDetail.Rows.Count > 0)
@@ -882,6 +884,8 @@ namespace Billing.Transaction
                     o.SerialNumber = txtMSN.Text;
                     o.ItemDescription = GetItemDesc();// txtMDescription.Text;
                     o.Status = "New";
+                    o.HaveSN = hddSN.Value;
+                    o.SNID = hddMSNID.Value;
 
                     #region DetailProduct
                     if (gvDetail.Rows.Count > 0)
@@ -969,6 +973,8 @@ namespace Billing.Transaction
             gvDetail.DataSource = null;
             gvDetail.DataBind();
             lkbm1Add.Visible = false;
+            imgbtnSearchItem.Visible = true;
+            imgbtnMSN.Visible = false;
         }
 
         protected void imgbtnEdit_Click(object sender, ImageClickEventArgs e)
@@ -998,9 +1004,12 @@ namespace Billing.Transaction
                                 txtMDiscount.Text = obj.DiscountStr;
                                 txtMSN.Text = obj.SerialNumber;
                                 //txtMDescription.Text = obj.ItemDescription;
+                                hddSN.Value = obj.HaveSN;
 
                                 BindPackageDetail(obj.ProductDetail);
                                 imgbtnSearchItem.Visible = false;
+                                if (obj.HaveSN == "Y")
+                                    imgbtnMSN.Visible = true;
                             }
                         }
                     }
@@ -1048,7 +1057,21 @@ namespace Billing.Transaction
                 SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
-
+        protected void imgbtnMSN_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                Int32 PackageHeaderID = ToInt32(hddItemID.Value);
+                SearchSNByPackageHeader(PackageHeaderID);
+                
+                ModalPopupExtender1.Show();
+                ModalPopupExtender6.Show();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
         //Add gvDetail
         protected void lkbm1Add_Click(object sender, EventArgs e)
         {
@@ -1124,6 +1147,29 @@ namespace Billing.Transaction
             {
                 ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
                 SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+
+        protected void SearchSNByPackageHeader(Int32 PackageHeaderID)
+        {
+            try
+            {
+                var dal = ItemDal.Instance;
+                List<Entities.TransProductSerial> lst = dal.GetSearchSNByPackageHeaderID(PackageHeaderID);
+                if(lst != null)
+                {
+                    gvm6SN.DataSource = lst;
+                    gvm6SN.DataBind();
+                }
+                else
+                {
+                    gvm6SN.DataSource = null;
+                    gvm6SN.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
         #endregion
@@ -1387,6 +1433,16 @@ namespace Billing.Transaction
                         {
                             BindPackageDetail(lst);
                             lkbm1Add.Visible = true;
+                            if(lst.Count(w => w.ProductSN.ToLower().Equals("y")) > 0)
+                            {
+                                imgbtnMSN.Visible = true;
+                                hddSN.Value = "Y";
+                            }
+                            else
+                            {
+                                imgbtnMSN.Visible = false;
+                                hddSN.Value = "N";
+                            }
                         }
                         #endregion
                     }                    
@@ -1598,6 +1654,72 @@ namespace Billing.Transaction
             ModalPopupExtender4.Show();
             hddm5Index.Value = "";
         }
+
         #endregion
+
+        #region Modal6
+        protected void btnm6OK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Int32 amt = ToInt32(txtMAmount.Text);
+                Int32 i = 0;
+                string sn = "", id = "", msg = "";
+                HiddenField hdd = new HiddenField();
+                CheckBox chk = new CheckBox();
+                foreach (GridViewRow item in gvm6SN.Rows)
+                {
+                    hdd = (HiddenField)item.FindControl("hddTransID");
+                    chk = (CheckBox)item.FindControl("chkm6SN");
+                    if (chk != null && hdd != null)
+                    {
+                        if(chk.Checked)
+                        {
+                            id = id + hdd.Value + ",";
+                            sn = sn + item.Cells[1].Text + ", ";
+                            i++;
+                        }
+                    }
+                    
+                    if(i > amt)
+                    {
+                        msg = "Choose Serial Number Too much.";
+                        break;
+                    }
+                }
+
+                if(!string.IsNullOrEmpty(msg))
+                {
+                    ShowMessageBox(msg);
+                }
+                else
+                {
+                    sn = sn.Substring(0, sn.Length - 2);
+                    id = id.Substring(0, id.Length - 1);
+                    txtMSN.Text = sn;
+                    hddMSNID.Value = id;
+                }
+                ModalPopupExtender1.Show();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnm6Cancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ModalPopupExtender1.Show();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        #endregion
+        
     }
 }

@@ -1619,7 +1619,7 @@ namespace Billing.Common
                                 cell1.AddElement(GetNewParag(item.ItemCode, font11));
                                 cell2.AddElement(GetNewParag(item.ItemName, font11));
                                 cell3.AddElement(GetNewParag(item.AmountStr, font11, 1));
-                                cell4.AddElement(GetNewParag(item.TotalExVatAmountStr, font11, 2));
+                                cell4.AddElement(GetNewParag(item.TotalExVatAmount3DGStr, font11, 2));
                                 cell6.AddElement(GetNewParag(item.TotalExVatStr, font11, 2));
                                 cellAry = new PdfPCell[] { cell1, cell2, cell3, cell4, cell5, cell6 };
                                 row = new PdfPRow(cellAry);
