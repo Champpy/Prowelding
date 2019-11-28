@@ -14,7 +14,11 @@
 <body>
     <form id="form1" runat="server">
         <div class="row" style="height:150px;">
-            &nbsp;
+            <%--TESTSTOCK--%>
+            <div class="col-xs-5"></div>
+            <div class="col-xs-2 text-center"><br /><br /><br /><a style="vertical-align:middle !important; font-size:xx-large; color:red;">TEST STOCK</a></div>
+            <div class="col-xs-5"></div>
+            <%--TESTSTOCK--%>
         </div>
         <div class="row" style="height:400px;">
             <div class="col-xs-3"></div>

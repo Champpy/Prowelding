@@ -270,16 +270,16 @@ namespace DAL
                 #endregion
 
                 conn.CallStoredProcedure("UpdTransSaleHeader", param, out error);
-                if (lstDetail != null && lstDetail.Count > 0 && string.IsNullOrEmpty(error))
-                {
-                    foreach (SaleDetailDTO item in lstDetail)
-                    {
-                        param = new List<SqlParameter>();
-                        param.Add(new SqlParameter() { ParameterName = "SaleDetailID", Value = item.SaleDetailID, DbType = DbType.Int32 });
-                        param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = item.SerialNumber, DbType = DbType.String });
-                        conn.CallStoredProcedure("UpdTransSaleDetail", param, out error);
-                    }
-                }
+                //if (lstDetail != null && lstDetail.Count > 0 && string.IsNullOrEmpty(error))
+                //{
+                //    foreach (SaleDetailDTO item in lstDetail)
+                //    {
+                //        param = new List<SqlParameter>();
+                //        param.Add(new SqlParameter() { ParameterName = "SaleDetailID", Value = item.SaleDetailID, DbType = DbType.Int32 });
+                //        param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = item.SerialNumber, DbType = DbType.String });
+                //        conn.CallStoredProcedure("UpdTransSaleDetail", param, out error);
+                //    }
+                //}
 
                 if (string.IsNullOrEmpty(error))
                 {

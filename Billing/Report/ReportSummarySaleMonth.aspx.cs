@@ -36,6 +36,7 @@ namespace Billing.Report
         {
             try
             {
+                List<MasValueList> lst = new List<MasValueList>();
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Text");
                 dt.Columns.Add("Val");
@@ -86,7 +87,6 @@ namespace Billing.Report
                 #endregion
 
                 #region Sale
-                List<MasValueList> lst = new List<MasValueList>();
                 using (BillingEntities cre = new BillingEntities())
                 {
                     lst = cre.MasValueLists.Where(w => w.FUNC.Equals("SALENAME") && w.ISACTIVE.Equals("Y")).OrderBy(od => od.CODE).ToList();
@@ -104,6 +104,26 @@ namespace Billing.Report
 
                 ddlSaleName.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
                 ddlSaleName.DataBind();
+                #endregion
+
+                #region Pay Type
+                using (BillingEntities cre = new BillingEntities())
+                {
+                    lst = cre.MasValueLists.Where(w => w.FUNC.Equals("PAYMENT") && w.ISACTIVE.Equals("Y")).OrderBy(od => od.TYPES).ToList();
+                }
+                if (lst != null && lst.Count > 0)
+                {
+                    lst = lst.OrderBy(od => ToInt32(od.CODE)).ToList();
+                    ddlPay.DataSource = lst;
+                    ddlPay.DataTextField = "Description";
+                    ddlPay.DataValueField = "Code";
+                }
+                else
+                {
+                    ddlPay.DataSource = null;
+                }
+                ddlPay.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
+                ddlPay.DataBind();
                 #endregion
             }
             catch (Exception ex)
@@ -138,6 +158,7 @@ namespace Billing.Report
                 string Year = ddlYear.SelectedValue;
                 string date = "01/" + Month.PadLeft(2, '0') + "/" + Year;
                 string SaleName = ddlSaleName.SelectedItem.Text;
+                string payTypeID = ddlPay.SelectedItem.Value;
                 DateTime dateFrom = DateTime.ParseExact(date, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                 DateTime dateTo = dateFrom.AddMonths(1).AddSeconds(-1);
                 xx = xx / 100;
@@ -152,6 +173,7 @@ namespace Billing.Report
                            join i in cre.MasItems on d.ItemID equals i.ItemID
                            where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
                            && (string.IsNullOrEmpty(SaleName) ? true : h.SaleName.Equals(SaleName))
+                           && (payTypeID == "0" ? true : h.PayType.Equals(payTypeID))
                            && h.Active == "1"
                            //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
                            select new ReportSaleMonthDTO()

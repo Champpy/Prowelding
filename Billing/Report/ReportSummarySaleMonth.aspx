@@ -82,8 +82,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-2 headerData"><b></b></div>
-                            <div class="col-xs-4 rowData">                                
+                            <div class="col-xs-2 headerData"><b>ช่องทางการชำระเงิน :</b></div>
+                            <div class="col-xs-4 rowData">  
+                                <asp:DropDownList ID="ddlPay" runat="server" AppendDataBoundItems="true" Width="90%" class="form-control" >
+                                </asp:DropDownList>                              
                             </div>
                             <div class="col-xs-2 headerData"><b>MAGMIX225 :</b></div>
                             <div class="col-xs-4 rowData">

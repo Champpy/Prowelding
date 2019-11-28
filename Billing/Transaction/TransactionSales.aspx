@@ -263,6 +263,7 @@
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleDetailID").ToString()%>'
+                                                        Visible='<%# string.IsNullOrEmpty(hddID.Value) %>'
                                                         OnClick="imgbtnEdit_Click" />
                                                     &nbsp;
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 

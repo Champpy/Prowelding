@@ -253,9 +253,9 @@ namespace Billing.Stock
                     if (lstProduct != null && lstProduct.Count > 0)
                     {
                         MasProduct o = lstProduct.FirstOrDefault(w => w.ProductID.Equals(ProductID));
-                        if(o != null)
+                        if (o != null)
                         {
-                            if(o.ProductSN == "Y")
+                            if (o.ProductSN == "Y")
                             {
                                 List<StockDetail> lst = new List<StockDetail>();
                                 if (Session["StockDetail"] != null)

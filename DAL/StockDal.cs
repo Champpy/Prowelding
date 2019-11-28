@@ -265,6 +265,7 @@ namespace DAL
                 conn.BeginTransaction();
                 DataSet ds = new DataSet();
                 Int32 HeaderID = 0;
+                bool chk = false;
                 List<SqlParameter> param = new List<SqlParameter>();
                 param.Add(new SqlParameter() { ParameterName = "StockType", Value = header.StockType });
                 param.Add(new SqlParameter() { ParameterName = "StockTime", Value = header.StockTime });
@@ -288,12 +289,21 @@ namespace DAL
                         {
                             foreach (TransProductSerial tps in item.lstSerial)
                             {
+                                ds = new DataSet();
                                 param = new List<SqlParameter>();
                                 param.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
                                 param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = tps.SerialNumber });
                                 param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
-                                conn.CallStoredProcedure("InsTransProductSerial", param, out err);
+                                conn.CallStoredProcedure("InsTransProductSerial", param, out ds, out err);
+                                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                                {
+                                    err = err + tps.SerialNumber + ", ";
+                                    chk = true;
+                                }
                             }
+
+                            if (chk)
+                                err = "ไม่พบ S/N หมายเลข : " + err.Substring(0, err.Length - 2);
                         }
                     }
                 }
@@ -330,7 +340,23 @@ namespace DAL
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null && string.IsNullOrEmpty(err) && header.detail != null && header.detail.Count > 0)
                 {
                     HeaderID = Convert.ToInt32(ds.Tables[0].Rows[0][0].ToString());
-                    string cal = header.StockType == "IN" ? "+" : "-";
+                    string cal = "";
+                    switch (header.StockType)
+                    {
+                        case "IN":
+                            cal = "+";
+                            break;
+                        case "OUT":
+                            cal = "-";
+                            break;
+                        case "TRANSFER":
+                            cal = "+-";
+                            break;
+                        default:
+                            cal = "";
+                            break;
+                    }
+                    //header.StockType == "IN" ? "+" : "-";
                     foreach (StockDetail item in header.detail)
                     {
                         param = new List<SqlParameter>();
@@ -339,6 +365,19 @@ namespace DAL
                         param.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
                         param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
                         conn.CallStoredProcedure("InsStockHeadQDetail", param, out err);
+
+                        if (item.lstSerial != null && item.lstSerial.Count > 0)
+                        {
+                            foreach (TransProductSerial tps in item.lstSerial)
+                            {
+                                ds = new DataSet();
+                                param = new List<SqlParameter>();
+                                param.Add(new SqlParameter() { ParameterName = "ProductID", Value = item.ProductID, DbType = DbType.Int32 });
+                                param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = tps.SerialNumber });
+                                param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
+                                conn.CallStoredProcedure("InsTransProductSerial", param, out ds, out err);
+                            }
+                        }
                     }
                 }
 

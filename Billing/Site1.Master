@@ -23,6 +23,9 @@
                 <nav class="navbar navbar-inverse">
                     <div class="container-fluid">
                         <div class="navbar-header">
+                            <%--TESTSTOCK--%>
+                            <a class="navbar-brand" href="/">TEST STOCK</a>
+                            <%--TESTSTOCK--%>
                             <a class="navbar-brand" href="/Default.aspx">PRO WELDING & TOOLS CO,LTD.</a>
                         </div>
                         <ul class="nav navbar-nav">
@@ -80,6 +83,8 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="/Stock/ManageStock.aspx?t=i">รับเข้า</a></li>
                                     <li role="separator" class="divider"></li>
+                                    <li><a href="/Stock/ManageStockHeadQ.aspx?t=t">ย้ายเข้าคลังขาย</a></li>
+                                    <li role="separator" class="divider"></li>
                                     <li><a href="/Stock/ManageStock.aspx?t=o">คืนสินค้า</a></li>
                                     <li role="separator" class="divider"></li>
                                     <%--<li><a href="/Stock/StockLogs.aspx">ประวัติ</a></li>
@@ -93,8 +98,6 @@
                                     <li><a href="/Stock/ManageStockHeadQ.aspx?t=i">รับเข้า</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Stock/ManageStockHeadQ.aspx?t=o">HeadQ ขายสินค้า</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="/Stock/TransferStockHeadQ.aspx?t=o">ย้ายเข้าคลังขาย</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Setup/MasterProductHeadQ.aspx">Product HeadQ</a></li>
                                     <%--<li role="separator" class="divider"></li>

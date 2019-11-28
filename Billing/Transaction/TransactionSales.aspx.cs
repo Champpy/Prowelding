@@ -73,6 +73,7 @@ namespace Billing.Transaction
                 }
                 if(lst != null && lst.Count > 0)
                 {
+                    lst = lst.OrderBy(od => ToInt32(od.CODE)).ToList();
                     ddlPay.DataSource = lst;
                     ddlPay.DataTextField = "Description";
                     ddlPay.DataValueField = "Code";
@@ -814,6 +815,13 @@ namespace Billing.Transaction
                     return;
                 }
 
+                if (hddSN.Value.ToLower() == "y")
+                {
+                    ShowMessageBox("กรุณาระบุ S/N");
+                    ModalPopupExtender1.Show();
+                    return;
+                }
+                
                 ItemID = ToInt32(hddItemID.Value);
                 #endregion
 
