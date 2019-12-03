@@ -323,11 +323,12 @@ namespace DAL
         #endregion
 
         #region Stock HeadQ
-        public string InsertStockHeadQ(StockHeader header, string User)
+        public string InsertStockHeadQ(StockHeader header, string User, ref string result)
         {
             string err = "";
             try
             {
+                result = "";
                 conn.BeginTransaction();
                 DataSet ds = new DataSet();
                 Int32 HeaderID = 0;
@@ -376,12 +377,19 @@ namespace DAL
                                 param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = tps.SerialNumber });
                                 param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
                                 conn.CallStoredProcedure("InsTransProductSerial", param, out ds, out err);
+                                if (!string.IsNullOrEmpty(err))
+                                    break;
+
+                                if(ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                                {
+                                    result = result + "Product Name : " + item.ProductName + " --> " + ds.Tables[0].Rows[0][0].ToString() + "\\r";
+                                }
                             }
                         }
                     }
                 }
 
-                if (string.IsNullOrEmpty(err))
+                if (string.IsNullOrEmpty(err) && string.IsNullOrEmpty(result))
                     conn.Commit();
                 else
                     conn.RollBack();

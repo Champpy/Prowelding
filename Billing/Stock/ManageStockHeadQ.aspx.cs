@@ -44,7 +44,7 @@ namespace Billing.Stock
         {
             try
             {
-                string err = "", type = "";
+                string err = "", type = "", result = "";
                 List<StockDetail> lst = new List<StockDetail>();
                 StockHeader Header = new StockHeader();
                 var dal = StockDal.Instance;
@@ -78,7 +78,7 @@ namespace Billing.Stock
                     Header.StockTime = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                     Header.Remark = txtRemark.Text;
                     Header.detail = lst;
-                    err = dal.InsertStockHeadQ(Header, GetUsername());
+                    err = dal.InsertStockHeadQ(Header, GetUsername(), ref result);
                 }
                 
                 if (!string.IsNullOrEmpty(err))
@@ -86,6 +86,13 @@ namespace Billing.Stock
                     ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.!!" + err);
                     return;
                 }
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ShowMessageBox(result);
+                    return;
+                }
+
                 ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Setup/MasterProductHeadQ.aspx");
             }
             catch (Exception ex)

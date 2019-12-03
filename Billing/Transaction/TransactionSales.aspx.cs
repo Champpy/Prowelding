@@ -815,7 +815,7 @@ namespace Billing.Transaction
                     return;
                 }
 
-                if (hddSN.Value.ToLower() == "y")
+                if (hddSN.Value.ToLower() == "y" && string.IsNullOrEmpty(txtMSN.Text))
                 {
                     ShowMessageBox("กรุณาระบุ S/N");
                     ModalPopupExtender1.Show();
