@@ -38,6 +38,8 @@ namespace Billing
                 if (user.ToLower() == "fern")
                 {
                     liReport.Visible = true;
+                    liStock.Visible = true;
+                    liStockHeadQ.Visible = true;
                 }
             }
             catch (Exception ex)

@@ -1109,29 +1109,11 @@ namespace Billing.Transaction
                     List<SaleDetailDTO> lst = new List<SaleDetailDTO>();
                     SaleDetailDTO obj = new SaleDetailDTO();
                     Entities.MasPackageDetail pd = new Entities.MasPackageDetail();
-                    if (Session["saleDetail"] != null)
-                    {
-                        lst = (List<SaleDetailDTO>)Session["saleDetail"];
-                        if (lst != null && lst.Count > 0)
-                        {
-                            obj = lst.FirstOrDefault(w => w.SaleDetailID.Equals(DetailID));
-                            if(obj.ProductDetail != null && obj.ProductDetail.Count > 0)
-                            {
-                                pd = obj.ProductDetail.FirstOrDefault(w => w.PackageDetailID.Equals(objID));
-                                if(pd != null)
-                                {
-                                    obj.ProductDetail.Remove(pd);
-                                    gvDetail.DataSource = obj.ProductDetail;
-                                    gvDetail.DataBind();
-                                }
-                            }
-                            Session["saleDetail"] = lst;
-                        }
-                    }
-                    else if(Session["saleDetailProduct"] != null)
+
+                    if (Session["saleDetailProduct"] != null)
                     {
                         List<Entities.MasPackageDetail> lstPD = (List<Entities.MasPackageDetail>)Session["saleDetailProduct"];
-                        if(lstPD != null && lstPD.Count > 0)
+                        if (lstPD != null && lstPD.Count > 0)
                         {
                             pd = lstPD.FirstOrDefault(w => w.PackageDetailID.Equals(objID));
                             if (pd != null)
@@ -1143,6 +1125,31 @@ namespace Billing.Transaction
                             }
                         }
                     }
+                    else
+                    {
+                        ShowMessageBox("Session TimeOut. (SaleDetailProduct)");
+                        return;
+
+                    }
+                    //else if (Session["saleDetail"] != null)
+                    //{
+                    //    lst = (List<SaleDetailDTO>)Session["saleDetail"];
+                    //    if (lst != null && lst.Count > 0)
+                    //    {
+                    //        obj = lst.FirstOrDefault(w => w.SaleDetailID.Equals(DetailID));
+                    //        if(obj != null && obj.ProductDetail != null && obj.ProductDetail.Count > 0)
+                    //        {
+                    //            pd = obj.ProductDetail.FirstOrDefault(w => w.PackageDetailID.Equals(objID));
+                    //            if(pd != null)
+                    //            {
+                    //                obj.ProductDetail.Remove(pd);
+                    //                gvDetail.DataSource = obj.ProductDetail;
+                    //                gvDetail.DataBind();
+                    //            }
+                    //        }
+                    //        Session["saleDetail"] = lst;
+                    //    }
+                    //}
                     
                     ModalPopupExtender1.Show();
                 }
