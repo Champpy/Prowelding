@@ -204,7 +204,7 @@ namespace Billing.Report
                 string bill = "", pay = "";
                 int OldHeader = 0, CurrHeader = 0;
                 int i = 0;
-                double Summary = 0;
+                double Summary = 0, CurrSummary = 0;
                 foreach (Entities.DTO.ReportSaleMonthDTO item in lst)
                 {
                     bill = !string.IsNullOrEmpty(item.BillTypeID) ? item.BillTypeID : "";
@@ -225,11 +225,31 @@ namespace Billing.Report
                         item.Tel = "";
                         item.VisImgBtn = "false";   
                     }
+
+                    if (item.Active == "0")
+                    {
+                        if (CurrHeader == OldHeader)
+                            item.Remove = "Y";
+
+                        item.ItemCode = "";
+                        item.ItemName = "";
+                        item.Amount = 0;
+                        item.ItemPrice = 0;
+                        item.Discount = 0;
+                        item.SerialNumber = "";
+                        CurrSummary = 0;
+                    }
+                    else
+                    {
+                        CurrSummary = item.Total;
+                    }
+
                     OldHeader = CurrHeader;
-                    Summary = Summary + item.Total;
+                    Summary = Summary + CurrSummary;
                     i++;
                 }
 
+                lst.RemoveAll(w => w.Remove.Equals("Y"));
                 lbSummary.Text = Summary.ToString("###,##0.00");
             }
             catch (Exception ex)

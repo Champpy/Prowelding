@@ -514,6 +514,7 @@
     <Content Include="Script\jquery.min.js" />
     <Content Include="Stock\ManageStockHeadQ.aspx" />
     <Content Include="Stock\ManageStock.aspx" />
+    <Content Include="Stock\StockHeadQLogs.aspx" />
     <Content Include="Stock\StockLogs.aspx" />
     <Content Include="Stock\Outbound.aspx" />
     <Content Include="Stock\InventoryList.aspx" />
@@ -784,6 +785,13 @@
     </Compile>
     <Compile Include="Stock\ManageStock.aspx.designer.cs">
       <DependentUpon>ManageStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Stock\StockHeadQLogs.aspx.cs">
+      <DependentUpon>StockHeadQLogs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Stock\StockHeadQLogs.aspx.designer.cs">
+      <DependentUpon>StockHeadQLogs.aspx</DependentUpon>
     </Compile>
     <Compile Include="Stock\StockLogs.aspx.cs">
       <DependentUpon>StockLogs.aspx</DependentUpon>

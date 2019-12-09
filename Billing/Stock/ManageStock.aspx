@@ -237,7 +237,7 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-3 headerData"><b>จำนวน :</b></div>
                 <div class="col-md-7 rowData">
-                    <asp:TextBox ID="txtm5Amount" runat="server" onKeyPress="keyintNodot()" Width="85%"></asp:TextBox>
+                    <asp:TextBox ID="txtm5Amount" runat="server" autocomplete="off" onKeyPress="keyintNodot()" Width="85%"></asp:TextBox>
                     <asp:HiddenField id="hddm5Index" runat="server" />
                 </div>               
                 <div class="col-md-1"></div>
@@ -267,7 +267,7 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-3 headerData"><b>S/N :</b></div>
                 <div class="col-md-7 rowData">
-                    <asp:TextBox ID="txtM6SN" runat="server" Width="75%"></asp:TextBox>
+                    <asp:TextBox ID="txtM6SN" autocomplete="off" runat="server" Width="75%"></asp:TextBox>
                     <asp:HiddenField id="hddM6ProductID" runat="server" />
                     <asp:Button ID="btnM6Add" runat="server" CssClass="btn btn-save" Text="Add" OnClick="btnM6Add_Click"/>
                 </div>               

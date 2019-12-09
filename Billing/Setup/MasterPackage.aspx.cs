@@ -115,8 +115,8 @@ namespace Billing.Setup
 
             if (imb != null)
             {
-
-                MasProduct Data = lst.FirstOrDefault(x => x.ProductCode == imb.CommandArgument);
+                Int32 id = ToInt32(imb.CommandArgument);
+                MasProduct Data = lst.FirstOrDefault(x => x.ProductID == id);
 
                 hddProductID.Value = Data.ProductID.ToString();
                 txtProductCode.Text = Data.ProductCode;
@@ -138,8 +138,8 @@ namespace Billing.Setup
 
             if (imb != null)
             {
-
-                lst.RemoveAll(x => x.ProductCode == imb.CommandArgument);
+                Int32 id = ToInt32(imb.CommandArgument);
+                lst.RemoveAll(x => x.ProductID == id);
 
                 CleartxtDetail();
                 BindDataGrid();
@@ -245,8 +245,12 @@ namespace Billing.Setup
 
             if (hddProductMode.Value != "Add")
             {
-                ModelDataAdd = lst.FirstOrDefault(x => x.ProductCode == txtProductCode.Text);
+                Int32 id = ToInt32(hddProductID.Value);
+                ModelDataAdd = lst.FirstOrDefault(x => x.ProductID == id);
             }
+
+            if (ModelDataAdd == null)
+                ModelDataAdd = new MasProduct();
 
             ModelDataAdd.ProductID = Convert.ToInt32(hddProductID.Value);
             ModelDataAdd.ProductCode = txtProductCode.Text;

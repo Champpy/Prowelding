@@ -36,6 +36,9 @@ namespace Billing.Stock
                 }
                 lblHeader.Text = "คลังใหญ่ : " + type; // (hddType.Value.ToLower() == "i" ? "รับเข้า" : "");
                 Session["StockDetailHeadQ"] = null;
+                Session["StockDetailHeadQSerial"] = null;
+                Session["StockProductHeadQList"] = null;
+                Session["StockDetailHeadQProduct"] = null;
                 BindDataDetail();
             }
         }
@@ -44,7 +47,7 @@ namespace Billing.Stock
         {
             try
             {
-                string err = "", type = "", result = "";
+                string err = "", type = "", result = "", url = "../Stock/StockLogs.aspx";
                 List<StockDetail> lst = new List<StockDetail>();
                 StockHeader Header = new StockHeader();
                 var dal = StockDal.Instance;
@@ -61,12 +64,15 @@ namespace Billing.Stock
                     {
                         case "i":
                             type = "IN";
+                            url = "../Stock/StockHeadQLogs.aspx";
                             break;
                         case "o":
                             type = "OUT";
+                            url = "../Stock/StockHeadQLogs.aspx";
                             break;
                         case "t":
                             type = "TRANSFER";
+                            url = "../Stock/StockLogs.aspx";
                             break;
                         default:
                             type = "";
@@ -93,7 +99,7 @@ namespace Billing.Stock
                     return;
                 }
 
-                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Setup/MasterProductHeadQ.aspx");
+                ShowMessageBox("บันทึกสำเร็จ.", this.Page, url);
             }
             catch (Exception ex)
             {
@@ -204,20 +210,21 @@ namespace Billing.Stock
             {
                 string ProductCode = txtSearchItemCode.Text.ToLower();
                 string ProductName = txtSearchItemName.Text.ToLower();
-                List<MasProduct> lst = new List<MasProduct>();
-                var dal = ItemDal.Instance;
-                lst = dal.GetSearchProductAll();
+                MasPackageHeader o = new MasPackageHeader() { PackageCode = ProductCode, PackageName = ProductName };
+                List<MasPackageHeader> lst = new List<MasPackageHeader>();
+                var dal = PackageDal.Instance; // ItemDal.Instance;
+                lst = dal.GetSearchPackageHeader(o);
                 if (lst != null)
                 {
-                    if (!string.IsNullOrEmpty(ProductCode))
-                        lst = lst.Where(w => w.ProductCode.ToLower().Contains(ProductCode)).ToList();
+                    //if (!string.IsNullOrEmpty(ProductCode))
+                    //    lst = lst.Where(w => w.ProductCode.ToLower().Contains(ProductCode)).ToList();
 
-                    if (!string.IsNullOrEmpty(ProductName))
-                    {
-                        lst = lst.Where(w => w.ProductName.ToLower().Contains(ProductName)).ToList();
-                    }
+                    //if (!string.IsNullOrEmpty(ProductName))
+                    //{
+                    //    lst = lst.Where(w => w.ProductName.ToLower().Contains(ProductName)).ToList();
+                    //}
 
-                    lst = lst.OrderBy(od => od.ProductName).ToList();
+                    lst = lst.OrderBy(od => od.PackageName).ToList();
                     Session["StockProductHeadQList"] = lst;
                     gvItemSearch.DataSource = lst;
                     gvItemSearch.DataBind();
@@ -287,58 +294,73 @@ namespace Billing.Stock
 
                 if (Session["StockProductHeadQList"] != null)
                 {
-                    List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
+                    List<MasPackageHeader> lstProduct = (List<MasPackageHeader>)Session["StockProductHeadQList"];
                     if (lstProduct != null && lstProduct.Count > 0)
                     {
-                        MasProduct o = lstProduct.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                        MasPackageHeader o = lstProduct.FirstOrDefault(w => w.PackageHeaderID.Equals(ProductID));
                         if (o != null)
                         {
-                            if (o.ProductSN == "Y")
+                            //Get Package Detail
+                            var bal = PackageDal.Instance;
+                            Int32 pSN = 0;
+                            List<MasProduct> lstDet = bal.GetSearchPackageDetail(o);
+                            if(lstDet != null && lstDet.Count > 0)
                             {
-                                List<StockDetail> lst = new List<StockDetail>();
-                                if (Session["StockDetailHeadQ"] != null)
-                                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
-
-                                StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
-                                if (s != null)
+                                Session["StockDetailHeadQProduct"] = lstDet;
+                                pSN = lstDet.Count(w => w.ProductSN.ToLower().Equals("y"));
+                                if (pSN > 0 && hddType.Value.ToLower() == "t")
                                 {
-                                    s.lstSerial = new List<TransProductSerial>();
-                                    s.Amount = Amt;
+                                    //List<StockDetail> lst = new List<StockDetail>();
+                                    //if (Session["StockDetailHeadQ"] != null)
+                                    //    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
+
+                                    //StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                                    //if (s != null)
+                                    //{
+                                    //    s.lstSerial = new List<TransProductSerial>();
+                                    //    s.Amount = Amt;
+                                    //}
+
+                                    ClearModal6();
+
+                                    lbM6Header.Text = o.PackageName + " (" + Amt.ToString() + ")";
+                                    hddM6ProductID.Value = hddm5Index.Value;
+
+                                    ModalPopupExtender6.Show();
                                 }
+                                else
+                                {
+                                    #region Comment
+                                    //List<StockDetail> lst = new List<StockDetail>();
+                                    //if (Session["StockDetailHeadQ"] != null)
+                                    //    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
 
-                                ClearModal6();
+                                    //StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
+                                    //if (s == null)
+                                    //{
+                                    //    lst.Add(new StockDetail()
+                                    //    {
+                                    //        ProductID = ProductID,
+                                    //        ProductCode = o.ProductCode,
+                                    //        ProductName = o.ProductName,
+                                    //        ProductTypeID = o.TypeID,
+                                    //        ProductTypeName = o.TypeName,
+                                    //        Amount = Amt,
+                                    //    });
+                                    //}
+                                    //else // Found In List
+                                    //{
+                                    //    s.Amount = s.Amount + Amt;
+                                    //}
+                                    #endregion
 
-                                lbM6Header.Text = o.ProductName + " (" + Amt.ToString() + ")";
-                                hddM6ProductID.Value = hddm5Index.Value;
-
-                                ModalPopupExtender6.Show();
+                                    AddDetailFromSession(Amt);
+                                }
                             }
                             else
                             {
-                                List<StockDetail> lst = new List<StockDetail>();
-                                if (Session["StockDetailHeadQ"] != null)
-                                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
-
-                                StockDetail s = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
-                                if (s == null)
-                                {
-                                    lst.Add(new StockDetail()
-                                    {
-                                        ProductID = ProductID,
-                                        ProductCode = o.ProductCode,
-                                        ProductName = o.ProductName,
-                                        ProductTypeID = o.TypeID,
-                                        ProductTypeName = o.TypeName,
-                                        Amount = Amt,
-                                    });
-                                }
-                                else // Found In List
-                                {
-                                    s.Amount = s.Amount + Amt;
-                                }
-
-                                Session["StockDetailHeadQ"] = lst;
-                                BindDataDetail();
+                                Session["StockDetailHeadQProduct"] = null;
+                                ShowMessageBox("Detail Not found. !!");
                             }
                         }
                     }
@@ -404,7 +426,7 @@ namespace Billing.Stock
 
         #endregion
 
-        #region Modal6
+        #region Modal6 S/N
         protected void btnM6Add_Click(object sender, EventArgs e)
         {
             try
@@ -417,121 +439,153 @@ namespace Billing.Stock
                 }
 
                 Int32 Amt = ToInt32(txtm5Amount.Text);
-                int productID = ToInt32(hddM6ProductID.Value);
-                List<StockDetail> lst = new List<StockDetail>();
-                List<TransProductSerial> lstTPS = new List<TransProductSerial>();
                 TransProductSerial tps = new TransProductSerial();
-                if (Session["StockDetailHeadQ"] != null)
+                List<TransProductSerial> lst = new List<TransProductSerial>();
+                if (Session["StockDetailHeadQSerial"] != null)
+                    lst = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+
+                #region Validate
+                //Check Amount
+                if (Amt <= lst.Count)
                 {
-                    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
-                    StockDetail o = lst.FirstOrDefault(w => w.ProductID.Equals(productID));
-                    if (o != null)
-                    {
-                        if (o.lstSerial == null)
-                        {
-                            o.lstSerial = new List<TransProductSerial>();
-                        }
-                        else
-                        {
-                            if (o.Amount <= o.lstSerial.Count)
-                            {
-                                ShowMessageBox("Serial Number Too much.");
-                                ModalPopupExtender6.Show();
-                                return;
-                            }
-                        }
-
-                        //Check S/N Duplicate
-                        tps = o.lstSerial.FirstOrDefault(w => w.SerialNumber.Trim().Equals(txtM6SN.Text.Trim()));
-                        if (tps != null)
-                        {
-                            ShowMessageBox("Serial Number is duplicate.");
-                            ModalPopupExtender6.Show();
-                            return;
-                        }
-
-                        tps = new TransProductSerial();
-                        tps.ProductID = productID;
-                        tps.SerialNumber = txtM6SN.Text.Trim();
-                        o.lstSerial.Add(tps);
-
-                        //Binding
-                        BindGridSerial(o.lstSerial);
-                    }
-                    else
-                    {
-                        if (Session["StockProductHeadQList"] != null)
-                        {
-                            List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
-                            if (lstProduct != null && lstProduct.Count > 0)
-                            {
-                                MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
-                                if (pd != null)
-                                {
-                                    lstTPS = new List<TransProductSerial>();
-
-                                    tps = new TransProductSerial();
-                                    tps.ProductID = productID;
-                                    tps.SerialNumber = txtM6SN.Text.Trim();
-                                    lstTPS.Add(tps);
-
-                                    lst.Add(new StockDetail()
-                                    {
-                                        ProductID = productID,
-                                        ProductCode = pd.ProductCode,
-                                        ProductName = pd.ProductName,
-                                        ProductTypeID = pd.TypeID,
-                                        ProductTypeName = pd.TypeName,
-                                        Amount = Amt,
-                                        lstSerial = lstTPS,
-                                    });
-
-                                    //Binding
-                                    BindGridSerial(lstTPS);
-                                }
-                            }
-                        }
-
-                    }
+                    ShowMessageBox("Serial Number Too much.");
+                    ModalPopupExtender6.Show();
+                    return;
                 }
-                else
+
+                //Check S/N Duplicate
+                tps = lst.FirstOrDefault(w => w.SerialNumber.Trim().Equals(txtM6SN.Text.Trim()));
+                if (tps != null)
                 {
-                    if (Session["StockProductHeadQList"] != null)
-                    {
-                        List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
-                        if (lstProduct != null && lstProduct.Count > 0)
-                        {
-                            MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
-                            if (pd != null)
-                            {
-                                lstTPS = new List<TransProductSerial>();
-                                tps = new TransProductSerial();
-                                tps.ProductID = productID;
-                                tps.SerialNumber = txtM6SN.Text.Trim();
-                                lstTPS.Add(tps);
-
-                                //Binding
-                                BindGridSerial(lstTPS);
-
-                                lst.Add(new StockDetail()
-                                {
-                                    ProductID = productID,
-                                    ProductCode = pd.ProductCode,
-                                    ProductName = pd.ProductName,
-                                    ProductTypeID = pd.TypeID,
-                                    ProductTypeName = pd.TypeName,
-                                    Amount = Amt,
-                                    lstSerial = lstTPS,
-                                });
-                            }
-                        }
-                    }
+                    ShowMessageBox("Serial Number is duplicate.");
+                    ModalPopupExtender6.Show();
+                    return;
                 }
+                #endregion
+
+                //Pass All Validate
+                tps = new TransProductSerial();
+                tps.SerialNumber = txtM6SN.Text;
+                lst.Add(tps);
+                BindGridSerial(lst);
+
+                #region Comment
+                //List<StockDetail> lst = new List<StockDetail>();
+                //List<TransProductSerial> lstTPS = new List<TransProductSerial>();
+                //TransProductSerial tps = new TransProductSerial();
+                //if (Session["StockDetailHeadQ"] != null)
+                //{
+                //    lst = (List<StockDetail>)Session["StockDetailHeadQ"];
+                //    StockDetail o = lst.FirstOrDefault(w => w.ProductID.Equals(productID));
+                //    if (o != null)
+                //    {
+                //        if (o.lstSerial == null)
+                //        {
+                //            o.lstSerial = new List<TransProductSerial>();
+                //        }
+                //        else
+                //        {
+                //            if (o.Amount <= o.lstSerial.Count)
+                //            {
+                //                ShowMessageBox("Serial Number Too much.");
+                //                ModalPopupExtender6.Show();
+                //                return;
+                //            }
+                //        }
+
+                //        //Check S/N Duplicate
+                //        tps = o.lstSerial.FirstOrDefault(w => w.SerialNumber.Trim().Equals(txtM6SN.Text.Trim()));
+                //        if (tps != null)
+                //        {
+                //            ShowMessageBox("Serial Number is duplicate.");
+                //            ModalPopupExtender6.Show();
+                //            return;
+                //        }
+
+                //        tps = new TransProductSerial();
+                //        tps.ProductID = productID;
+                //        tps.SerialNumber = txtM6SN.Text.Trim();
+                //        o.lstSerial.Add(tps);
+
+                //        //Binding
+                //        BindGridSerial(o.lstSerial);
+                //    }
+                //    else
+                //    {
+                //        if (Session["StockProductHeadQList"] != null)
+                //        {
+                //            List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
+                //            if (lstProduct != null && lstProduct.Count > 0)
+                //            {
+                //                MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
+                //                if (pd != null)
+                //                {
+                //                    lstTPS = new List<TransProductSerial>();
+
+                //                    tps = new TransProductSerial();
+                //                    tps.ProductID = productID;
+                //                    tps.SerialNumber = txtM6SN.Text.Trim();
+                //                    lstTPS.Add(tps);
+
+                //                    lst.Add(new StockDetail()
+                //                    {
+                //                        ProductID = productID,
+                //                        ProductCode = pd.ProductCode,
+                //                        ProductName = pd.ProductName,
+                //                        ProductTypeID = pd.TypeID,
+                //                        ProductTypeName = pd.TypeName,
+                //                        Amount = Amt,
+                //                        lstSerial = lstTPS,
+                //                    });
+
+                //                    //Binding
+                //                    BindGridSerial(lstTPS);
+                //                }
+                //            }
+                //        }
+
+                //    }
+                //}
+                //else
+                //{
+                //    if (Session["StockProductHeadQList"] != null)
+                //    {
+                //        List<MasProduct> lstProduct = (List<MasProduct>)Session["StockProductHeadQList"];
+                //        if (lstProduct != null && lstProduct.Count > 0)
+                //        {
+                //            MasProduct pd = lstProduct.FirstOrDefault(w => w.ProductID.Equals(productID));
+                //            if (pd != null)
+                //            {
+                //                lstTPS = new List<TransProductSerial>();
+                //                tps = new TransProductSerial();
+                //                tps.ProductID = productID;
+                //                tps.SerialNumber = txtM6SN.Text.Trim();
+                //                lstTPS.Add(tps);
+
+                //                //Binding
+                //                BindGridSerial(lstTPS);
+
+                //                lst.Add(new StockDetail()
+                //                {
+                //                    ProductID = productID,
+                //                    ProductCode = pd.ProductCode,
+                //                    ProductName = pd.ProductName,
+                //                    ProductTypeID = pd.TypeID,
+                //                    ProductTypeName = pd.TypeName,
+                //                    Amount = Amt,
+                //                    lstSerial = lstTPS,
+                //                });
+                //            }
+                //        }
+                //    }
+                //}
+                #endregion
+
                 //Clear Txt
                 txtM6SN.Text = "";
 
                 //Save Session
-                Session["StockDetailHeadQ"] = lst;
+                Session["StockDetailHeadQSerial"] = lst;
 
                 ModalPopupExtender6.Show();
             }
@@ -545,7 +599,10 @@ namespace Billing.Stock
         {
             try
             {
-                BindDataDetail();
+                Int32 Amt = ToInt32(txtm5Amount.Text);
+                AddDetailFromSession(Amt);
+
+                //BindDataDetail();
                 //ModalPopupExtender6.Show();
             }
             catch (Exception ex)
@@ -639,5 +696,67 @@ namespace Billing.Stock
             }
         }
         #endregion
+
+        private void AddDetailFromSession(Int32 Amt)
+        {
+            try
+            {
+                if(Session["StockDetailHeadQProduct"] != null)
+                {
+                    List<MasProduct> lstDet = (List<MasProduct>)Session["StockDetailHeadQProduct"];
+
+                    if(lstDet != null && lstDet.Count > 0)
+                    {
+                        List<TransProductSerial> lstTPS = new List<TransProductSerial>();
+                        StockDetail s = new StockDetail();
+                        List<StockDetail> lst = new List<StockDetail>();
+                        if (Session["StockDetailHeadQ"] != null)
+                            lst = (List<StockDetail>)Session["StockDetailHeadQ"];
+
+                        foreach (MasProduct item in lstDet)
+                        {
+                            s = lst.FirstOrDefault(w => w.ProductID.Equals(item.ProductID));
+                            if (s == null)
+                            {
+                                s = new StockDetail();
+                                s.ProductID = item.ProductID;
+                                s.ProductCode = item.ProductCode;
+                                s.ProductName = item.ProductName;
+                                s.ProductTypeID = item.TypeID;
+                                s.ProductTypeName = item.TypeName;
+                                s.Amount = item.Amount * Amt;
+                                if(item.ProductSN.ToLower() == "y" && Session["StockDetailHeadQSerial"] != null)
+                                {
+                                    lstTPS = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+                                    foreach (TransProductSerial tps in lstTPS)
+                                    {
+                                        tps.ProductID = item.ProductID;
+                                    }
+                                    s.lstSerial = lstTPS;
+                                }
+
+                                lst.Add(s);
+                            }
+                            else // Found In List
+                            {
+                                s.Amount = s.Amount + (item.Amount * Amt);
+                            }
+                        }
+
+                        Session["StockDetailHeadQ"] = lst;
+                        BindDataDetail();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Stock/ManageStockHeadQ.aspx?t=" + hddType.Value);
+        }
     }
 }

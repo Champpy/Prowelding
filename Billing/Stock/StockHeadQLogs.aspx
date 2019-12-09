@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site1.Master" AutoEventWireup="true" CodeBehind="StockLogs.aspx.cs" Inherits="Billing.Stock.StockLogs" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site1.Master" AutoEventWireup="true" CodeBehind="StockHeadQLogs.aspx.cs" Inherits="Billing.Stock.StockHeadQLogs" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">    
 </asp:Content>
@@ -10,7 +10,7 @@
                 <div class="panel-heading panel-heading-dark text-left">
                     <h3 class="panel-title">
                         <strong>
-                            <asp:Label ID="lblHeader" runat="server" Text="">ประวัติสินค้า เข้า-ออก คลังขาย</asp:Label>
+                            <asp:Label ID="lblHeader" runat="server" Text="">ประวัติสินค้า เข้า-ออก คลังใหญ่</asp:Label>
                         </strong>
                     </h3>
                 </div>
@@ -71,7 +71,6 @@
                                             <ItemTemplate>
                                                 <asp:ImageButton ID="imgbtnView" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/search32x32.png"
                                                     CommandArgument='<%# DataBinder.Eval(Container.DataItem, "StockHeaderID").ToString()%>'
-                                                    CommandName='<%# DataBinder.Eval(Container.DataItem, "StockFrom").ToString()%>'
                                                     OnClick="imgbtnView_Click" />
                                             </ItemTemplate>
                                             <HeaderStyle CssClass="headerData text-center width10" />

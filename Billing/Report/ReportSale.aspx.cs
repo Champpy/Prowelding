@@ -62,7 +62,7 @@ namespace Billing.Report
                            join d in cre.TransSaleDetails on h.SaleHeaderID equals d.SaleHeaderID
                            join i in cre.MasItems on d.ItemID equals i.ItemID                           
                            where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
-                           && h.Active == "1"
+                           //&& h.Active == "1"
                            //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
                            select new ReportSaleDTO()
                            {
@@ -89,6 +89,8 @@ namespace Billing.Report
                                SaleName = h.SaleName,
                                AccountTransfer = h.AccountTransfer,
                                Installment = h.Installment,
+                               Active = h.Active,
+                               Remove = "N",
                            }).OrderBy(od => od.ReceivedDate).ThenBy(od => od.SaleNumber).ToList();
                 };
 
@@ -124,7 +126,7 @@ namespace Billing.Report
             {
                 int OldHeader = 0, CurrHeader = 0;
                 int i = 0;
-                double Summary = 0;
+                double Summary = 0, CurrSummary = 0;
                 foreach (ReportSaleDTO item in lst)
                 {
                     if (!string.IsNullOrEmpty(item.BillTypeID))
@@ -133,8 +135,6 @@ namespace Billing.Report
                     if (!string.IsNullOrEmpty(item.PayTypeID))
                         item.PayType = lstVal.FirstOrDefault(w => w.CODE.Equals(item.PayTypeID)).DESCRIPTION;
                     CurrHeader = item.HeaderID;
-                    //if (!string.IsNullOrEmpty(item.Tel))
-                    //    item.CustomerName = item.CustomerName + "(" + item.Tel + ")";
 
                     if (i > 0 && CurrHeader == OldHeader)
                     {
@@ -143,11 +143,31 @@ namespace Billing.Report
                         item.SaleNumber = "";
                         item.Tel = "";   
                     }
+
+                    if(item.Active == "0")
+                    {
+                        if (CurrHeader == OldHeader)
+                            item.Remove = "Y";
+
+                        item.ItemCode = "";
+                        item.ItemName = "";
+                        item.Amount = 0;
+                        item.ItemPrice = 0;
+                        item.Discount = 0;
+                        item.SerialNumber = "";
+                        CurrSummary = 0;
+                    }
+                    else
+                    {
+                        CurrSummary = item.Total;
+                    }
+
                     OldHeader = CurrHeader;
-                    Summary = Summary + item.Total;
+                    Summary = Summary + CurrSummary;
                     i++;
                 }
 
+                lst.RemoveAll(w => w.Remove.Equals("Y"));
                 lbSummary.Text = Summary.ToString("###,##0.00");
             }
             catch (Exception ex)

@@ -10,7 +10,7 @@
 namespace Billing.Stock {
     
     
-    public partial class StockLogs {
+    public partial class StockHeadQLogs {
         
         /// <summary>
         /// lblHeader control.

@@ -198,5 +198,6 @@ namespace Entities.DTO
         }
         public string HaveSN { get; set; }
         public string SNID { get; set; }
+        public string UpdateSN { get; set; }
     }
 }

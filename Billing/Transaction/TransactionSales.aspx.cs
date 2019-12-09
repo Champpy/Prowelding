@@ -381,7 +381,7 @@ namespace Billing.Transaction
                     return;
                 }
 
-                string Message = "";
+                string Message = "", result = "";
                 var bal = TransactionDal.Instance;
                 Entities.TransSaleHeader o = new Entities.TransSaleHeader();
                 SaleHeaderDTO obj = new SaleHeaderDTO();
@@ -630,7 +630,7 @@ namespace Billing.Transaction
                         o.Installment = "";
                     #endregion
 
-                    Message = bal.UpdateSaleHeader(o, lst);
+                    Message = bal.UpdateSaleHeader(o, lst, ref result);
                     #endregion
 
                     #region Comment
@@ -765,6 +765,12 @@ namespace Billing.Transaction
                     //    }
                     //};
                     #endregion
+                }
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    ShowMessageBox(result);
+                    return;
                 }
 
                 if (string.IsNullOrEmpty(Message))
@@ -1735,6 +1741,156 @@ namespace Billing.Transaction
         }
 
         #endregion
-        
+
+        #region Modal 7 SN From Grid --> Edit Mode
+        protected void imgbtnSN_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                ImageButton img = (ImageButton)sender;
+                if(img != null)
+                {
+                    hddm7DetailID.Value = img.CommandArgument;
+                    Int32 PackageHeaderID = ToInt32(img.CommandName);
+                    SearchSNByPackageHeaderM7(PackageHeaderID);
+
+                    ModalPopupExtender7.Show();
+                }
+                else
+                {
+                    ShowMessageBox("Error --> Sender is Null.");
+                    return;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Error --> " + ex.Message);
+            }
+        }
+
+        protected void btnm7OK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(Session["saleDetail"] != null)
+                {
+                    List<Entities.DTO.SaleDetailDTO> lstDetail = new List<Entities.DTO.SaleDetailDTO>();
+                    lstDetail = (List<Entities.DTO.SaleDetailDTO>)Session["saleDetail"];
+                    if(lstDetail != null && lstDetail.Count > 0)
+                    {
+                        double Amt = 0;
+                        Int32 SaleDetailID = 0, i = 0;
+                        string oldSN = "";
+                        SaleDetailID = ToInt32(hddm7DetailID.Value);
+                        Entities.DTO.SaleDetailDTO o = lstDetail.FirstOrDefault(w => w.SaleDetailID.Equals(SaleDetailID));
+                        if(o != null)
+                        {
+                            oldSN = o.SerialNumber;
+                            Amt = o.Amount.HasValue ? o.Amount.Value : 0;
+                            HiddenField hdd = new HiddenField();
+                            CheckBox chk = new CheckBox();
+                            string sn = "", id = "", msg = "";
+                            foreach (GridViewRow item in gvm7SN.Rows)
+                            {
+                                hdd = (HiddenField)item.FindControl("hddm7TransID");
+                                chk = (CheckBox)item.FindControl("chkm7SN");
+                                if (chk != null && hdd != null)
+                                {
+                                    if (chk.Checked)
+                                    {
+                                        id = id + hdd.Value + ",";
+                                        sn = sn + item.Cells[1].Text + ", ";
+                                        i++;
+                                    }
+                                }
+
+                                if (i > Amt)
+                                {
+                                    msg = "Choose Serial Number Too much.";
+                                    break;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(msg)) // --> Case Error
+                            {
+                                ShowMessageBox(msg);
+                                return;
+                            }
+                            else // --> Case Success
+                            {
+                                // Get Old SN To Remark
+                                txtRemark.Text = txtRemark.Text + " Old S/N --> " + oldSN;
+
+                                //Sub String SN & ID
+                                sn = sn.Substring(0, sn.Length - 2);
+                                id = id.Substring(0, id.Length - 1);
+
+                                //Save ID to HDD For btnSave
+                                hddm7SNID.Value = id;
+
+                                //Change Grid
+                                o.SNID = id;
+                                o.SerialNumber = sn;
+                                o.UpdateSN = "Y";
+
+                                BindDataGrid();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ShowMessageBox("List Detail is null. !!!");
+                        return;
+                    }
+                }
+                else
+                {
+                    ShowMessageBox("Session is null. !!!");
+                    return;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Error --> " + ex.Message);
+            }
+        }
+
+        protected void btnm7Cancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Error --> " + ex.Message);
+            }
+        }
+
+        protected void SearchSNByPackageHeaderM7(Int32 PackageHeaderID)
+        {
+            try
+            {
+                var dal = ItemDal.Instance;
+                List<Entities.TransProductSerial> lst = dal.GetSearchSNByPackageHeaderID(PackageHeaderID);
+                if (lst != null)
+                {
+                    gvm7SN.DataSource = lst;
+                    gvm7SN.DataBind();
+                }
+                else
+                {
+                    gvm7SN.DataSource = null;
+                    gvm7SN.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox("Error --> " + ex.Message);
+            }
+        }
+        #endregion
     }
 }

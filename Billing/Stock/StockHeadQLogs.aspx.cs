@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 
 namespace Billing.Stock
 {
-    public partial class StockLogs : Billing.Common.BasePage
+    public partial class StockHeadQLogs : Billing.Common.BasePage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -39,7 +39,7 @@ namespace Billing.Stock
                 DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                 DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US")).AddDays(1);
                 var bal = StockDal.Instance;
-                lst = bal.GetStockHeader(dateFrom, dateTo);              
+                lst = bal.GetStockHeaderHeadQ(dateFrom, dateTo);              
 
                 if (lst != null && lst.Count > 0)
                 {
@@ -79,16 +79,11 @@ namespace Billing.Stock
                 if(imb != null)
                 {
                     Int32 HeaderID = ToInt32(imb.CommandArgument);
-                    string stockFrom = imb.CommandName;
                     ModalPopupExtender1.Show();
                     List<StockDetailDTO> lst = new List<StockDetailDTO>();
                     var bal = StockDal.Instance;
-                    if(stockFrom == "s")
-                        lst = bal.GetStockDetail(HeaderID);
-                    else
-                        lst = bal.GetStockDetailHeadQ(HeaderID);
-
-                    if (lst != null && lst.Count > 0)
+                    lst = bal.GetStockDetailHeadQ(HeaderID);
+                    if(lst != null && lst.Count > 0)
                     {
                         gvItemStock.DataSource = lst;
                     }

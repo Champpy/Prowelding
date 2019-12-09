@@ -320,6 +320,69 @@ namespace DAL
             }
             return err;
         }
+
+        public List<StockHeader> GetStockHeader(DateTime DateFrom, DateTime DateTo)
+        {
+            List<StockHeader> lst = new List<StockHeader>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "DateFrom", Value = DateFrom });
+                param.Add(new SqlParameter() { ParameterName = "DateTo", Value = DateTo });
+                DataSet ds = conn.GetDataSet("GetStockHeader", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    StockHeader o = new StockHeader();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new StockHeader();
+                        o.StockHeaderID = Convert.ToInt32(dr["StockHeaderID"].ToString());
+                        o.StockTime = Convert.ToDateTime(dr["StockTime"].ToString());
+                        o.StockType = dr["StockType"].ToString();
+                        o.CreatedBy = dr["CreatedBy"].ToString();
+                        o.StockFrom = dr["StockFrom"].ToString(); 
+                        o.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+
+        public List<StockDetailDTO> GetStockDetail(Int32 HeaderID)
+        {
+            List<StockDetailDTO> lst = new List<StockDetailDTO>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "StockHeaderID", Value = HeaderID });
+                DataSet ds = conn.GetDataSet("GetStockDetail", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    StockDetailDTO o = new StockDetailDTO();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new StockDetailDTO();
+                        o.StockHeaderID = Convert.ToInt32(dr["StockHeaderID"].ToString());
+                        o.StockDetailID = Convert.ToInt32(dr["StockDetailID"].ToString());
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.Amount = Convert.ToInt32(dr["Amount"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
         #endregion
 
         #region Stock HeadQ
@@ -401,6 +464,68 @@ namespace DAL
             }
             return err;
         }
+
+        public List<StockHeader> GetStockHeaderHeadQ(DateTime DateFrom, DateTime DateTo)
+        {
+            List<StockHeader> lst = new List<StockHeader>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "DateFrom", Value = DateFrom });
+                param.Add(new SqlParameter() { ParameterName = "DateTo", Value = DateTo });
+                DataSet ds = conn.GetDataSet("GetStockHeaderHeadQ", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    StockHeader o = new StockHeader();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new StockHeader();
+                        o.StockHeaderID = Convert.ToInt32(dr["StockHeadQHeaderID"].ToString());
+                        o.StockTime = Convert.ToDateTime(dr["StockTime"].ToString());
+                        o.StockType = dr["StockType"].ToString();
+                        o.CreatedBy = dr["CreatedBy"].ToString();
+                        o.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+
+        public List<StockDetailDTO> GetStockDetailHeadQ(Int32 HeaderID)
+        {
+            List<StockDetailDTO> lst = new List<StockDetailDTO>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "StockHeaderID", Value = HeaderID });
+                DataSet ds = conn.GetDataSet("GetStockDetailHeadQ", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    StockDetailDTO o = new StockDetailDTO();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new StockDetailDTO();
+                        o.StockHeaderID = Convert.ToInt32(dr["StockHeadQHeaderID"].ToString());
+                        o.StockDetailID = Convert.ToInt32(dr["StockHeadQDetailID"].ToString());
+                        o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        o.Amount = Convert.ToInt32(dr["Amount"].ToString());
+                        o.ProductCode = dr["ProductCode"].ToString();
+                        o.ProductName = dr["ProductName"].ToString();
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
         #endregion
 
         public string UpdateSaleCancel(Int32 HeaderID, string User)
@@ -422,5 +547,6 @@ namespace DAL
             return err;
         }
 
+        
     }
 }

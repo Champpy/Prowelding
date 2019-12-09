@@ -240,6 +240,7 @@ namespace DAL
                         item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
                         item.CanChange = dr["CanChange"].ToString() == "Y" ? "Change" : "Fix";
                         item.DMLFlag = "I";
+                        item.ProductSN = dr["ProductSN"].ToString();
                         lstData.Add(item);
 
                     }

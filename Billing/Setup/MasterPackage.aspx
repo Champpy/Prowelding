@@ -100,11 +100,11 @@
                                             <asp:TemplateField HeaderText="Tools">
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
-                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
                                                         OnClick="imgbtnEdit_Click" />
                                                     &nbsp;
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"
-                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductCode").ToString()%>'
+                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
                                                         OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');" />
                                                 </ItemTemplate>
                                                 <HeaderStyle CssClass="text-center width9 headerData" Height="30px" />

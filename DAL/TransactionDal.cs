@@ -230,11 +230,12 @@ namespace DAL
             return error;
         }
 
-        public string UpdateSaleHeader(TransSaleHeader o, List<SaleDetailDTO> lstDetail)
+        public string UpdateSaleHeader(TransSaleHeader o, List<SaleDetailDTO> lstDetail, ref string result)
         {
             string error = "";
             try
             {
+                DataSet ds = new DataSet();
                 List<SqlParameter> param = new List<SqlParameter>();
                 conn.BeginTransaction();
 
@@ -270,16 +271,25 @@ namespace DAL
                 #endregion
 
                 conn.CallStoredProcedure("UpdTransSaleHeader", param, out error);
-                //if (lstDetail != null && lstDetail.Count > 0 && string.IsNullOrEmpty(error))
-                //{
-                //    foreach (SaleDetailDTO item in lstDetail)
-                //    {
-                //        param = new List<SqlParameter>();
-                //        param.Add(new SqlParameter() { ParameterName = "SaleDetailID", Value = item.SaleDetailID, DbType = DbType.Int32 });
-                //        param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = item.SerialNumber, DbType = DbType.String });
-                //        conn.CallStoredProcedure("UpdTransSaleDetail", param, out error);
-                //    }
-                //}
+                if (lstDetail != null && lstDetail.Count > 0 && string.IsNullOrEmpty(error))
+                {
+                    lstDetail = lstDetail.Where(w => w.UpdateSN.Equals("Y")).ToList();
+                    foreach (SaleDetailDTO item in lstDetail)
+                    {
+                        param = new List<SqlParameter>();
+                        param.Add(new SqlParameter() { ParameterName = "PackageID", Value = item.ItemID, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "SaleDetailID", Value = item.SaleDetailID, DbType = DbType.Int32 });
+                        param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = item.SerialNumber, DbType = DbType.String });
+                        conn.CallStoredProcedure("UpdTransSaleDetail", param, out ds, out error);
+                        if (!string.IsNullOrEmpty(error))
+                            break;
+
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                        {
+                            result = result + "Product Name : " + item.ItemName + " --> " + ds.Tables[0].Rows[0][0].ToString() + "\\r";
+                        }
+                    }
+                }
 
                 if (string.IsNullOrEmpty(error))
                 {
@@ -293,6 +303,7 @@ namespace DAL
             catch (Exception ex)
             {
                 error = ex.Message;
+                conn.RollBack();
             }
             return error;
         }
@@ -365,6 +376,7 @@ namespace DAL
                         d.Discount = Convert.ToDouble(dr["Discount"].ToString());
                         d.SerialNumber = dr["SerialNumber"].ToString();
                         d.Status = "Old";
+                        d.UpdateSN = "N";
 
                         if (d.ProductDetail == null)
                             d.ProductDetail = new List<MasPackageDetail>();

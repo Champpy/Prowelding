@@ -88,7 +88,6 @@ namespace DAL
                     {
                         ReportSaleMonthDTO item = new ReportSaleMonthDTO();
                         item.HeaderID = Convert.ToInt32(dr["SaleHeaderID"].ToString());
-                        item.DetailID = Convert.ToInt32(dr["SaleDetailID"].ToString());
                         item.Remark = dr["Remark"].ToString();
                         item.CustomerName = dr["CustomerName"].ToString();
                         item.CustomerAddress = dr["CustomerAddress"].ToString();
@@ -99,13 +98,18 @@ namespace DAL
                         item.ReceivedDate = Convert.ToDateTime(dr["ReceivedDate"].ToString());
                         item.WarrantyDate = Convert.ToDateTime(dr["WarrantyDate"].ToString());
                         item.SaleNumber = dr["SaleNumber"].ToString();
-                        item.ItemCode = dr["PackageCode"].ToString();
-                        item.ItemName = dr["PackageName"].ToString();
+                        if(!string.IsNullOrEmpty(dr["SaleDetailID"].ToString()))
+                        {
+                            item.DetailID = Convert.ToInt32(dr["SaleDetailID"].ToString());
+                            item.ItemCode = dr["PackageCode"].ToString();
+                            item.ItemName = dr["PackageName"].ToString();
+                            item.ItemDescription = dr["ItemDetail"].ToString();
+                            item.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
+                            item.Discount = Convert.ToDouble(dr["Discount"].ToString());
+                            item.Amount = Convert.ToDouble(dr["Amount"].ToString());
+                        }
+                        
                         item.SerialNumber = dr["SerialNumber"].ToString();
-                        item.ItemDescription = dr["ItemDetail"].ToString();
-                        item.ItemPrice = Convert.ToDouble(dr["ItemPrice"].ToString());
-                        item.Discount = Convert.ToDouble(dr["Discount"].ToString());
-                        item.Amount = Convert.ToDouble(dr["Amount"].ToString());
                         item.Tel = dr["Tel"].ToString();
                         item.Address = dr["CustomerAddress"].ToString();
                         item.District = dr["CustomerDistrict"].ToString();
@@ -121,8 +125,8 @@ namespace DAL
                         item.ConsignmentNo = dr["ConsignmentNo"].ToString();
                         item.AccountTransfer = dr["AccountTransfer"].ToString();
                         item.Installment = dr["Installment"].ToString();
-
-
+                        item.Active = dr["Active"].ToString();
+                        item.Remove = "N";
                         lst.Add(item);
                     }
                 }

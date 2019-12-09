@@ -122,7 +122,7 @@
                             <div class="col-xs-8">
                                 <asp:Button ID="btnSave" runat="server" Text="บันทึก" CssClass="btn btn-default" OnClick="btnSave_Click" />
                                 &nbsp;&nbsp;&nbsp;
-                               <asp:Button ID="btnCancel" runat="server" Text="ยกเลิก" CssClass="btn btn-default" />
+                               <asp:Button ID="btnCancel" runat="server" Text="ยกเลิก" CssClass="btn btn-default" OnClick="btnCancel_Click" />
                             </div>
                             <div class="col-xs-2">
                             </div>
@@ -166,23 +166,23 @@
                 <div class="col-md-10 rowData" style="overflow:auto; height:300px !important;">
                     <asp:GridView ID="gvItemSearch" runat="server" Width="100%" AutoGenerateColumns="False">
                         <Columns>
-                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
+                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="PackageCode">
                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="ProductName">
+                            <asp:BoundField HeaderText="ชื่อสินค้า" DataField="PackageName">
                                 <HeaderStyle CssClass="text-center width55 headerData" />
                                 <ItemStyle CssClass="text-left rowData"/>
                             </asp:BoundField>  
-                            <asp:BoundField HeaderText="เหลือ" DataField="RemainingHeadQ">
+                            <%--<asp:BoundField HeaderText="เหลือ" DataField="RemainingHeadQ">
                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                 <ItemStyle CssClass="text-right rowData"/>
-                            </asp:BoundField>                       
+                            </asp:BoundField>   --%>                    
                             <asp:TemplateField HeaderText="Choose">
                                 <ItemTemplate>
                                     <asp:ImageButton ID="imgbtnChooseItem" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"                                        
                                         CommandArgument='<%# Container.DataItemIndex.ToString()%>'
-                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
+                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "PackageHeaderID").ToString()%>'
                                         OnClick="imgbtnChooseItem_Click" />
                                 </ItemTemplate>
                                 <HeaderStyle CssClass="text-center width10 headerData" Height="30px"/>
@@ -232,7 +232,7 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-3 headerData"><b>จำนวน :</b></div>
                 <div class="col-md-7 rowData">
-                    <asp:TextBox ID="txtm5Amount" runat="server" onKeyPress="keyintNodot()" Width="85%"></asp:TextBox>
+                    <asp:TextBox ID="txtm5Amount" runat="server" autocomplete="off" onKeyPress="keyintNodot()" Width="85%"></asp:TextBox>
                     <asp:HiddenField id="hddm5Index" runat="server" />
                 </div>               
                 <div class="col-md-1"></div>
@@ -262,7 +262,7 @@
                 <div class="col-md-1"></div>            
                 <div class="col-md-3 headerData"><b>S/N :</b></div>
                 <div class="col-md-7 rowData">
-                    <asp:TextBox ID="txtM6SN" runat="server" Width="75%"></asp:TextBox>
+                    <asp:TextBox ID="txtM6SN" autocomplete="off" runat="server" Width="75%"></asp:TextBox>
                     <asp:HiddenField id="hddM6ProductID" runat="server" />
                     <asp:Button ID="btnM6Add" runat="server" CssClass="btn btn-save" Text="Add" OnClick="btnM6Add_Click"/>
                 </div>               

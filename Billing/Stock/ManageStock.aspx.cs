@@ -55,7 +55,7 @@ namespace Billing.Stock
                     ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.!!" + err);
                     return;
                 }
-                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Setup/MasterProduct.aspx");
+                ShowMessageBox("บันทึกสำเร็จ.", this.Page, "../Stock/StockLogs.aspx");
             }
             catch (Exception ex)
             {

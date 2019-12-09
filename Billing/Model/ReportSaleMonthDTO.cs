@@ -224,5 +224,7 @@ namespace Billing.Model
         public string ConsignmentNo { get; set; }
         public string AccountTransfer { get; set; }
         public string Installment { get; set; }
+        public string Active { get; set; }
+        public string Remove { get; set; }
     }
 }

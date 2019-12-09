@@ -270,6 +270,12 @@
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleDetailID").ToString()%>'
                                                         Visible='<%# string.IsNullOrEmpty(hddID.Value) %>'
                                                         OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
+                                                    &nbsp;
+                                                    <asp:ImageButton ID="imgbtnSN" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png" 
+                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "SaleDetailID").ToString()%>'
+                                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>'
+                                                        Visible='<%# !string.IsNullOrEmpty(hddID.Value) %>'
+                                                        OnClick="imgbtnSN_Click"/>
                                                 </ItemTemplate>
                                                 <HeaderStyle CssClass="text-center width9 headerData" Height="30px"/>
                                                 <ItemStyle CssClass="text-center rowData" />
@@ -813,7 +819,7 @@
         </div>
     </asp:Panel>
 
-    <%--Amount--%>
+    <%--SN From Modal Detail--%>
     <asp:ModalPopupExtender ID="ModalPopupExtender6" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel6" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
@@ -825,15 +831,6 @@
                     <asp:HiddenField id="hddm6ProductID" runat="server" />
                 </h3>
             </div>
-            <%--<div class="row">    
-                <div class="col-md-1"></div>            
-                <div class="col-md-3 headerData"><b>S/N :</b></div>
-                <div class="col-md-7 rowData">
-                    <asp:TextBox ID="txtm6SN" runat="server" Width="85%"></asp:TextBox>
-                    
-                </div>               
-                <div class="col-md-1"></div>
-            </div>--%>
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10" style="overflow:auto; height:200px;">
@@ -871,6 +868,61 @@
                 <div class="col-md-12 text-center">
                     <asp:Button ID="btnm6OK" runat="server" CssClass="btn btn-save" Text="OK" OnClick="btnm6OK_Click"/>
                     <asp:Button ID="btnm6Cancel" runat="server" CssClass="btn btn-save" Text="Cancel" OnClick="btnm6Cancel_Click"/>
+                </div>
+            </div>
+        </div>
+    </asp:Panel>
+
+    <%--Edit SN From Grid Detail--%>
+    <asp:ModalPopupExtender ID="ModalPopupExtender7" runat="server" BackgroundCssClass="modalBackground"
+        PopupControlID="Panel7" TargetControlID="lbl_modal_view">
+    </asp:ModalPopupExtender>
+    <asp:Panel ID="Panel7" Height="350px" Width="400px" runat="server" Style="display: none;">
+        <div class="panel panel-info-dark width100" style="min-height: 350px;">
+            <div class="panel-heading text-left">
+                <h3 class="panel-title">
+                    <asp:Label ID="Label6" runat="server" CssClass="modalHeader" Text="S/N"></asp:Label>
+                    <asp:HiddenField id="hddm7DetailID" runat="server" />
+                    <asp:HiddenField id="hddm7SNID" runat="server" />
+                </h3>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10" style="overflow:auto; height:200px;">
+                    <asp:GridView ID="gvm7SN" runat="server" Width="100%" AutoGenerateColumns="False">
+                        <Columns>
+                            <asp:TemplateField HeaderText="Tools">
+                                <ItemTemplate>
+                                    <asp:HiddenField ID="hddm7TransID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "TransID").ToString()%>' />
+                                    <asp:CheckBox ID="chkm7SN" runat="server" />
+                                </ItemTemplate>
+                                <HeaderStyle CssClass="text-center width5" Height="30px"/>
+                                <ItemStyle CssClass="text-center" />
+                            </asp:TemplateField> 
+                            <asp:BoundField HeaderText="SerialNumber" DataField="SerialNumber">
+                                <HeaderStyle CssClass="text-center width75" />
+                                <ItemStyle CssClass="text-left"/>
+                            </asp:BoundField>           
+                        </Columns>
+                        <HeaderStyle BackColor="#ff7777" />
+                        <EmptyDataTemplate>
+                            <table border="1" style="width:100%; padding:5px;">
+                                <tr>
+                                    <td colspan="2" style="text-align:left;">
+                                        No data.
+                                    </td>
+                                </tr>
+                            </table>
+                        </EmptyDataTemplate>
+                    </asp:GridView>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">&nbsp;</div> 
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12 text-center">
+                    <asp:Button ID="btnm7OK" runat="server" CssClass="btn btn-save" Text="OK" OnClick="btnm7OK_Click"/>
+                    <asp:Button ID="btnm7Cancel" runat="server" CssClass="btn btn-save" Text="Cancel" OnClick="btnm7Cancel_Click"/>
                 </div>
             </div>
         </div>

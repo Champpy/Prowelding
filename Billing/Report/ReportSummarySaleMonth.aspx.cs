@@ -174,7 +174,7 @@ namespace Billing.Report
                            where h.ReceivedDate >= dateFrom && h.ReceivedDate < dateTo
                            && (string.IsNullOrEmpty(SaleName) ? true : h.SaleName.Equals(SaleName))
                            && (payTypeID == "0" ? true : h.PayType.Equals(payTypeID))
-                           && h.Active == "1"
+                           //&& h.Active == "1"
                            //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
                            select new ReportSaleMonthDTO()
                            {
@@ -213,7 +213,9 @@ namespace Billing.Report
                                ConsignmentNo = h.ConsignmentNo,
                                AccountTransfer = h.AccountTransfer,
                                Installment = h.Installment,
-                           }).OrderBy(od => od.ReceivedDate).ThenBy(od => od.SaleNumber).ThenBy(od => od.DetailID).ToList();
+                               Active = h.Active,
+                               Remove = "N",
+                }).OrderBy(od => od.ReceivedDate).ThenBy(od => od.SaleNumber).ThenBy(od => od.DetailID).ToList();
                 };
 
                 if (lst != null && lst.Count > 0)
@@ -243,17 +245,37 @@ namespace Billing.Report
                 int OldHeader = 0, CurrHeader = 0;
                 int i = 0;
                 string bill = "", pay = "";
-                double Summary = 0;
+                double Summary = 0, CurrSummary = 0;
                 foreach (ReportSaleMonthDTO itemSource in lstSource)
                 {
+                    CurrHeader = itemSource.HeaderID;
                     bill = !string.IsNullOrEmpty(itemSource.BillTypeID) ? itemSource.BillTypeID : "";
                     pay = !string.IsNullOrEmpty(itemSource.PayTypeID) ? itemSource.PayTypeID : "";
                     itemSource.BillType = bill.Equals("Vat") ? "Vat" : "Cash";
                     o = lstVal.FirstOrDefault(w => w.CODE.Equals(pay));
                     if(o != null)
                         itemSource.PayType = o.DESCRIPTION;
-                    Summary = Summary + itemSource.Total;
+
+                    if (itemSource.Active == "0")
+                    {
+                        if (CurrHeader == OldHeader)
+                            itemSource.Remove = "Y";
+                        
+                        itemSource.Amount = 0;
+                        itemSource.ItemPrice = 0;
+                        itemSource.Discount = 0;
+
+                        CurrSummary = 0;
+                    }
+                    else
+                    {
+                        CurrSummary = itemSource.Total;
+                    }
+                    Summary = Summary + CurrSummary;
+                    OldHeader = CurrHeader;
                 }
+
+                lstSource.RemoveAll(w => w.Remove.Equals("Y"));
                 lbSummary.Text = Summary.ToString("###,##0.00");
 
                 foreach (ReportSaleMonthDTO itemSource in lstSource)
@@ -290,6 +312,7 @@ namespace Billing.Report
                         oRPT.Remark = itemSource.Remark;
                         lstResult.Add(oRPT);
                     }
+                    
                     OldHeader = CurrHeader;
                     i++;
                 }

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\CustomerDTO.cs" />
+    <Compile Include="DTO\StockDetailDTO.cs" />
     <Compile Include="DTO\InventoryDTO.cs" />
     <Compile Include="DTO\MasItemDTO.cs" />
     <Compile Include="MasPackageDetail.cs" />
