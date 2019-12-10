@@ -48,29 +48,6 @@
                                 <%--<asp:TextBox ID="txtSN" runat="server" class="form-control"></asp:TextBox>--%>
                             </div>
                         </div>
-                        <%--<div class="row">
-                            <div class="col-xs-2 headerData"><b>เบอร์โทรศัพท์ :</b></div>
-                            <div class="col-xs-4 rowData">
-                                <asp:TextBox ID="txtTel" runat="server" class="form-control"></asp:TextBox>
-                            </div>
-                            <div class="col-xs-2 headerData"><b>สินค้า :</b></div>
-                            <div class="col-xs-4 rowData">
-                                <asp:DropDownList ID="ddlItem" runat="server" AutoPostBack="true" class="form-control" >
-                                </asp:DropDownList>
-                            </div>
-                        </div>--%>
-                        <div class="row">
-                            <div class="col-xs-2 headerData"><b>ตั้งแต่วันที่ :</b></div>
-                            <div class="col-xs-4 rowData">
-                                <asp:TextBox ID="txtDateFrom" runat="server" placeholder="กดเพื่อเปิดปฏิทิน" class="form-control"></asp:TextBox>
-                                <asp:CalendarExtender ID="ceDate1" runat="server" Format="dd/MM/yyyy" TargetControlID="txtDateFrom" PopupPosition="TopLeft"></asp:CalendarExtender> 
-                            </div>
-                            <div class="col-xs-2 headerData"><b>ถึงวันที่ :</b></div>
-                            <div class="col-xs-4 rowData">
-                                <asp:TextBox ID="txtDateTo" runat="server" placeholder="กดเพื่อเปิดปฏิทิน" class="form-control"></asp:TextBox>
-                                <asp:CalendarExtender ID="ceDate2" runat="server" Format="dd/MM/yyyy" TargetControlID="txtDateTo" PopupPosition="TopLeft"></asp:CalendarExtender> 
-                            </div>
-                        </div>
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-xs-2"></div>
                             <div class="col-xs-8">

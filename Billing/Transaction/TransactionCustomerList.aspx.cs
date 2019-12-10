@@ -22,8 +22,6 @@ namespace Billing.Transaction
             if (!IsPostBack)
             {
                 DateTime dt = DateTime.Now;
-                txtDateTo.Text = dt.ToString("dd/MM/yyyy");
-                txtDateFrom.Text = dt.AddDays(-365).ToString("dd/MM/yyyy");
                 BindData();
             }
         }
@@ -46,35 +44,10 @@ namespace Billing.Transaction
             {
                 List<SaleHeaderDTO> lst = new List<SaleHeaderDTO>();
                 List<SaleHeaderDTO> lstMod = new List<SaleHeaderDTO>();
-                DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US")).AddDays(1);
-                //DateTime date = string.IsNullOrEmpty(txtDate.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                 string AccName = txtCustName.Text;
                 var dal = TransactionDal.Instance;
-                lst = dal.GetSearchCustomer(dateFrom, dateTo, AccName);
-                //using (BillingEntities cre = new BillingEntities())
-                //{
-                //    lst = (from d in cre.GetTransSaleList(dateFrom, dateTo, )
-                //           select new SaleHeaderDTO()
-                //           {
-                //               SaleHeaderID = d.SaleHeaderID,
-                //               CustomerName = d.CustomerName,                                  
-                //               Tel = d.tel,
-                //               ReceivedDate = d.ReceivedDate,
-                //               ReceivedBy = d.ReceivedBy,
-                //               SaleNumber = d.SaleNumber,
-                //               ItemCode = d.ItemCode,
-                //               ItemName = d.ItemName,
-                //               ItemID = d.ItemID.HasValue ? d.ItemID.Value : 0,
-                //               dAmount = d.Amount,
-                //               ItemPrice = d.ItemPrice.HasValue ? d.ItemPrice.Value : 0,
-                //               Discount = d.Discount.HasValue ? d.Discount.Value : 0,
-                //               SerialNumber = d.SerialNumber,
-                //               BillType = d.BillType,
-                //           }).ToList();
-
-                //};
-
+                lst = dal.GetSearchCustomer(AccName);
+                
                 if (lst != null && lst.Count > 0)
                 {
                     if (lst != null && lst.Count > 0)

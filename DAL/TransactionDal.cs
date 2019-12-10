@@ -72,14 +72,12 @@ namespace DAL
 
         #endregion
 
-        public List<SaleHeaderDTO> GetSearchCustomer(DateTime dtFrom, DateTime dtTo, string CusName)
+        public List<SaleHeaderDTO> GetSearchCustomer(string CusName)
         {
             List<SaleHeaderDTO> lst = new List<SaleHeaderDTO>();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
-                param.Add(new SqlParameter() { ParameterName = "DateFrom", Value = dtFrom, DbType = DbType.DateTime });
-                param.Add(new SqlParameter() { ParameterName = "DateTo", Value = dtTo, DbType = DbType.DateTime });
                 param.Add(new SqlParameter() { ParameterName = "CustomerName", Value = CusName });
                 DataSet ds = conn.GetDataSet("GetCustomerHistorty", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)

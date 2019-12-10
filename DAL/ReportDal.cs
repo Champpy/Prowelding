@@ -137,6 +137,40 @@ namespace DAL
             }
             return lst;
         }
-        
+
+        public List<ReportSaleItemDTO> GetSearchReportSaleItem(DateTime dateFrom, DateTime dateTo)
+        {
+            List<ReportSaleItemDTO> lst = new List<ReportSaleItemDTO>();
+            try
+            {
+                ReportSaleItemDTO item = new ReportSaleItemDTO();
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "DateFrom", Value = dateFrom, DbType = DbType.DateTime });
+                param.Add(new SqlParameter() { ParameterName = "DateTo", Value = dateTo, DbType = DbType.DateTime });
+
+                DataSet ds = conn.GetDataSet("GetReportSaleItem", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    int i = 1;
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        item = new ReportSaleItemDTO();
+                        item.No = i;
+                        item.ItemCode = dr["ItemCode"].ToString();
+                        item.ItemName = dr["ItemName"].ToString();
+                        item.Amount = Convert.ToDouble(dr["Amount"].ToString());
+                        
+                        lst.Add(item);
+                        i++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
+
     }
 }

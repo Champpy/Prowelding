@@ -49,19 +49,16 @@
                 </div>
                 <div class="panel-body text-center" style="margin-top: 5px;">
                     <div style="padding: 0px 15px 15px 15px;">
-                        <div class="row">
+                        <%--<div class="row">
                             <div class="col-xs-2 headerData"><b>สินค้า :</b></div>
                             <div class="col-xs-4 rowData">
                                 <asp:TextBox ID="txtItemCode" runat="server" class="form-control"></asp:TextBox>
-                                <%--<asp:DropDownList ID="ddlItem" runat="server" AutoPostBack="true" class="form-control" >
-                                </asp:DropDownList>--%>
-                                <%--<input id="tags" />--%>
                             </div>
-                            <div class="col-xs-2 headerData"><b>แสดงราคา :</b></div>
+                            <div class="col-xs-2 headerData"><b></b></div>
                             <div class="col-xs-4 rowData">
                                 <asp:CheckBox ID="chkShow" runat="server"/>                                
                             </div>
-                        </div>
+                        </div>--%>
                         <div class="row">
                             <div class="col-xs-2 headerData"><b>ตั้งแต่วันที่ :</b></div>
                             <div class="col-xs-4 rowData">
@@ -87,20 +84,24 @@
                         <div class="row" style="margin-top: 15px; max-height:350px; overflow:auto;">
                             <div class="col-xs-12">
                                 <asp:GridView ID="gv" runat="server" Width="100%" AutoGenerateColumns="False">
-                                    <Columns>       
-                                        <asp:BoundField HeaderText="รหัสสินค้า" DataField="ItemCode">
+                                    <Columns>     
+                                        <asp:BoundField HeaderText="ลำดับ" DataField="No">
+                                            <HeaderStyle CssClass="text-center width10 headerData" />
+                                            <ItemStyle CssClass="text-center rowData"/>
+                                        </asp:BoundField>
+                                        <%--<asp:BoundField HeaderText="รหัสสินค้า" DataField="ItemCode">
                                             <HeaderStyle CssClass="text-center width10" />
                                             <ItemStyle CssClass="text-left"/>
-                                        </asp:BoundField>                                  
+                                        </asp:BoundField>  --%>                                
                                         <asp:BoundField HeaderText="สินค้า" DataField="ItemName">
-                                            <HeaderStyle CssClass="text-center width20" />
-                                            <ItemStyle CssClass="text-left"/>
+                                            <HeaderStyle CssClass="text-center width80 headerData" />
+                                            <ItemStyle CssClass="text-left rowData"/>
                                         </asp:BoundField>  
                                         <asp:BoundField HeaderText="จำนวน" DataField="AmountStr">
-                                            <HeaderStyle CssClass="text-center width5" />
-                                            <ItemStyle CssClass="text-center"/>
+                                            <HeaderStyle CssClass="text-center width10 headerData" />
+                                            <ItemStyle CssClass="text-center rowData"/>
                                         </asp:BoundField>  
-                                        <asp:BoundField HeaderText="ราคา" DataField="ItemPriceStr">
+                                        <%--<asp:BoundField HeaderText="ราคา" DataField="ItemPriceStr">
                                             <HeaderStyle CssClass="text-center width8" />
                                             <ItemStyle CssClass="text-right"/>
                                         </asp:BoundField> 
@@ -116,7 +117,7 @@
                                             </ItemTemplate>
                                             <HeaderStyle CssClass="text-center width3" />
                                             <ItemStyle CssClass="text-center" />
-                                        </asp:TemplateField>   
+                                        </asp:TemplateField> --%>  
                                     </Columns>
                                     <EmptyDataTemplate>
                                         <table>
@@ -140,11 +141,10 @@
         <div class="col-xs-1"></div>  
     </div>  
     
-    <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" BackgroundCssClass="modalBackground"
+    <%--<asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" BackgroundCssClass="modalBackground"
         PopupControlID="Panel1" TargetControlID="lbl_modal_view">
     </asp:ModalPopupExtender>
     <asp:Panel ID="Panel1" Height="400px" Width="500px" runat="server" Style="display: none;">
-        <%--Style="display: none;"--%>
         <div class="panel panel-info-dark width100" style="min-height: 400px;">
             <div class="panel-heading text-left">
                 <h3 class="panel-title">
@@ -195,5 +195,5 @@
                 </div>
             </div>
         </div>
-    </asp:Panel>  
+    </asp:Panel>  --%>
 </asp:Content>

@@ -75,5 +75,6 @@ namespace Entities.DTO
                 return Amount.ToString("###,##0");
             }
         }
+        public Int32 No { get; set; }
     }
 }

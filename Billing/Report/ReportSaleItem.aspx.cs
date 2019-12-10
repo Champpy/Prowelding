@@ -1,10 +1,8 @@
-﻿using Billing.AppData;
-using Billing.Common;
-using Billing.Model;
+﻿using Billing.Common;
+using DAL;
+using Entities.DTO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,40 +22,11 @@ namespace Billing.Report
             if (!IsPostBack)
             {
                 Session["ReportSaleItem"] = null;
-                Session["ItemList"] = null;
-                //BindDDL();
+                DateTime dt = DateTime.Now;
+                txtDateTo.Text = dt.ToString("dd/MM/yyyy");
+                txtDateFrom.Text = dt.ToString("dd/MM/yyyy");
+                
                 BindData();
-            }
-        }
-        protected void BindDDL()
-        {
-            try
-            {
-                //List<MasItem> lst = new List<MasItem>();
-                //using (BillingEntities cre = new BillingEntities())
-                //{
-                //    lst = cre.MasItems.ToList();
-                //};
-
-                //if (lst != null)
-                //{
-                //    Session["ItemList"] = lst;
-                //    ddlItem.DataSource = lst;
-                //    ddlItem.DataValueField = "ItemID";
-                //    ddlItem.DataTextField = "ItemName";
-                //}
-                //else
-                //{
-                //    Session["ItemList"] = null;
-                //    ddlItem.DataSource = null;
-                //}
-
-                //ddlItem.DataBind();
-                //ddlItem.Items.Insert(0, "");
-            }
-            catch (Exception ex)
-            {
-
             }
         }
 
@@ -79,61 +48,45 @@ namespace Billing.Report
             try
             {
                 List<ReportSaleItemDTO> lst = new List<ReportSaleItemDTO>();
-                DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text + " 235959", "dd/MM/yyyy HHmmss", new System.Globalization.CultureInfo("en-US"));                
+                DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.Now.AddYears(-200) : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+                DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text + " 235959", "dd/MM/yyyy HHmmss", new System.Globalization.CultureInfo("en-US"));
+                var bal = ReportDal.Instance;
+                lst = bal.GetSearchReportSaleItem(dateFrom, dateTo);
+                #region Comment
                 //Int32 itemID = ToInt32(ddlMItem.SelectedItem.Value);
-                string ItemCode = "", Group = "";                          
+                //string ItemCode = "", Group = "";                          
                 //ItemCode = ddlItem.SelectedItem.Value;
-                ItemCode = txtItemCode.Text;
-                Group = chkShow.Checked ? "1" : "";
+                //ItemCode = txtItemCode.Text;
+                //Group = chkShow.Checked ? "1" : "";
 
-                using (BillingEntities cre = new BillingEntities())
-                {
+                //using (BillingEntities cre = new BillingEntities())
+                //{
 
-                    lst = (from d in cre.GetReportSaleItem(dateFrom, dateTo, ItemCode, Group)
-                           select new ReportSaleItemDTO()
-                           {
-                               //HeaderID = h.SaleHeaderID,
-                               //CustomerName = h.CustomerName,
-                               //ReceivedDate = h.ReceivedDate,
-                               //SaleNumber = h.SaleNumber,
-                               ItemCode = d.ItemCode,
-                               ItemName = d.ItemName,
-                               ItemPrice = d.ItemPrice.Value,
-                               Amount = d.sumAmt.Value,
-                           }).OrderBy(od => od.ItemCode).ToList();
+                //    lst = (from d in cre.GetReportSaleItem(dateFrom, dateTo, ItemCode, Group)
+                //           select new ReportSaleItemDTO()
+                //           {
+                //               //HeaderID = h.SaleHeaderID,
+                //               //CustomerName = h.CustomerName,
+                //               //ReceivedDate = h.ReceivedDate,
+                //               //SaleNumber = h.SaleNumber,
+                //               ItemCode = d.ItemCode,
+                //               ItemName = d.ItemName,
+                //               ItemPrice = d.ItemPrice.Value,
+                //               Amount = d.sumAmt.Value,
+                //           }).OrderBy(od => od.ItemCode).ToList();
+                //};
 
-
-                    //lst = (from h in cre.TransSaleHeaders
-                    //       join d in cre.TransSaleDetails on h.SaleHeaderID equals d.SaleHeaderID
-                    //       join i in cre.MasItems on d.ItemID equals i.ItemID
-                    //       where i.ItemCode.Contains(ItemCode)
-                    //       && h.ReceivedDate > dateFrom && h.ReceivedDate < dateTo
-                    //       //&& dateFrom == DateTime.MinValue ? true : h.ReceivedDate.HasValue ? h.ReceivedDate.Value == date : true
-                    //       select new ReportSaleItemDTO()
-                    //       {
-                    //           //HeaderID = h.SaleHeaderID,
-                    //           //CustomerName = h.CustomerName,
-                    //           //ReceivedDate = h.ReceivedDate,
-                    //           //SaleNumber = h.SaleNumber,
-                    //           ItemCode = i.ItemCode,
-                    //           ItemName = i.ItemName,
-                    //           ItemPrice = d.ItemPrice.Value,
-                    //           Discount = d.Discount.Value,
-                    //           Amount = d.Amount.Value,
-                    //       }).OrderBy(od => od.ItemCode).ToList();
-                };
-
-                if (Group == "1")
-                {
-                    gv.Columns[3].Visible = true;
-                    gv.Columns[4].Visible = true;
-                }
-                else
-                {
-                    gv.Columns[3].Visible = false;
-                    gv.Columns[4].Visible = false;
-                }
+                //if (Group == "1")
+                //{
+                //    gv.Columns[3].Visible = true;
+                //    gv.Columns[4].Visible = true;
+                //}
+                //else
+                //{
+                //    gv.Columns[3].Visible = false;
+                //    gv.Columns[4].Visible = false;
+                //}
+                #endregion
 
                 if (lst != null && lst.Count > 0)
                 {
@@ -287,66 +240,66 @@ namespace Billing.Report
             Response.SuppressContent = true;
         }
 
-        protected void imgbtnView_Click(object sender, ImageClickEventArgs e)
-        {
-            try
-            {
-                ModalPopupExtender1.Show();
-                ImageButton imb = new ImageButton();
-                DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
-                DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text + " 235959", "dd/MM/yyyy HHmmss", new System.Globalization.CultureInfo("en-US"));                                
-                string ItemCode = "";
-                imb = (ImageButton)sender;
-                List<ReportSaleItemDTO> lst = new List<ReportSaleItemDTO>();
-                if(imb != null)
-                {
-                    ItemCode = imb.CommandArgument;
+        //protected void imgbtnView_Click(object sender, ImageClickEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ModalPopupExtender1.Show();
+        //        ImageButton imb = new ImageButton();
+        //        DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
+        //        DateTime dateTo = string.IsNullOrEmpty(txtDateTo.Text) ? DateTime.MaxValue : DateTime.ParseExact(txtDateTo.Text + " 235959", "dd/MM/yyyy HHmmss", new System.Globalization.CultureInfo("en-US"));                                
+        //        string ItemCode = "";
+        //        imb = (ImageButton)sender;
+        //        List<ReportSaleItemDTO> lst = new List<ReportSaleItemDTO>();
+        //        if(imb != null)
+        //        {
+        //            ItemCode = imb.CommandArgument;
 
-                    using (BillingEntities cre = new BillingEntities())
-                    {
-                        lst = (from d in cre.GetReportSaleItemItemCode(dateFrom, dateTo, ItemCode)
-                               select new ReportSaleItemDTO()
-                               {
-                                   SaleHeaderID = d.SaleHeaderID,
-                                   SaleNumber = d.SaleNumber,
-                                   ItemCode = d.ItemCode,
-                               }).OrderBy(od => od.ItemCode).ToList();
-                    }
+        //            using (BillingEntities cre = new BillingEntities())
+        //            {
+        //                lst = (from d in cre.GetReportSaleItemItemCode(dateFrom, dateTo, ItemCode)
+        //                       select new ReportSaleItemDTO()
+        //                       {
+        //                           SaleHeaderID = d.SaleHeaderID,
+        //                           SaleNumber = d.SaleNumber,
+        //                           ItemCode = d.ItemCode,
+        //                       }).OrderBy(od => od.ItemCode).ToList();
+        //            }
 
-                    if (lst != null && lst.Count > 0)
-                    {
-                        //ModData(lst);
-                        gvSale.DataSource = lst;
-                    }
-                    else
-                        gvSale.DataSource = null;
+        //            if (lst != null && lst.Count > 0)
+        //            {
+        //                //ModData(lst);
+        //                gvSale.DataSource = lst;
+        //            }
+        //            else
+        //                gvSale.DataSource = null;
 
-                    gvSale.DataBind();   
-                }
-            }
-            catch (Exception ex)
-            {
+        //            gvSale.DataBind();   
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
                 
-            }
-        }
+        //    }
+        //}
 
-        protected void imgbtnChoose_Click(object sender, ImageClickEventArgs e)
-        {
-            try
-            {
-                Int32 SaleID = 0;
-                ImageButton imb = new ImageButton();
-                imb = (ImageButton)sender;
-                if (imb != null)
-                {
-                    SaleID = ToInt32(imb.CommandArgument);
-                    Response.Redirect("~/Transaction/TransactionSales.aspx?ID=" + SaleID);
-                }
-            }
-            catch (Exception ex)
-            {
+        //protected void imgbtnChoose_Click(object sender, ImageClickEventArgs e)
+        //{
+        //    try
+        //    {
+        //        Int32 SaleID = 0;
+        //        ImageButton imb = new ImageButton();
+        //        imb = (ImageButton)sender;
+        //        if (imb != null)
+        //        {
+        //            SaleID = ToInt32(imb.CommandArgument);
+        //            Response.Redirect("~/Transaction/TransactionSales.aspx?ID=" + SaleID);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
     }
 }
