@@ -15,5 +15,6 @@ namespace Entities.DTO
         public int DetailOrder { get; set; }
         public string CanChange { get; set; }
         public string ItemDetail { get; set; }
+        public string ProductSN { get; set; }
     }
 }

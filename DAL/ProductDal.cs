@@ -319,6 +319,7 @@ namespace DAL
                         item.ItemDetail = dr["ItemDetail"].ToString();
                         item.DetailOrder = Convert.ToInt32(dr["DetailOrder"].ToString());
                         item.CanChange = dr["CanChange"].ToString();
+                        item.ProductSN = dr["ProductSN"].ToString();
                         lst.Add(item);
                     }
                 }

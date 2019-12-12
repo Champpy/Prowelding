@@ -429,7 +429,7 @@ namespace DAL
                         param.Add(new SqlParameter() { ParameterName = "Amount", Value = item.Amount, DbType = DbType.Int32 });
                         param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
                         conn.CallStoredProcedure("InsStockHeadQDetail", param, out err);
-
+                        
                         if (item.lstSerial != null && item.lstSerial.Count > 0)
                         {
                             foreach (TransProductSerial tps in item.lstSerial)
