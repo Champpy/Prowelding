@@ -189,11 +189,11 @@ namespace DAL
                         o.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         o.ProductCode = dr["ProductCode"].ToString();
                         o.ProductName = dr["ProductName"].ToString();
-                        o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
-                        o.RemainingHeadQ = Convert.ToInt32(dr["RemainingHeadQ"].ToString());
+                        o.Remaining = string.IsNullOrEmpty(dr["Remaining"].ToString()) ? 0 : Convert.ToInt32(dr["Remaining"].ToString());
+                        o.RemainingHeadQ = string.IsNullOrEmpty(dr["RemainingHeadQ"].ToString()) ? 0 : Convert.ToInt32(dr["RemainingHeadQ"].ToString());
                         o.Active = dr["Active"].ToString();
-                        o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
-                        o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        o.PurchasePrice = string.IsNullOrEmpty(dr["PurchasePrice"].ToString()) ? 0 : Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        o.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToDouble(dr["SellPrice"].ToString());
                         o.CreatedBy = dr["CreatedBy"].ToString();
                         o.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
                         o.UpdatedBy = dr["UpdatedBy"].ToString();

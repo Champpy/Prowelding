@@ -76,6 +76,15 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.HiddenField hddProductMode;
         
         /// <summary>
+        /// hddPackageDetailID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hddPackageDetailID;
+        
+        /// <summary>
         /// btnAddModal control.
         /// </summary>
         /// <remarks>

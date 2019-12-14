@@ -94,10 +94,14 @@
                                             <ItemStyle CssClass="text-left"/>
                                         </asp:BoundField>  --%>                                
                                         <asp:BoundField HeaderText="สินค้า" DataField="ItemName">
-                                            <HeaderStyle CssClass="text-center width80 headerData" />
+                                            <HeaderStyle CssClass="text-center width70 headerData" />
                                             <ItemStyle CssClass="text-left rowData"/>
                                         </asp:BoundField>  
-                                        <asp:BoundField HeaderText="จำนวน" DataField="AmountStr">
+                                        <asp:BoundField HeaderText="ขาย" DataField="AmountStr">
+                                            <HeaderStyle CssClass="text-center width10 headerData" />
+                                            <ItemStyle CssClass="text-center rowData"/>
+                                        </asp:BoundField>  
+                                        <asp:BoundField HeaderText="แถม" DataField="AmountFreeStr">
                                             <HeaderStyle CssClass="text-center width10 headerData" />
                                             <ItemStyle CssClass="text-center rowData"/>
                                         </asp:BoundField>  

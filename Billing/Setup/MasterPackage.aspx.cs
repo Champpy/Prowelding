@@ -24,7 +24,8 @@ namespace Billing.Setup
 
                 if (PackageCode != null)
                 {
-                    MasPackageHeader Modeldata = dal.GetSearchMasPackageHeaderByID(PackageCode);
+                    Int32 PackageHeaderId = ToInt32(PackageCode);
+                    MasPackageHeader Modeldata = dal.GetSearchMasPackageHeaderByID(PackageHeaderId);
                     txtPackageCode.Text = Modeldata.PackageCode;
                     txtPackageName.Text = Modeldata.PackageName;
                     txtPackageSellPrice.Text = Convert.ToDouble(Modeldata.SellPrice).ToString("#,###0.00");
@@ -40,6 +41,11 @@ namespace Billing.Setup
             }
         }
 
+        #region Main Page
+        protected void btnAddModal_Click(object sender, EventArgs e)
+        {
+            ModalPopupExtender4.Show();
+        }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
@@ -47,8 +53,6 @@ namespace Billing.Setup
 
             try
             {
-
-
                 if (txtPackageCode.Text == "")
                 {
                     ShowMessageBox("กรุณาระบุ รหัส Packag !!!");
@@ -85,7 +89,6 @@ namespace Billing.Setup
                     dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text, "D");
 
                     string ResultDetail = dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text);
-
                     if (ResultDetail == "")
                     {
                         ShowMessageBox("บันทึกข้อมูลสำเร็จ.", this.Page, "MasterPackageList.aspx");
@@ -104,6 +107,8 @@ namespace Billing.Setup
             }
 
         }
+        #endregion
+
 
 
         #region Detail
@@ -116,6 +121,7 @@ namespace Billing.Setup
             if (imb != null)
             {
                 Int32 id = ToInt32(imb.CommandArgument);
+                //Int32 PackageDetailID = ToInt32(imb.CommandName);
                 MasProduct Data = lst.FirstOrDefault(x => x.ProductID == id);
 
                 hddProductID.Value = Data.ProductID.ToString();
@@ -127,6 +133,7 @@ namespace Billing.Setup
 
                 //ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
                 hddProductMode.Value = "Edit";
+                hddPackageDetailID.Value = imb.CommandName;
             }
 
             ModalPopupExtender4.Show();
@@ -145,6 +152,8 @@ namespace Billing.Setup
                 BindDataGrid();
             }
         }
+
+        #region Modal4 Item
         protected void imgbtnChooseItem_Click(object sender, ImageClickEventArgs e)
         {
             var dal = ProductDal.Instance;
@@ -172,17 +181,6 @@ namespace Billing.Setup
             ModalPopupExtender4.Show();
         }
 
-        protected void imgbtnSearchProduct_Click(object sender, ImageClickEventArgs e)
-        {
-            ModalPopupExtender3.Show();
-            BindDataProduct();
-        }
-
-        protected void btnAddModal_Click(object sender, EventArgs e)
-        {
-            ModalPopupExtender4.Show();
-        }
-
         protected void BtnSaveProductDetail_Click(object sender, EventArgs e)
         {
             List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
@@ -202,10 +200,20 @@ namespace Billing.Setup
                 return;
             }
 
+            int pid = ToInt32(hddProductID.Value);
             if (hddProductMode.Value == "Add")
             {
-                int pid = ToInt32(hddProductID.Value);
                 if (lst.Where(x => x.ProductID == pid).ToList().Count > 0)
+                {
+                    ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
+                    ModalPopupExtender4.Show();
+                    return;
+                }
+            }
+            else if (hddProductMode.Value == "Edit")
+            {
+                int pdid = ToInt32(hddPackageDetailID.Value);
+                if (lst.Where(x => x.ProductID == pid && x.PackageDetailID != pdid).ToList().Count > 0)
                 {
                     ShowMessageBox("รหัสสินค้านี้ มีอยู่ใน list แล้ว!!!");
                     ModalPopupExtender4.Show();
@@ -245,8 +253,8 @@ namespace Billing.Setup
 
             if (hddProductMode.Value != "Add")
             {
-                Int32 id = ToInt32(hddProductID.Value);
-                ModelDataAdd = lst.FirstOrDefault(x => x.ProductID == id);
+                Int32 id = ToInt32(hddPackageDetailID.Value);
+                ModelDataAdd = lst.FirstOrDefault(x => x.PackageDetailID == id);
             }
 
             if (ModelDataAdd == null)
@@ -265,13 +273,41 @@ namespace Billing.Setup
 
             if (hddProductMode.Value == "Add")
             {
+                ModelDataAdd.PackageDetailID = (lst.Count + 1) * -1;
                 lst.Add(ModelDataAdd);
             }
+            //else if (hddProductMode.Value == "Edit")
+            //{
+            //    Int32 pdID = ToInt32(hddPackageDetailID.Value);
+            //}
             CleartxtDetail();
 
+            Session["DetailProdcut"] = lst;
             BindDataGrid();
 
         }
+
+        protected void BindDataGrid()
+        {
+            List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
+            try
+            {
+                gvProdcutDetail.DataSource = lst;
+                gvProdcutDetail.DataBind();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+        protected void imgbtnSearchProduct_Click(object sender, ImageClickEventArgs e)
+        {
+            ModalPopupExtender3.Show();
+            BindDataProduct();
+        }
+
         protected void BindDataProduct()
         {
             try
@@ -309,6 +345,11 @@ namespace Billing.Setup
             ChkCanChange.Checked = false;
         }
 
+
+
+        #endregion
+
+        #region Modal3 ItemSearch
         protected void btnMItemSearch_Click(object sender, EventArgs e)
         {
             ModalPopupExtender3.Show();
@@ -322,22 +363,9 @@ namespace Billing.Setup
             txtSearchProductName.Text = "";
             ModalPopupExtender4.Show();
         }
-
         #endregion
 
-        protected void BindDataGrid()
-        {
-            List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
-            try
-            {
-                gvProdcutDetail.DataSource = lst;
-                gvProdcutDetail.DataBind();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
+        
 
 
     }

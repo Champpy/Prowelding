@@ -919,9 +919,12 @@ namespace Billing.Transaction
                             pd.Amount = ToInt32(item.Cells[2].Text);
                             pd.ProductCode = item.Cells[0].Text;
                             pd.ProductName = item.Cells[1].Text;
-
+                            
                             imb = (ImageButton)item.FindControl("imgbtnDelete");
                             pd.CanChange = (imb != null && imb.Visible == true) ? "Y" : "N";
+
+                            hdd = (HiddenField)item.FindControl("hddIsFree");
+                            pd.IsFree = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? hdd.Value : "N";
                             o.ProductDetail.Add(pd);
                         }
                     }
@@ -1095,6 +1098,7 @@ namespace Billing.Transaction
                 ModalPopupExtender4.Show();
                 SearchProduct();
                 txtm5Amount.Text = "";
+                hddm1AddStatus.Value = "Y";
             }
             catch (Exception ex)
             {
@@ -1634,6 +1638,7 @@ namespace Billing.Transaction
             {
                 if (Session["ProductList"] != null)
                 {
+                    string FreeStatus = "N";
                     Int32 ProductID = ToInt32(hddm5Index.Value);
                     List<Entities.MasProduct> lst = new List<Entities.MasProduct>();
                     Entities.MasProduct masPro = new Entities.MasProduct();
@@ -1641,6 +1646,12 @@ namespace Billing.Transaction
                     masPro = lst.FirstOrDefault(w => w.ProductID.Equals(ProductID));
                     if (masPro != null && Session["saleDetailProduct"] != null)
                     {
+                        if(hddm1AddStatus.Value == "Y")
+                        {
+                            FreeStatus = "Y";
+                            hddm1AddStatus.Value = "N";
+                        }
+
                         List<Entities.MasPackageDetail> lstDetailProduct = (List<Entities.MasPackageDetail>)Session["saleDetailProduct"];
                         lstDetailProduct.Add(new Entities.MasPackageDetail()
                         {
@@ -1649,6 +1660,7 @@ namespace Billing.Transaction
                             ProductName = masPro.ProductName,
                             Amount = ToInt32(txtm5Amount.Text),
                             CanChange = "Y",
+                            IsFree = FreeStatus,
                         });
                         BindPackageDetail(lstDetailProduct);
                         ModalPopupExtender1.Show();

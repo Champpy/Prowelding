@@ -13,6 +13,7 @@ namespace Entities.DTO
         public string ItemName { get; set; }
         public double ItemPrice { get; set; }
         public double Amount { get; set; }
+        public double AmountFree { get; set; }
         public double Total
         {
             get
@@ -73,6 +74,13 @@ namespace Entities.DTO
             get
             {
                 return Amount.ToString("###,##0");
+            }
+        }
+        public string AmountFreeStr
+        {
+            get
+            {
+                return AmountFree.ToString("###,##0");
             }
         }
         public Int32 No { get; set; }

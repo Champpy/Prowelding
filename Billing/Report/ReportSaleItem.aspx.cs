@@ -129,7 +129,7 @@ namespace Billing.Report
         protected void ReportExportPDF(List<ReportSaleItemDTO> lst)
         {
             MemoryStream ms = new MemoryStream();
-            Document doc = new Document(PageSize.A4.Rotate(), 3, 3, 7, 3);
+            Document doc = new Document(PageSize.A4, 3, 3, 7, 3);
             //var output = new FileStream(Server.MapPath(filename), FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, ms);
             doc.Open();
@@ -145,14 +145,13 @@ namespace Billing.Report
                 Font fontHeader = new Font(bf, 10);
                 Font fontGrid = new Font(bf, 9);                
                 PdfPTable table = new PdfPTable(1);
-                PdfPTable tableGrid = new PdfPTable(5);
+                PdfPTable tableGrid = new PdfPTable(4);
                 PdfPCell[] cellAry;
                 PdfPRow row;
                 PdfPCell cell1 = new PdfPCell();
                 PdfPCell cell2 = new PdfPCell();
                 PdfPCell cell3 = new PdfPCell();
                 PdfPCell cell4 = new PdfPCell();
-                PdfPCell cell5 = new PdfPCell();
                 table.WidthPercentage = 95;
                 tableGrid.WidthPercentage = 95;
                 DateTime dateFrom = string.IsNullOrEmpty(txtDateFrom.Text) ? DateTime.MinValue : DateTime.ParseExact(txtDateFrom.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
@@ -186,16 +185,15 @@ namespace Billing.Report
                 cell2 = GetNewCell(true);
                 cell3 = GetNewCell(true);
                 cell4 = GetNewCell(true);
-                cell5 = GetNewCell(true);
 
-                cell1.AddElement(GetNewParag("รหัสสินค้า", fontHeader, 1));
+                cell1.AddElement(GetNewParag("ลำดับ", fontHeader, 1));
                 cell2.AddElement(GetNewParag("สินค้า", fontHeader, 1));
-                cell3.AddElement(GetNewParag("จำนวน", fontHeader, 1));
-                cell4.AddElement(GetNewParag("ราคา", fontHeader, 1));
-                cell5.AddElement(GetNewParag("รวม", fontHeader, 1));
-                cellAry = new PdfPCell[] { cell1, cell2, cell3, cell4, cell5 };
+                cell3.AddElement(GetNewParag("ขาย", fontHeader, 1));
+                cell4.AddElement(GetNewParag("แถม", fontHeader, 1));
+                
+                cellAry = new PdfPCell[] { cell1, cell2, cell3, cell4 };
                 row = new PdfPRow(cellAry);
-                widths = new float[] { 30f, 65f, 15f, 20f, 20f };
+                widths = new float[] { 10f, 65f, 10f, 10f };
                 tableGrid.SetWidths(widths);
                 tableGrid.Rows.Add(row);
 
@@ -205,14 +203,13 @@ namespace Billing.Report
                     cell2 = GetNewCell(true);
                     cell3 = GetNewCell(true);
                     cell4 = GetNewCell(true);
-                    cell5 = GetNewCell(true);
 
-                    cell1.AddElement(GetNewParag(item.ItemCode, fontGrid));
+                    cell1.AddElement(GetNewParag(item.No.ToString(), fontGrid, 1));
                     cell2.AddElement(GetNewParag(item.ItemName, fontGrid));
                     cell3.AddElement(GetNewParag(item.AmountStr, fontGrid, 1));
-                    cell4.AddElement(GetNewParag(item.ItemPriceStr, fontGrid, 2));
-                    cell5.AddElement(GetNewParag(item.TotalStr, fontGrid, 2));
-                    cellAry = new PdfPCell[] { cell1, cell2, cell3, cell4, cell5 };
+                    cell4.AddElement(GetNewParag(item.AmountFreeStr, fontGrid, 1));
+                    
+                    cellAry = new PdfPCell[] { cell1, cell2, cell3, cell4 };
                     row = new PdfPRow(cellAry);
                     tableGrid.Rows.Add(row);                    
                 }

@@ -62,6 +62,7 @@
                         <div class="row tab tab-border">
                             <div class="row">
                                 <asp:HiddenField ID="hddProductMode" Value="Add" runat="server" />
+                                <asp:HiddenField ID="hddPackageDetailID" Value="0" runat="server" />
                                 <div class="row">
                                     <div class="text-left" style="height: 25px; padding-left: 35px;">
                                         <strong>Detail</strong>
@@ -101,6 +102,7 @@
                                                 <ItemTemplate>
                                                     <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png"
                                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'
+                                                        CommandName='<%# DataBinder.Eval(Container.DataItem, "PackageDetailID").ToString()%>'
                                                         OnClick="imgbtnEdit_Click" />
                                                     &nbsp;
                                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif"

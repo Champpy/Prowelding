@@ -86,11 +86,11 @@
                                             <ItemTemplate>
                                                 <%--<asp:HiddenField ID="hddGID" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ItemID").ToString()%>' />--%>
                                                 <asp:ImageButton ID="imgbtnEdit" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/b_edit.png" 
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageCode").ToString()%>'
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageHeaderID").ToString()%>'
                                                     OnClick="imgbtnEdit_Click"/>
                                                 &nbsp;
                                                 <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
-                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageCode").ToString()%>'
+                                                    CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageHeaderID").ToString()%>'
                                                     OnClick="imgbtnDelete_Click" OnClientClick="return confirm('ยืนยันการลบข้อมูล?');"/>
                                                     <%-- OnClientClick="return confirm('คุณต้องการเปลี่ยนสถานะข้อมูลนี้หรือไม่ ?');" OnClick="imgbtnDelete_Click" ToolTip="เปลี่ยนสถานะ"
                                                     Visible='<%# string.IsNullOrEmpty(DataBinder.Eval(Container.DataItem, "Name").ToString()) ? false : true %>'--%>

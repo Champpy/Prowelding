@@ -32,6 +32,7 @@ namespace Entities
             }
         }
         public string ProductSN { get; set; }
+        public string IsFree { get; set; }
         #endregion
     }
 }

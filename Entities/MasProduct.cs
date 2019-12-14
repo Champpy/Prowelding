@@ -29,6 +29,7 @@ namespace Entities
         public Int32 Remaining { get; set; }
         public Int32 RemainingHeadQ { get; set; }
         public string ProductSN { get; set; }
+        public Int32 PackageDetailID { get; set; }
         #endregion
 
     }

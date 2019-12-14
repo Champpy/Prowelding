@@ -405,6 +405,7 @@
                     <br />
                     <b style="color:black;"><asp:LinkButton ID="lkbm1Add" runat="server" Text="<< Add >>" 
                         Visible="false" OnClick="lkbm1Add_Click"></asp:LinkButton></b>
+                    <asp:HiddenField ID="hddm1AddStatus" runat="server" Value="N"/>
                 </div>
                 <div class="col-md-9 rowData" style="height:200px; overflow:auto;">
                     <%--<asp:TextBox ID="txtMDescription" runat="server" TextMode="MultiLine" Rows="7" Width="99%"></asp:TextBox>--%>
@@ -427,6 +428,7 @@
                                     <asp:HiddenField ID="hddSaleDetailID" runat="server"  Value='<%# DataBinder.Eval(Container.DataItem, "PackageDetailID").ToString()%>' />
                                     <asp:HiddenField ID="hddProductID" runat="server" value='<%# DataBinder.Eval(Container.DataItem, "ProductID").ToString()%>'/>
                                     <asp:HiddenField ID="hddCanChange" runat="server" value='<%# DataBinder.Eval(Container.DataItem, "CANCHANGE").ToString()%>'/>
+                                    <asp:HiddenField ID="hddIsFree" runat="server" value='<%# DataBinder.Eval(Container.DataItem, "ISFREE").ToString()%>'/>
                                     <asp:ImageButton ID="imgbtnDelete" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/icon_delete.gif" 
                                         CommandArgument='<%# DataBinder.Eval(Container.DataItem, "PackageDetailID").ToString()%>'
                                         CommandName='<%# Container.DataItemIndex %>'

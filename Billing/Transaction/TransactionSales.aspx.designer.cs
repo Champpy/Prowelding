@@ -472,6 +472,15 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.LinkButton lkbm1Add;
         
         /// <summary>
+        /// hddm1AddStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hddm1AddStatus;
+        
+        /// <summary>
         /// gvDetail control.
         /// </summary>
         /// <remarks>

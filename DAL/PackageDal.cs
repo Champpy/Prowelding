@@ -98,7 +98,7 @@ namespace DAL
             string err = "";
             try
             {
-                MasPackageHeader DataMasPackageHeader = GetSearchMasPackageHeaderByID(PackageCode);
+                MasPackageHeader DataMasPackageHeader = GetSearchMasPackageHeaderByCode(PackageCode);
 
 
                 if (Model == "D")
@@ -109,7 +109,6 @@ namespace DAL
                     conn.ExcuteNonQueryNClose("InsUpdDelMasPackageDetail", paramI, out err);
                     return err;
                 }
-
 
                 int rowOrder = 1;
                 foreach (MasProduct Data in item)
@@ -138,13 +137,48 @@ namespace DAL
         }
 
 
-        public MasPackageHeader GetSearchMasPackageHeaderByID(string PackageCode)
+        public MasPackageHeader GetSearchMasPackageHeaderByCode(string PackageCode)
         {
             MasPackageHeader item = new MasPackageHeader();
             try
             {
                 List<SqlParameter> param = new List<SqlParameter>();
                 param.Add(new SqlParameter() { ParameterName = "PackageCode", Value = PackageCode, DbType = DbType.String });
+
+                DataSet ds = conn.GetDataSet("GetMasPackageHeaderByCode", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        item.PackageHeaderID = Convert.ToInt32(dr["PackageHeaderID"].ToString());
+                        item.PackageCode = dr["PackageCode"].ToString();
+                        item.PackageName = dr["PackageName"].ToString();
+                        item.Active = dr["Active"].ToString();
+                        item.PurchasePrice = !dr.IsNull("PurchasePrice") ? Convert.ToDouble(dr["PurchasePrice"].ToString()) : 0;
+                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.CreatedBy = dr["CreatedBy"].ToString();
+                        item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
+                        item.UpdatedBy = dr["UpdatedBy"].ToString();
+                        item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+                        item.DMLFlag = "U";
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return item;
+        }
+
+        public MasPackageHeader GetSearchMasPackageHeaderByID(Int32 PackageHeaderID)
+        {
+            MasPackageHeader item = new MasPackageHeader();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "PackageHeaderID", Value = PackageHeaderID, DbType = DbType.Int32 });
 
                 DataSet ds = conn.GetDataSet("GetMasPackageHeaderByID", param);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
@@ -228,12 +262,12 @@ namespace DAL
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         item = new MasProduct();
-                        item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
+                        item.ProductID = string.IsNullOrEmpty(dr["ProductID"].ToString()) ? 0 : Convert.ToInt32(dr["ProductID"].ToString());
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
-                        item.Amount = Convert.ToInt32(dr["Amount"].ToString());
+                        item.Amount = string.IsNullOrEmpty(dr["Amount"].ToString()) ? 0 : Convert.ToInt32(dr["Amount"].ToString());
                         item.Active = dr["Active"].ToString();
-                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToDouble(dr["SellPrice"].ToString());
                         item.CreatedBy = dr["CreatedBy"].ToString();
                         item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
                         item.UpdatedBy = dr["UpdatedBy"].ToString();
@@ -241,6 +275,7 @@ namespace DAL
                         item.CanChange = dr["CanChange"].ToString() == "Y" ? "Change" : "Fix";
                         item.DMLFlag = "I";
                         item.ProductSN = dr["ProductSN"].ToString();
+                        item.PackageDetailID = string.IsNullOrEmpty(dr["PackageDetailID"].ToString()) ? 0 : Convert.ToInt32(dr["PackageDetailID"].ToString());
                         lstData.Add(item);
 
                     }

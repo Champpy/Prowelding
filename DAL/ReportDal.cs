@@ -158,8 +158,9 @@ namespace DAL
                         item.No = i;
                         item.ItemCode = dr["ItemCode"].ToString();
                         item.ItemName = dr["ItemName"].ToString();
-                        item.Amount = Convert.ToDouble(dr["Amount"].ToString());
-                        
+                        item.Amount = string.IsNullOrEmpty(dr["Amount"].ToString()) ? 0 : Convert.ToDouble(dr["Amount"].ToString());
+                        item.AmountFree = string.IsNullOrEmpty(dr["AmountFree"].ToString()) ? 0 : Convert.ToDouble(dr["AmountFree"].ToString());
+
                         lst.Add(item);
                         i++;
                     }

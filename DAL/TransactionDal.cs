@@ -205,6 +205,7 @@ namespace DAL
                                     param.Add(new SqlParameter() { ParameterName = "SaleDetailID", Value = DetailID, DbType = DbType.Int32 });
                                     param.Add(new SqlParameter() { ParameterName = "ProductID", Value = pd.ProductID, DbType = DbType.Int32 });
                                     param.Add(new SqlParameter() { ParameterName = "Amount", Value = pd.Amount, DbType = DbType.Int32 });
+                                    param.Add(new SqlParameter() { ParameterName = "IsFree", Value = pd.IsFree });
                                     conn.CallStoredProcedure("InsTransSaleDetailProduct", param, out error);
                                 }
                             }
