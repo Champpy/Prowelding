@@ -34,11 +34,11 @@
                         <div class="row">
                             <div class="col-xs-2 headerData"><b>รหัสสินค้า :</b></div>
                             <div class="col-xs-4 rowData">
-                                <asp:TextBox ID="txtCode" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="txtCode" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                             <div class="col-xs-2 headerData"><b>สินค้า :</b></div>
                             <div class="col-xs-4 rowData">
-                                <asp:TextBox ID="txtName" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="txtName" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="row" style="margin-top: 15px;">
@@ -138,7 +138,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-2 headerData"><b>รหัสสินค้า :</b></div>
                 <div class="col-md-8 rowData">
-                    <asp:TextBox ID="txtMCode" runat="server" Width="95%"></asp:TextBox>
+                    <asp:TextBox ID="txtMCode" runat="server" Width="95%" CssClass="form-control"></asp:TextBox>
                 </div>
                 <div class="col-md-1"></div>
             </div>
@@ -146,9 +146,33 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-2 headerData"><b>สินค้า :</b></div>
                 <div class="col-md-8 rowData">
-                    <asp:TextBox ID="txtMName" runat="server" Width="95%"></asp:TextBox>
+                    <asp:TextBox ID="txtMName" runat="server" Width="95%" CssClass="form-control"></asp:TextBox>
                     <asp:HiddenField ID="hddMode" runat="server" />
                     <asp:HiddenField ID="hddID" runat="server" />
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 headerData"><b>กลุ่มสินค้า :</b></div>
+                <div class="col-md-8 rowData">
+                    <asp:DropDownList ID="ddlType" runat="server" AppendDataBoundItems="true" Width="95%" CssClass="form-control"></asp:DropDownList>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 headerData"><b>หน่วยสินค้า :</b></div>
+                <div class="col-md-8 rowData">
+                    <asp:DropDownList ID="ddlUnit" runat="server" AppendDataBoundItems="true" Width="95%" CssClass="form-control"></asp:DropDownList>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 headerData"><b>S/N :</b></div>
+                <div class="col-md-8 rowData">
+                    <asp:CheckBox ID="chkSN" runat="server" />
                 </div>
                 <div class="col-md-1"></div>
             </div>

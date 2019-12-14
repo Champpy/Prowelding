@@ -88,6 +88,8 @@ namespace DAL
                 paramI.Add(new SqlParameter() { ParameterName = "UnitID", Value = item.UnitID, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "TypeID", Value = item.TypeID, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "Remaining", Value = item.Remaining, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "RemainingHeadQ", Value = item.RemainingHeadQ, DbType = DbType.Int32 });
+                paramI.Add(new SqlParameter() { ParameterName = "ProductSN", Value = item.ProductSN, DbType = DbType.String });
                 paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
           
                 conn.ExcuteNonQueryNClose("InsUpdDelMasProduct", paramI, out err);
@@ -116,12 +118,15 @@ namespace DAL
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
                         item.Active = dr["Active"].ToString();
-                        item.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
-                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.PurchasePrice = string.IsNullOrEmpty(dr["PurchasePrice"].ToString()) ? 0 : Convert.ToDouble(dr["PurchasePrice"].ToString());
+                        item.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToDouble(dr["SellPrice"].ToString());
                         item.CreatedBy = dr["CreatedBy"].ToString();
                         item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
                         item.UpdatedBy = dr["UpdatedBy"].ToString();
                         item.UpdatedDate = Convert.ToDateTime(dr["UpdatedDate"].ToString());
+                        item.UnitID = string.IsNullOrEmpty(dr["UnitID"].ToString()) ? 0 : Convert.ToInt32(dr["UnitID"].ToString());
+                        item.TypeID = string.IsNullOrEmpty(dr["TypeID"].ToString()) ? 0 : Convert.ToInt32(dr["TypeID"].ToString());
+                        item.ProductSN = dr["ProductSN"].ToString();
 
                         break;
                     }

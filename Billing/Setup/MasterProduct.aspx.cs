@@ -1,4 +1,4 @@
-﻿using Billing.AppData;
+﻿//using Billing.AppData;
 using DAL;
 using Entities;
 using System;
@@ -18,6 +18,7 @@ namespace Billing.Setup
             if (!IsPostBack)
             {
                 BindData();
+                BindDDL();
             }
         }
 
@@ -65,9 +66,13 @@ namespace Billing.Setup
             {
                 txtMCode.Text = "";
                 txtMName.Text = "";
+                ddlType.SelectedIndex = 0;
+                ddlUnit.SelectedIndex = 0;
+                chkSN.Checked = false;
                 //txtMPurchasePrice.Text = "";
                 //txtMPrice.Text = "";
                 //txtMPrice.Text = "";
+                //BindDDL();
 
                 ModalPopupExtender1.Show();
                 hddMode.Value = "Add";
@@ -79,6 +84,49 @@ namespace Billing.Setup
                 SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
             }
 
+        }
+
+        private void BindDDL()
+        {
+            try
+            {
+                var bal = ItemDal.Instance;
+                List<MasItemType> lstType = bal.GetSearchItemType();
+                if(lstType != null && lstType.Count > 0)
+                {
+                    lstType = lstType.Where(w => w.Active.ToLower().Equals("y")).ToList();
+                    ddlType.DataSource = lstType;
+                    ddlType.DataTextField = "ItemTypeName";
+                    ddlType.DataValueField = "ItemTypeID";
+                    ddlType.DataBind();
+                }
+                else
+                {
+                    ddlType.DataSource = null;
+                    ddlType.DataBind();
+                }
+                ddlType.Items.Insert(0, new ListItem("", "0"));
+
+                List<MasUnit> lstUnit = bal.GetSearchUnit();
+                if (lstUnit != null && lstUnit.Count > 0)
+                {
+                    lstUnit = lstUnit.Where(w => w.Active.ToLower().Equals("y")).ToList();
+                    ddlUnit.DataSource = lstUnit;
+                    ddlUnit.DataTextField = "UnitName";
+                    ddlUnit.DataValueField = "UnitID";
+                    ddlUnit.DataBind();
+                }
+                else
+                {
+                    ddlUnit.DataSource = null;
+                    ddlUnit.DataBind();
+                }
+                ddlUnit.Items.Insert(0, new ListItem("", "0"));
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         protected void btnModalSave_Click(object sender, EventArgs e)
@@ -109,6 +157,11 @@ namespace Billing.Setup
                     o = new MasProduct();
                     o.ProductCode = txtMCode.Text;
                     o.ProductName = txtMName.Text;
+                    o.UnitID = ToInt32(ddlUnit.SelectedItem.Value);
+                    o.TypeID = ToInt32(ddlType.SelectedItem.Value);
+                    o.Remaining = 0;
+                    o.RemainingHeadQ = 0;
+                    o.ProductSN = chkSN.Checked ? "Y" : "N";
                     //o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
                     //o.SellPrice = ToDoudle(txtMPrice.Text);
                     o.Active = "Y";
@@ -125,6 +178,11 @@ namespace Billing.Setup
                     o.ProductID = ToInt32(hddID.Value);
                     o.ProductCode = txtMCode.Text;
                     o.ProductName = txtMName.Text;
+                    o.UnitID = ToInt32(ddlUnit.SelectedItem.Value);
+                    o.TypeID = ToInt32(ddlType.SelectedItem.Value);
+                    o.Remaining = 0;
+                    o.RemainingHeadQ = 0;
+                    o.ProductSN = chkSN.Checked ? "Y" : "N";
                     //o.PurchasePrice = ToDoudle(txtMPurchasePrice.Text);
                     //o.SellPrice = ToDoudle(txtMPrice.Text);
                     o.Active = "Y";
@@ -158,14 +216,20 @@ namespace Billing.Setup
                 if (imb != null)
                 {
                     Int32 obj = ToInt32(imb.CommandArgument);
+                    //BindDDL();
 
                     MasProduct ModelData = dal.GetSearchProductID(obj);
-
                     if (ModelData != null)
                     {
                         hddID.Value = imb.CommandArgument;
                         txtMCode.Text = ModelData.ProductCode;
                         txtMName.Text = ModelData.ProductName;
+                        ddlUnit.SelectedIndex = ToInt32(ddlUnit.Items.FindByValue(ModelData.UnitID.ToString()).Value);
+                        ddlType.SelectedIndex = ToInt32(ddlType.Items.FindByValue(ModelData.TypeID.ToString()).Value);
+                        //ddlUnit.Items.FindByValue(ModelData.UnitID.ToString()).Selected = true;
+                        //ddlType.Items.FindByValue(ModelData.TypeID.ToString()).Selected = true;
+                        chkSN.Checked = ModelData.ProductSN == "Y" ? true : false;
+                        //ddlUnit.SelectedIndex = ddlUnit.Items.FindByValue().Selected;
                         //txtMPurchasePrice.Text = ModelData.PurchasePrice.ToString("###,##0");
                         //txtMPrice.Text = ModelData.SellPrice.ToString("###,##0");
                         ModalPopupExtender1.Show();

@@ -227,8 +227,8 @@ namespace DAL
                         item.PackageCode = dr["PackageCode"].ToString();
                         item.PackageName = dr["PackageName"].ToString();
                         item.Active = dr["Active"].ToString();
-                        item.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
-                        item.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
+                        item.SellPrice = string.IsNullOrEmpty(dr["SellPrice"].ToString()) ? 0 : Convert.ToDouble(dr["SellPrice"].ToString());
+                        item.Remaining = string.IsNullOrEmpty(dr["Remaining"].ToString()) ? 0 : Convert.ToInt32(dr["Remaining"].ToString());
                         //item.CreatedBy = dr["CreatedBy"].ToString();
                         //item.CreatedDate = Convert.ToDateTime(dr["CreatedDate"].ToString());
                         //item.UpdatedBy = dr["UpdatedBy"].ToString();
