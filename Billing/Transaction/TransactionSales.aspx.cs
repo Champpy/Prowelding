@@ -53,9 +53,9 @@ namespace Billing.Transaction
                     }
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Logs(ex.Message);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Billing.Transaction
             }
             catch (Exception ex)
             {
-                
+                Logs(ex.Message);
             }
         }
         protected void BindData()
@@ -330,7 +330,7 @@ namespace Billing.Transaction
             }
             catch (Exception ex)
             {
-
+                Logs(ex.Message);
             }
         }
 
@@ -360,7 +360,7 @@ namespace Billing.Transaction
             }
             catch (Exception ex)
             {
-
+                Logs(ex.Message);
             }
         }
         #endregion
@@ -781,7 +781,8 @@ namespace Billing.Transaction
             catch (Exception ex)
             {
                 ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
-                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+                //SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+                Logs(ex.Message);
             }
         }
 
@@ -878,6 +879,9 @@ namespace Billing.Transaction
 
                                 imb = (ImageButton)item.FindControl("imgbtnDelete");
                                 pd.CanChange = (imb != null && imb.Visible == true) ? "Y" : "N";
+
+                                hdd = (HiddenField)item.FindControl("hddIsFree");
+                                pd.IsFree = (hdd != null && !string.IsNullOrEmpty(hdd.Value)) ? hdd.Value : "N";
                                 o.ProductDetail.Add(pd);
                             }
                         }
@@ -943,7 +947,8 @@ namespace Billing.Transaction
             catch (Exception ex)
             {
                 ShowMessageBox("เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ.");
-                SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+                //SendMailError(ex.Message, System.Reflection.MethodBase.GetCurrentMethod());
+                Logs(ex.Message);
             }
         }     
         

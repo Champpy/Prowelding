@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDal.cs" />
+    <Compile Include="LogsDal.cs" />
     <Compile Include="PackageDal.cs" />
     <Compile Include="ReportDal.cs" />
     <Compile Include="ProductDal.cs" />

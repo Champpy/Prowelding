@@ -145,7 +145,7 @@ namespace Billing.Common
         }
         #endregion
 
-        #region SendMail
+        #region SendMail & Logs
         public void SendMailError(string error, System.Reflection.MethodBase method)
         {
             try
@@ -169,6 +169,20 @@ namespace Billing.Common
             catch (Exception ex) 
             {
 
+            }
+        }
+
+        public void Logs(string Desc, string LogType = "Exception")
+        {
+            try
+            {
+                var bal = DAL.LogsDal.Instance;
+                bal.InsertLogs(Desc, LogType);
+                bal.Dispose();
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
         #endregion
