@@ -101,12 +101,14 @@ namespace Billing.Setup
                 MasPackageHeader DataHeader = new MasPackageHeader();
                 if (imb != null)
                 {
-                    string objCode = imb.CommandArgument;
+                    Int32 obj = ToInt32(imb.CommandArgument);
 
                     DataHeader.DMLFlag = "D";
-                    DataHeader.PackageCode = objCode;
+                    DataHeader.PackageHeaderID = obj;
+                    DataHeader.CreatedBy = GetUsername();
 
                     dal.InsUpdDelMasPackageHeader(DataHeader);
+                    BindData();
                 }
                 else
                 {

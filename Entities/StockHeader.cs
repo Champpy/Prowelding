@@ -26,6 +26,22 @@ namespace Entities
                 return StockTime.HasValue ? StockTime.Value.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-US")) : "";
             }
         }
+        public string CreatedDateStr
+        {
+            get
+            {
+                string result = "";
+                try
+                {
+                    result = CreatedDate.ToString("dd/MM/yyyy HH:mm", new System.Globalization.CultureInfo("en-US"));
+                }
+                catch (Exception)
+                {
+                    
+                }
+                return result;
+            }
+        }
 
         public string StockTypeDesc
         {

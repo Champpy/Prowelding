@@ -27,6 +27,29 @@ namespace Entities
         public int ProductTypeID { get; set; }
         public string ProductTypeName { get; set; }
         public List<TransProductSerial> lstSerial {get; set;}
+
+        public string SNConcat
+        {
+            get
+            {
+                string result = "";
+                try
+                {
+                    if(lstSerial != null && lstSerial.Count > 0)
+                    {
+                        foreach (var item in lstSerial)
+                        {
+                            result = result + item.SerialNumber + ", ";
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
+                return result;
+            }
+        }
         #endregion
     }
 }

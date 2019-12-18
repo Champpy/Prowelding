@@ -52,15 +52,19 @@
                                 <asp:GridView ID="gv" runat="server" Width="100%" AutoGenerateColumns="False" >
                                     <Columns>   
                                         <asp:BoundField HeaderText="รับเข้าวันที่" DataField="StockTimeStr">
-                                            <HeaderStyle CssClass="headerData text-center width20 " />
+                                            <HeaderStyle CssClass="headerData text-center width15 " />
                                             <ItemStyle CssClass="text-center rowData"/>
-                                        </asp:BoundField>                                      
+                                        </asp:BoundField>   
+                                        <asp:BoundField HeaderText="วันที่ทำรายการ" DataField="CreatedDateStr">
+                                            <HeaderStyle CssClass="headerData text-center width15 " />
+                                            <ItemStyle CssClass="text-center rowData"/>
+                                        </asp:BoundField>                                     
                                         <asp:BoundField HeaderText="ประเภท" DataField="StockTypeDesc">
                                             <HeaderStyle CssClass="headerData text-center width20 " />
                                             <ItemStyle CssClass="text-left rowData"/>
                                         </asp:BoundField>
                                         <asp:BoundField HeaderText="ผู้ทำรายการ" DataField="CreatedBy">
-                                            <HeaderStyle CssClass="headerData text-center width20 " />
+                                            <HeaderStyle CssClass="headerData text-center width10 " />
                                             <ItemStyle CssClass="text-left rowData"/>
                                         </asp:BoundField>
                                         <%--<asp:BoundField HeaderText="จำนวน" DataField="AmountStr">

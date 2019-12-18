@@ -77,6 +77,7 @@ namespace DAL
             try
             {
                 List<SqlParameter> paramI = new List<SqlParameter>();
+                paramI.Add(new SqlParameter() { ParameterName = "PackageHeaderID", Value = item.PackageHeaderID });
                 paramI.Add(new SqlParameter() { ParameterName = "PackageCode", Value = item.PackageCode });
                 paramI.Add(new SqlParameter() { ParameterName = "PackageName", Value = item.PackageName });
                 paramI.Add(new SqlParameter() { ParameterName = "SellPrice", Value = item.SellPrice, DbType = DbType.Double });
