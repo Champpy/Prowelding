@@ -123,6 +123,7 @@ namespace DAL
                     paramI.Add(new SqlParameter() { ParameterName = "CreatedBy", Value = Data.CreatedBy, DbType = DbType.String });
                     paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = Data.DMLFlag });
                     paramI.Add(new SqlParameter() { ParameterName = "CanChange", Value = Data.CanChange == "Change" ? "Y" : "N" });
+                    paramI.Add(new SqlParameter() { ParameterName = "IsFree", Value = Data.IsFree });
                     conn.ExcuteNonQueryNClose("InsUpdDelMasPackageDetail", paramI, out err);
 
                     rowOrder++;
@@ -276,6 +277,7 @@ namespace DAL
                         item.CanChange = dr["CanChange"].ToString() == "Y" ? "Change" : "Fix";
                         item.DMLFlag = "I";
                         item.ProductSN = dr["ProductSN"].ToString();
+                        item.IsFree = dr["IsFree"].ToString();
                         item.PackageDetailID = string.IsNullOrEmpty(dr["PackageDetailID"].ToString()) ? 0 : Convert.ToInt32(dr["PackageDetailID"].ToString());
                         lstData.Add(item);
 

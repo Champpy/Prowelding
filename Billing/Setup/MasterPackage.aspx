@@ -78,10 +78,10 @@
                                 <div class="col-xs-12">
                                     <asp:GridView ID="gvProdcutDetail" runat="server" Width="100%" AutoGenerateColumns="False">
                                         <Columns>
-                                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
+                                            <%--<asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
                                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                                 <ItemStyle CssClass="text-left rowData" />
-                                            </asp:BoundField>
+                                            </asp:BoundField>--%>
                                             <asp:BoundField HeaderText="ชื่อสินค้า" DataField="ProductName">
                                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                                 <ItemStyle CssClass="text-left rowData" />
@@ -95,6 +95,10 @@
                                                 <ItemStyle CssClass="text-center rowData" />
                                             </asp:BoundField>
                                             <asp:BoundField HeaderText="CanChange" DataField="CanChange">
+                                                <HeaderStyle CssClass="text-center width7 headerData" />
+                                                <ItemStyle CssClass="text-center rowData" />
+                                            </asp:BoundField>
+                                            <asp:BoundField HeaderText="IsFree" DataField="IsFree">
                                                 <HeaderStyle CssClass="text-center width7 headerData" />
                                                 <ItemStyle CssClass="text-center rowData" />
                                             </asp:BoundField>
@@ -189,11 +193,11 @@
                                 <HeaderStyle CssClass="text-center width25 headerData" />
                                 <ItemStyle CssClass="text-left rowData" />
                             </asp:BoundField>
-                            <asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
+                            <%--<asp:BoundField HeaderText="ราคาซื้อ" DataField="PurchasePrice" DataFormatString="{0:N2}">
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-center rowData" />
                             </asp:BoundField>
-                            <%--<asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
+                            <asp:BoundField HeaderText="ราคาขาย" DataField="SellPrice" DataFormatString="{0:N2}">
                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                 <ItemStyle CssClass="text-center rowData" />
                             </asp:BoundField>--%>
@@ -266,10 +270,6 @@
                 </div>
             </div>
             <div class="row width99" style="padding-left: 35px;">
-                <%--<div class="col-xs-2 headerData"><b>ราคาขาย :</b></div>
-                <div class="col-xs-4 rowData">
-                    <asp:TextBox ID="txtProductSellPrice" runat="server" Width="90%" Enabled="False"></asp:TextBox>
-                </div>--%>
                 <div class="col-xs-2 headerData"><b>CanChange :</b></div>
                 <div class="col-xs-4 rowData">
                     <asp:CheckBox ID="ChkCanChange" runat="server" />
@@ -277,6 +277,16 @@
                 <div class="col-xs-2 headerData"><b>จำนวน :</b></div>
                 <div class="col-xs-4 rowData">
                     <asp:TextBox ID="txtProductAmount" runat="server" Width="90%" onKeyPress="keyintNodot()"></asp:TextBox>
+                </div>
+            </div>
+            <div class="row width99" style="padding-left: 35px;">
+                <div class="col-xs-2 headerData"><b>IsFree :</b></div>
+                <div class="col-xs-4 rowData">
+                    <asp:CheckBox ID="ChkIsFree" runat="server" />
+                </div>
+                <div class="col-xs-2 headerData"><b></b></div>
+                <div class="col-xs-4 rowData">
+                    
                 </div>
             </div>
             <%--<div class="row width99" style="padding-left: 35px;">

@@ -130,6 +130,7 @@ namespace Billing.Setup
                 //txtProductSellPrice.Text = Data.SellPrice.ToString("#,###0.00");
                 txtProductAmount.Text = Data.Amount.ToString();
                 ChkCanChange.Checked = Data.CanChange == "Change" ? true : false;
+                ChkIsFree.Checked = Data.IsFree == "Y" ? true : false;
 
                 //ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
                 hddProductMode.Value = "Edit";
@@ -266,6 +267,7 @@ namespace Billing.Setup
             //ModelDataAdd.SellPrice = Convert.ToDouble(txtProductSellPrice.Text);
             ModelDataAdd.Amount = Convert.ToInt32(txtProductAmount.Text);
             ModelDataAdd.CanChange = ChkCanChange.Checked == true ? "Change" : "Fix";
+            ModelDataAdd.IsFree = ChkIsFree.Checked == true ? "Y" : "N";
             ModelDataAdd.DMLFlag = "I";
             ModelDataAdd.Active = "Y";
             ModelDataAdd.CreatedBy = GetUsername();
@@ -343,6 +345,7 @@ namespace Billing.Setup
             hddProductID.Value = "";
             hddProductMode.Value = "Add";
             ChkCanChange.Checked = false;
+            ChkIsFree.Checked = false;
         }
 
 

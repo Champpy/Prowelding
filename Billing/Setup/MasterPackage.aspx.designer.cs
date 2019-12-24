@@ -274,6 +274,15 @@ namespace Billing.Setup {
         protected global::System.Web.UI.WebControls.TextBox txtProductAmount;
         
         /// <summary>
+        /// ChkIsFree control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ChkIsFree;
+        
+        /// <summary>
         /// BtnSaveProductDetail control.
         /// </summary>
         /// <remarks>
