@@ -50,6 +50,7 @@ namespace Billing.Stock
                 string err = "", type = "", result = "", url = "../Stock/StockLogs.aspx";
                 List<StockDetail> lst = new List<StockDetail>();
                 StockHeader Header = new StockHeader();
+                List<string> errSN = new List<string>();
                 
                 var dal = StockDal.Instance;
                 if (Session["StockDetailHeadQ"] != null)
@@ -85,7 +86,7 @@ namespace Billing.Stock
                     Header.StockTime = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));
                     Header.Remark = txtRemark.Text;
                     Header.detail = lst;
-                    err = dal.InsertStockHeadQ(Header, GetUsername(), ref result);
+                    err = dal.InsertStockHeadQ(Header, GetUsername(), ref result, ref errSN);
                 }
                 
                 if (!string.IsNullOrEmpty(err))
@@ -98,6 +99,14 @@ namespace Billing.Stock
                 {
                     ShowMessageBox(result);
                     return;
+                }
+
+                if(errSN != null && errSN.Count > 0)
+                {
+                    foreach (string s in errSN)
+                    {
+                        Logs(s, "Log");
+                    }
                 }
 
                 ShowMessageBox("บันทึกสำเร็จ.", this.Page, url);

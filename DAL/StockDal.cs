@@ -387,7 +387,7 @@ namespace DAL
         #endregion
 
         #region Stock HeadQ
-        public string InsertStockHeadQ(StockHeader header, string User, ref string result)
+        public string InsertStockHeadQ(StockHeader header, string User, ref string result, ref List<string> errSN)
         {
             string err = "";
             try
@@ -443,8 +443,11 @@ namespace DAL
                                 param.Add(new SqlParameter() { ParameterName = "CAL", Value = cal });
                                 conn.CallStoredProcedure("InsTransProductSerial", param, out ds, out err);
                                 if (!string.IsNullOrEmpty(err))
+                                {
+                                    errSN.Add(err);
                                     break;
-
+                                }
+                                
                                 if(ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                                 {
                                     result = result + "Product Name : " + item.ProductName + " --> " + ds.Tables[0].Rows[0][0].ToString() + "\\r";

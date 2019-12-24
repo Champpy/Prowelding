@@ -67,14 +67,18 @@
                                 <div class="col-xs-12">
                                     <asp:GridView ID="gvItem" runat="server" Width="100%" AutoGenerateColumns="False">
                                         <Columns>
-                                            <asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
+                                            <%--<asp:BoundField HeaderText="รหัสสินค้า" DataField="ProductCode">
                                                 <HeaderStyle CssClass="text-center width15 headerData" />
                                                 <ItemStyle CssClass="text-left rowData"/>
-                                            </asp:BoundField>
+                                            </asp:BoundField>--%>
                                             <asp:BoundField HeaderText="สินค้า" DataField="ProductName">
                                                 <HeaderStyle CssClass="text-center width45 headerData" />
                                                 <ItemStyle CssClass="text-left rowData"/>
                                             </asp:BoundField> 
+                                            <asp:BoundField HeaderText="S/N" DataField="SNConcat">
+                                                <HeaderStyle CssClass="text-center width15 headerData" />
+                                                <ItemStyle CssClass="text-left rowData"/>
+                                            </asp:BoundField>
                                             <%--<asp:BoundField HeaderText="หน่วย" DataField="UnitName">
                                                 <HeaderStyle CssClass="text-center width10 headerData" />
                                                 <ItemStyle CssClass="text-center rowData"/>

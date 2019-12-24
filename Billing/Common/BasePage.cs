@@ -150,21 +150,22 @@ namespace Billing.Common
         {
             try
             {
-                string to = GetConfig("mailError");
-                string from = "system@system.com";
-                string subject = "System get something wrong!!!";
-                StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("Classname : {0}", method.ReflectedType.FullName).AppendLine();
-                sb.AppendFormat("Method : {0}", method.Name).AppendLine();
-                sb.AppendFormat("Error : {0}", error).AppendLine();
-                string body = sb.ToString();
+                //string to = GetConfig("mailError");
+                //string from = "system@system.com";
+                //string subject = "System get something wrong!!!";
+                //StringBuilder sb = new StringBuilder();
+                //sb.AppendFormat("Classname : {0}", method.ReflectedType.FullName).AppendLine();
+                //sb.AppendFormat("Method : {0}", method.Name).AppendLine();
+                //sb.AppendFormat("Error : {0}", error).AppendLine();
+                //string body = sb.ToString();
 
-                MailMessage message = new MailMessage(from, to, subject, body);
-                //message.IsBodyHtml = true;
+                //MailMessage message = new MailMessage(from, to, subject, body);
+                ////message.IsBodyHtml = true;
 
-                SmtpClient client = new SmtpClient(GetConfig("Connection.SMTP.IP").ToString(), Convert.ToInt32(GetConfig("Connection.SMTP.Port").ToString()));
-                client.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;
-                client.Send(message);
+                //SmtpClient client = new SmtpClient(GetConfig("Connection.SMTP.IP").ToString(), Convert.ToInt32(GetConfig("Connection.SMTP.Port").ToString()));
+                //client.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;
+                //client.Send(message);
+                Logs(error);
             }
             catch (Exception ex) 
             {
