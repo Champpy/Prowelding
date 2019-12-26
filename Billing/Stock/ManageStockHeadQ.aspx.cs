@@ -302,6 +302,14 @@ namespace Billing.Stock
             {
                 Int32 Amt = ToInt32(txtm5Amount.Text);
                 Int32 ProductID = ToInt32(hddm5Index.Value);
+                
+                if (string.IsNullOrEmpty(txtm5Amount.Text) || Amt == 0)
+                {
+                    ModalPopupExtender3.Show();
+                    ModalPopupExtender5.Show();
+                    ShowMessageBox("Input Amount First. !!");
+                    return;
+                }
 
                 if (Session["StockProductHeadQList"] != null)
                 {
@@ -572,13 +580,32 @@ namespace Billing.Stock
         {
             try
             {
-                if(Session["StockDetailHeadQProduct"] != null)
+                List<TransProductSerial> lstTPS = new List<TransProductSerial>();
+                #region Validate
+                if (Session["StockDetailHeadQSerial"] != null)
+                {
+                    lstTPS = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+                    if((lstTPS != null && lstTPS.Count == 0) || lstTPS == null)
+                    {
+                        ShowMessageBox("Add Serial Number First. !!");
+                        ModalPopupExtender6.Show();
+                        return;
+                    }
+                }
+                else
+                {
+                    ShowMessageBox("Add Serial Number First. !!");
+                    ModalPopupExtender6.Show();
+                    return;
+                }
+                #endregion
+
+                if (Session["StockDetailHeadQProduct"] != null)
                 {
                     List<MasProduct> lstDet = (List<MasProduct>)Session["StockDetailHeadQProduct"];
 
                     if(lstDet != null && lstDet.Count > 0)
                     {
-                        List<TransProductSerial> lstTPS = new List<TransProductSerial>();
                         StockDetail s = new StockDetail();
                         List<StockDetail> lst = new List<StockDetail>();
                         if (Session["StockDetailHeadQ"] != null)
@@ -604,7 +631,14 @@ namespace Billing.Stock
                                         lstTPS = lstTPS.Where(w => w.ProductID.Equals(item.ProductID)).ToList();
                                         if (lstTPS != null && lstTPS.Count > 0)
                                         {
-                                            s.lstSerial = lstTPS;
+                                            if (lstTPS.Count == Amt)
+                                                s.lstSerial = lstTPS;
+                                            else
+                                            {
+                                                ShowMessageBox("Serial Number list dose not equal with Amount. !!");
+                                                ModalPopupExtender6.Show();
+                                                return;
+                                            }
                                         }
                                     }
                                 }
@@ -620,6 +654,10 @@ namespace Billing.Stock
                         Session["StockDetailHeadQ"] = lst;
                         BindDataDetail();
                     }
+                }
+                else
+                {
+
                 }
             }
             catch (Exception ex)
