@@ -465,6 +465,25 @@ namespace Billing.Stock
         {
             try
             {
+                #region Validate
+                List<TransProductSerial> lstTPS = new List<TransProductSerial>();
+                if (Session["StockDetailHeadQSerial"] != null)
+                {
+                    lstTPS = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+                    if ((lstTPS != null && lstTPS.Count == 0) || lstTPS == null)
+                    {
+                        ShowMessageBox("Add Serial Number First. !!");
+                        ModalPopupExtender6.Show();
+                        return;
+                    }
+                }
+                else
+                {
+                    ShowMessageBox("Add Serial Number First. !!");
+                    ModalPopupExtender6.Show();
+                    return;
+                }
+                #endregion
                 Int32 Amt = ToInt32(txtm5Amount.Text);
                 AddDetailFromSession(Amt);
 
@@ -582,22 +601,22 @@ namespace Billing.Stock
             {
                 List<TransProductSerial> lstTPS = new List<TransProductSerial>();
                 #region Validate
-                if (Session["StockDetailHeadQSerial"] != null)
-                {
-                    lstTPS = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
-                    if((lstTPS != null && lstTPS.Count == 0) || lstTPS == null)
-                    {
-                        ShowMessageBox("Add Serial Number First. !!");
-                        ModalPopupExtender6.Show();
-                        return;
-                    }
-                }
-                else
-                {
-                    ShowMessageBox("Add Serial Number First. !!");
-                    ModalPopupExtender6.Show();
-                    return;
-                }
+                //if (Session["StockDetailHeadQSerial"] != null)
+                //{
+                //    lstTPS = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+                //    if((lstTPS != null && lstTPS.Count == 0) || lstTPS == null)
+                //    {
+                //        ShowMessageBox("Add Serial Number First. !!");
+                //        ModalPopupExtender6.Show();
+                //        return;
+                //    }
+                //}
+                //else
+                //{
+                //    ShowMessageBox("Add Serial Number First. !!");
+                //    ModalPopupExtender6.Show();
+                //    return;
+                //}
                 #endregion
 
                 if (Session["StockDetailHeadQProduct"] != null)
