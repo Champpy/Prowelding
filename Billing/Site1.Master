@@ -90,6 +90,8 @@
                                     <li><a href="/Transaction/TransactionSaleCancelList.aspx">ยกเลิกรายการขาย</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="/Stock/StockLogs.aspx">ประวัติคลังขาย</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/Stock/StockTransProductSerial.aspx">ตรวจสอบ S/N</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown" id="liStockHeadQ" runat="server" visible="false">

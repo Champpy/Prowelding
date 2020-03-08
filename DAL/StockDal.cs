@@ -384,6 +384,35 @@ namespace DAL
             }
             return lst;
         }
+
+        public List<TransProductSerial> GetSearchTransProductSerial(string ProductName, string SerialNumber)
+        {
+            List<TransProductSerial> lst = new List<TransProductSerial>();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "ProductName", Value = ProductName });
+                param.Add(new SqlParameter() { ParameterName = "SerialNumber", Value = SerialNumber });
+                DataSet ds = conn.GetDataSet("GetSearchTransProductSerial", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    TransProductSerial o = new TransProductSerial();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        o = new TransProductSerial();
+                        o.ProductName = dr["ProductName"].ToString();
+                        o.SerialNumber = dr["SerialNumber"].ToString();
+                        o.Status = dr["Status"].ToString();
+                        lst.Add(o);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return lst;
+        }
         #endregion
 
         #region Stock HeadQ

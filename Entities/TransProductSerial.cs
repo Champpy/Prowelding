@@ -13,5 +13,7 @@ namespace Entities
         //Used, 
         public string Status { get; set; }
 
+        public string ProductName { get; set; }
+
     }
 }

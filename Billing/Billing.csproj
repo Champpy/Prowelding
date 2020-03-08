@@ -519,6 +519,7 @@
     <Content Include="Stock\Outbound.aspx" />
     <Content Include="Stock\InventoryList.aspx" />
     <Content Include="Stock\Inbound.aspx" />
+    <Content Include="Stock\StockTransProductSerial.aspx" />
     <Content Include="Transaction\TransactionCustomerList.aspx" />
     <Content Include="Transaction\TransactionSaleCancelList.aspx" />
     <Content Include="Transaction\TransactionSaleList.aspx" />
@@ -820,6 +821,13 @@
     </Compile>
     <Compile Include="Stock\Inbound.aspx.designer.cs">
       <DependentUpon>Inbound.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Stock\StockTransProductSerial.aspx.cs">
+      <DependentUpon>StockTransProductSerial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Stock\StockTransProductSerial.aspx.designer.cs">
+      <DependentUpon>StockTransProductSerial.aspx</DependentUpon>
     </Compile>
     <Compile Include="Transaction\TransactionCustomerList.aspx.cs">
       <DependentUpon>TransactionCustomerList.aspx</DependentUpon>
