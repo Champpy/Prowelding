@@ -22,6 +22,10 @@ namespace Entities
         public string CanChange { get; set; }
         public string IsFree { get; set; }
 
+        public int CHK_PRODUCT_CODE { get; set; }
+        public int CHK_PRODUCT_NAME { get; set; }
+        public int CHK_CODE_NAME { get; set; }
+
         #region Other
         public Int32 UnitID { get; set; }
         public string UnitName { get; set; }

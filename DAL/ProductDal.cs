@@ -91,7 +91,7 @@ namespace DAL
                 paramI.Add(new SqlParameter() { ParameterName = "RemainingHeadQ", Value = item.RemainingHeadQ, DbType = DbType.Int32 });
                 paramI.Add(new SqlParameter() { ParameterName = "ProductSN", Value = item.ProductSN, DbType = DbType.String });
                 paramI.Add(new SqlParameter() { ParameterName = "DMLFlag", Value = item.DMLFlag });
-          
+
                 conn.ExcuteNonQueryNClose("InsUpdDelMasProduct", paramI, out err);
             }
             catch (Exception ex)
@@ -113,7 +113,7 @@ namespace DAL
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
-                    {                                          
+                    {
                         item.ProductID = Convert.ToInt32(dr["ProductID"].ToString());
                         item.ProductCode = dr["ProductCode"].ToString();
                         item.ProductName = dr["ProductName"].ToString();
@@ -336,6 +336,34 @@ namespace DAL
             return lst;
         }
 
+        public MasProduct ValidateProductData(string ProductCode, string ProductName, int ProductID)
+        {
+            MasProduct item = new MasProduct();
+            try
+            {
+                List<SqlParameter> param = new List<SqlParameter>();
+                param.Add(new SqlParameter() { ParameterName = "ProductID", Value = ProductID, DbType = DbType.Int32 });
+                param.Add(new SqlParameter() { ParameterName = "ProductCode", Value = ProductCode, DbType = DbType.String });
+                param.Add(new SqlParameter() { ParameterName = "ProductName", Value = ProductName, DbType = DbType.String });
+
+                DataSet ds = conn.GetDataSet("ValidateProductData", param);
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0] != null)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        item.CHK_PRODUCT_CODE = Convert.ToInt32(dr["CHK_PRODUCT_CODE"].ToString());
+                        item.CHK_PRODUCT_NAME = Convert.ToInt32(dr["CHK_PRODUCT_NAME"].ToString());
+                        item.CHK_CODE_NAME = Convert.ToInt32(dr["CHK_CODE_NAME"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return item;
+        }
+
         #region Product HeadQ
         public List<MasProduct> GetSearchProductHeadQ(MasProduct item)
         {
@@ -359,7 +387,7 @@ namespace DAL
                         o.ProductCode = dr["ProductCode"].ToString();
                         o.ProductName = dr["ProductName"].ToString();
                         o.Remaining = Convert.ToInt32(dr["Remaining"].ToString());
-                        o.RemainingHeadQ = Convert.ToInt32(dr["RemainingHeadQ"].ToString()); 
+                        o.RemainingHeadQ = Convert.ToInt32(dr["RemainingHeadQ"].ToString());
                         o.Active = dr["Active"].ToString();
                         o.PurchasePrice = Convert.ToDouble(dr["PurchasePrice"].ToString());
                         o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());

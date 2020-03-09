@@ -92,7 +92,7 @@ namespace Billing.Setup
             {
                 var bal = ItemDal.Instance;
                 List<MasItemType> lstType = bal.GetSearchItemType();
-                if(lstType != null && lstType.Count > 0)
+                if (lstType != null && lstType.Count > 0)
                 {
                     lstType = lstType.Where(w => w.Active.ToLower().Equals("y")).ToList();
                     ddlType.DataSource = lstType;
@@ -125,7 +125,7 @@ namespace Billing.Setup
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -142,14 +142,48 @@ namespace Billing.Setup
                     return;
                 }
 
-                MasProduct ModelData = dal.GetSearchProductCode(txtMCode.Text.Trim());
+                //MasProduct ModelData = dal.GetSearchProductCode(txtMCode.Text.Trim());
+                MasProduct ModelData = dal.ValidateProductData(txtMCode.Text.Trim(), txtMName.Text.Trim(), ToInt32(hddID.Value));
 
-                if (ModelData.ProductCode != null && hddMode.Value == "Add")
+                if (ModelData.CHK_CODE_NAME == 1)
+                {
+                    ShowMessageBox("รหัสสินค้าและชื่อสินค้า ห้ามเหมือนกัน !!!");
+                    ModalPopupExtender1.Show();
+                    return; 
+                }
+
+                if (ModelData.CHK_PRODUCT_CODE == 1)
                 {
                     ShowMessageBox("รหัสสินค้า นี้ซ้ำ !!!");
                     ModalPopupExtender1.Show();
                     return;
                 }
+                else if (ModelData.CHK_PRODUCT_CODE == 2)
+                {
+                    ShowMessageBox("รหัสสินค้านี้ซ้ำกับชื่อสินค้าอื่น !!!");
+                    ModalPopupExtender1.Show();
+                    return;
+                }
+
+                if (ModelData.CHK_PRODUCT_NAME == 1)
+                {
+                    ShowMessageBox("ชื่อสินค้า นี้ซ้ำ !!!");
+                    ModalPopupExtender1.Show();
+                    return;
+                }
+                else if (ModelData.CHK_PRODUCT_NAME == 2)
+                {
+                    ShowMessageBox("ชื่อสินค้านี้ซ้ำกับรหัสสินค้าอื่น !!!");
+                    ModalPopupExtender1.Show();
+                    return;
+                }
+
+                //if (ModelData.ProductCode != null && hddMode.Value == "Add")
+                //{
+                //    ShowMessageBox("รหัสสินค้า นี้ซ้ำ !!!");
+                //    ModalPopupExtender1.Show();
+                //    return;
+                //}
 
                 MasProduct o = new MasProduct();
                 if (hddMode.Value == "Add") // Add
@@ -267,7 +301,7 @@ namespace Billing.Setup
                     ModelData.ProductID = Convert.ToInt32(objCode);
                     ModelData.Active = "N";
                     ModelData.CreatedBy = GetUsername();
-                    ModelData.DMLFlag = "D"; 
+                    ModelData.DMLFlag = "D";
                     dal.InsUpdDelMasProduct(ModelData);
 
                     BindData();
