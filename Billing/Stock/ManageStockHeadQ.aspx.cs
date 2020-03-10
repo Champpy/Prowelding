@@ -151,6 +151,12 @@ namespace Billing.Stock
                             if (obj != null)
                                 lst.Remove(obj);
                             Session["InBoundDetail"] = lst;
+
+                            List<TransProductSerial> lstSN = new List<TransProductSerial>();
+                            if (Session["StockDetailHeadQSerial"] != null)
+                                lstSN = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+
+                            lstSN.RemoveAll(w => w.ProductID.Equals(objID));
                         }
                     }
 
@@ -543,6 +549,20 @@ namespace Billing.Stock
                         //Save Session
                         Session["StockDetailHeadQ"] = lst;
                     }
+                    else
+                    {
+                        List<TransProductSerial> lstSN = new List<TransProductSerial>();
+                        if (Session["StockDetailHeadQSerial"] != null)
+                            lstSN = (List<TransProductSerial>)Session["StockDetailHeadQSerial"];
+
+                        lstSN.RemoveAll(w => w.ProductID.Equals(productID));
+
+                        //Binding
+                        BindGridSerial(null, productID);
+                    }
+
+                    
+
                 }
                 else
                 {
