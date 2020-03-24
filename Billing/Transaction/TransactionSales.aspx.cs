@@ -1509,6 +1509,7 @@ namespace Billing.Transaction
                 lst = dal.GetItemInStock();
                 if (lst != null)
                 {
+                    lst = lst.Where(w => w.Active.ToUpper().Equals("Y")).ToList();
                     if (!string.IsNullOrEmpty(ItemCode))
                         lst = lst.Where(w => w.PackageCode.ToLower().Contains(ItemCode)).ToList();
 

@@ -213,7 +213,7 @@ namespace DAL
                         o.PackageCode = dr["PackageCode"].ToString();
                         o.PackageName = dr["PackageName"].ToString();
                         o.SellPrice = Convert.ToDouble(dr["SellPrice"].ToString());
-                        //o.UnitName = dr["UnitName"].ToString();
+                        o.Active = dr["Active"].ToString();
                         lst.Add(o);
                     }
                 }
