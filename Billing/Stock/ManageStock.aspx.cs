@@ -42,6 +42,12 @@ namespace Billing.Stock
                         return;
                     }
 
+                    if(hddType.Value.ToLower() == "o")
+                    {
+                        ShowMessageBox("กรุณาเพิ่ม หมายเหตุ !!");
+                        return;
+                    }
+
                     //Process Save 
                     Header.StockType = hddType.Value.ToLower() == "i" ? "IN" : "OUT";
                     Header.StockTime = DateTime.ParseExact(txtDate.Text, "dd/MM/yyyy", new System.Globalization.CultureInfo("en-US"));

@@ -1083,6 +1083,9 @@ namespace Billing.Transaction
         {
             try
             {
+                //reset
+                txtm6SNSearch.Text = "";
+
                 Int32 PackageHeaderID = ToInt32(hddItemID.Value);
                 SearchSNByPackageHeader(PackageHeaderID);
                 
@@ -1180,7 +1183,7 @@ namespace Billing.Transaction
             }
         }
 
-        protected void SearchSNByPackageHeader(Int32 PackageHeaderID)
+        protected void SearchSNByPackageHeader(Int32 PackageHeaderID, string filter = "")
         {
             try
             {
@@ -1188,6 +1191,10 @@ namespace Billing.Transaction
                 List<Entities.TransProductSerial> lst = dal.GetSearchSNByPackageHeaderID(PackageHeaderID);
                 if(lst != null)
                 {
+                    if (!string.IsNullOrEmpty(filter))
+                    {
+                        lst = lst.Where(w => w.SerialNumber.Contains(filter)).ToList();
+                    }
                     gvm6SN.DataSource = lst;
                     gvm6SN.DataBind();
                 }
@@ -1697,6 +1704,22 @@ namespace Billing.Transaction
         #endregion
 
         #region Modal6
+        protected void imgbtnm6Search_Click(object sender, ImageClickEventArgs e)
+        {
+            try
+            {
+                Int32 PackageHeaderID = ToInt32(hddItemID.Value);
+                string filter = txtm6SNSearch.Text;
+                SearchSNByPackageHeader(PackageHeaderID, filter);
+
+                ModalPopupExtender1.Show();
+                ModalPopupExtender6.Show();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         protected void btnm6OK_Click(object sender, EventArgs e)
         {
             try
@@ -1727,9 +1750,15 @@ namespace Billing.Transaction
                     }
                 }
 
+                if (string.IsNullOrEmpty(sn))
+                    msg = "Choose Serial Number First. !!!";
+
                 if(!string.IsNullOrEmpty(msg))
                 {
                     ShowMessageBox(msg);
+
+                    ModalPopupExtender1.Show();
+                    ModalPopupExtender6.Show();
                 }
                 else
                 {
@@ -1909,6 +1938,9 @@ namespace Billing.Transaction
                 ShowMessageBox("Error --> " + ex.Message);
             }
         }
+
         #endregion
+
+        
     }
 }

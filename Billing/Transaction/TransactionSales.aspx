@@ -833,6 +833,16 @@
                     <asp:HiddenField id="hddm6ProductID" runat="server" />
                 </h3>
             </div>
+            <div class="row" style="padding-bottom:5px;">
+                <div class="col-md-1"></div>                
+                <div class="col-md-8">
+                    <asp:TextBox ID="txtm6SNSearch" runat="server" ToolTip="Search S/N"></asp:TextBox>
+                </div>
+                <div class="col-md-2">
+                    <asp:ImageButton ID="imgbtnm6Search" runat="server" Height="20px" Width="20px" ImageUrl="~/img/icon/search32x32.png"
+                        OnClick="imgbtnm6Search_Click" />
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10" style="overflow:auto; height:200px;">

@@ -832,6 +832,24 @@ namespace Billing.Transaction {
         protected global::System.Web.UI.WebControls.HiddenField hddm6ProductID;
         
         /// <summary>
+        /// txtm6SNSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtm6SNSearch;
+        
+        /// <summary>
+        /// imgbtnm6Search control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgbtnm6Search;
+        
+        /// <summary>
         /// gvm6SN control.
         /// </summary>
         /// <remarks>
