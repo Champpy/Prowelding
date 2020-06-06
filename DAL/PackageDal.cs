@@ -94,12 +94,12 @@ namespace DAL
         }
 
 
-        public string InsUpdDelMasPackageDetail(List<MasProduct> item, string PackageCode,string Model = "I")
+        public string InsUpdDelMasPackageDetail(List<MasProduct> item, Int32 PackageID,string Model = "I")
         {
             string err = "";
             try
             {
-                MasPackageHeader DataMasPackageHeader = GetSearchMasPackageHeaderByCode(PackageCode);
+                MasPackageHeader DataMasPackageHeader = GetSearchMasPackageHeaderByID(PackageID);
 
 
                 if (Model == "D")

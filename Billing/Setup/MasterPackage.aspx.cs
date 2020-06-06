@@ -86,9 +86,9 @@ namespace Billing.Setup
                 List<MasProduct> lst = (List<MasProduct>)Session["DetailProdcut"];
                 if (ResultHearder == "")
                 {
-                    dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text, "D");
+                    dal.InsUpdDelMasPackageDetail(lst, DataHeader.PackageHeaderID, "D");
 
-                    string ResultDetail = dal.InsUpdDelMasPackageDetail(lst, txtPackageCode.Text);
+                    string ResultDetail = dal.InsUpdDelMasPackageDetail(lst, DataHeader.PackageHeaderID);
                     if (ResultDetail == "")
                     {
                         ShowMessageBox("บันทึกข้อมูลสำเร็จ.", this.Page, "MasterPackageList.aspx");
